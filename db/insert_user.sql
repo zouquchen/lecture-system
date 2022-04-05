@@ -1,0 +1,1 @@
+INSERT INTO sys_user (id,user_name,PASSWORD,user_type) VALUE(1,'admin','{noop}admin','0');
