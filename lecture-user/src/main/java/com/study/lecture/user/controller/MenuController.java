@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 菜单表 前端控制器
+ * 菜单表(权限表） 前端控制器
  * </p>
  *
  * @author zqc

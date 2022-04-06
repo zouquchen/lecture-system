@@ -22,7 +22,7 @@ import java.util.Date;
 @TableName("sys_user")
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 42354365256455L;
 
     /**
      * 用户id

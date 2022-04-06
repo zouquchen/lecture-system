@@ -19,6 +19,7 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -63,7 +64,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String jwt = JwtUtil.createJwt(id);
 
         // 把完整的用户信息存入redis，userid作为key
-        redisTemplate.opsForValue().set("login:" + id, loginUser);
+        // 设置过期时间为1天
+        redisTemplate.opsForValue().set("login:" + id, loginUser, 1, TimeUnit.DAYS);
 
         // 返回响应类给前端
         return R.ok("登录成功").put("token", jwt);

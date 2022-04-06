@@ -24,8 +24,6 @@
         <module>lecture-common</module>
         <module>lecture-user</module>
 
-        <!-- 开源项目-->
-        <module>renren-generator</module>
     </modules>
 
 </project>

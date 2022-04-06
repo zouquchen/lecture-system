@@ -8,8 +8,9 @@ spring:
     password: Lecture123
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
-    host: 192.168.150.101
+    host: r-bp1velmtv10jqnmyr6pd.redis.rds.aliyuncs.com
     port: 6379
+    password: Lecture123
     # 数据库
     database: 0
     # 连接超时
@@ -24,3 +25,6 @@ spring:
         max-idle: 8
         # 最小空闲连接，默认0
         min-idle: 5
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml

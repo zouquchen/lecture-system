@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -69,10 +70,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // 后面将需要一个Authentication的对象，在这里通过实现类UsernamePasswordAuthenticationToken构造这个对象
         // 选择3个参数的构造器，principal：账号，credentials：密码，authorities：权限
         // 为什么要选择这个构造器呢？因为这个构造器中有，super.setAuthenticated(true); 标识用户为已认证。
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, null);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
         // 存入SecurityContextHolder
         // 存入需要一个Authentication的对象，在登录的时候也用到过类似的方法。
-        // TODO 获取权限信息封装到Authentication
+        // 获取权限信息封装到Authentication
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         // 放行

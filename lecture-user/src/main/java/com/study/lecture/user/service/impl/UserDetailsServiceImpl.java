@@ -1,13 +1,16 @@
 package com.study.lecture.user.service.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.study.lecture.user.entity.LoginUser;
 import com.study.lecture.user.entity.User;
+import com.study.lecture.user.mapper.MenuMapper;
 import com.study.lecture.user.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,12 +29,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    /**
+     * 用户表
+     */
     @Autowired
     private UserMapper userMapper;
 
     /**
-     * 通过数据库查询用户信息，封装成UserDetails传给Spring Security处理
-     * LoginUser就是UserDetails的实现类。
+     * 权限表
+     */
+    @Autowired
+    private MenuMapper menuMapper;
+
+    /**
+     * <p>通过数据库查询用户信息，封装成UserDetails传给Spring Security处理.</p>
+     * <p>{@link com.study.lecture.user.entity.LoginUser}就是UserDetails的实现类。</p>
+     * <br>
      *
      * @param username 用户登录账号
      * @return LoginUser对象
@@ -50,9 +63,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new RuntimeException("用户名或密码错误");
         }
 
-        //TODO 查询对应的权限信息
-
+        // 查询对应的角色信息
+        List<String> list = menuMapper.selectRoleByUserId(user.getId());
         // 把数据封装成UserDetails返回
-        return new LoginUser(user);
+        return new LoginUser(user, list);
     }
 }

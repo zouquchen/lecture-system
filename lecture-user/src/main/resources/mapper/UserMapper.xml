@@ -24,4 +24,6 @@
         user_name, password, status, email, phone_number, sex, avatar, user_type, is_deleted, create_time, update_time
     </sql>
 
+    
+
 </mapper>

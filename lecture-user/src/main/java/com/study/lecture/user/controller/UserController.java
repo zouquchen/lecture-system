@@ -6,6 +6,7 @@ import com.study.lecture.user.entity.User;
 import com.study.lecture.user.mapper.UserMapper;
 import com.study.lecture.user.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -47,9 +48,11 @@ public class UserController {
 
     /**
      * controller测试
+     * 当前登录用户必须带有 test 权限才能访问
      * @return
      */
     @RequestMapping("hello")
+    @PreAuthorize("hasAuthority('admin')")
     public R hello() {
         return R.ok("hello");
     }
