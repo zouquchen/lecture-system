@@ -1,4 +1,4 @@
-package com.study.lecture.user.entity;
+package com.study.lecture.common.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

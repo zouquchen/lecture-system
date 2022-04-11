@@ -23,7 +23,8 @@
     <modules>
         <module>lecture-common</module>
         <module>lecture-user</module>
-
+        <module>lecture-lecture</module>
+        <module>lecture-publish</module>
     </modules>
 
 </project>

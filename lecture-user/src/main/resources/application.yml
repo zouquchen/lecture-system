@@ -26,5 +26,21 @@ spring:
         # 最小空闲连接，默认0
         min-idle: 5
 
+dubbo:
+  application:
+    name: user-provider
+  registry:
+    address: zookeeper://192.168.150.101:2181
+    timeout: 6000
+  protocol:
+    name: dubbo
+    port: 20880
+  scan:
+    base-packages: com.study.lecture.user.service.impl
+
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
+
+logging:
+  level:
+   root: INFO

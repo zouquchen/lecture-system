@@ -1,7 +1,6 @@
-package com.study.lecture.user.entity;
+package com.study.lecture.common.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

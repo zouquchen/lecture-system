@@ -1,4 +1,4 @@
-package com.study.lecture.user.config;
+package com.study.lecture.common.config;
 
 import com.study.lecture.common.utils.FastJsonRedisSerializer;
 import org.springframework.context.annotation.Bean;
@@ -39,5 +39,4 @@ public class RedisConfig {
         template.afterPropertiesSet();
         return template;
     }
-
 }

@@ -1,7 +1,7 @@
-package com.study.lecture.user.service;
+package com.study.lecture.common.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.study.lecture.user.entity.Menu;
+import com.study.lecture.common.entity.Menu;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.study.lecture.user.entity.Menu;
  * @author zqc
  * @since 2022-04-05
  */
-public interface IMenuService extends IService<Menu> {
+public interface MenuService extends IService<Menu> {
 
 }

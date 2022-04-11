@@ -3,21 +3,19 @@ package com.study.lecture.user.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.study.lecture.common.utils.JwtUtil;
 import com.study.lecture.common.utils.R;
-import com.study.lecture.user.entity.LoginUser;
-import com.study.lecture.user.entity.User;
+import com.study.lecture.common.entity.LoginUser;
+import com.study.lecture.common.entity.User;
 import com.study.lecture.user.mapper.UserMapper;
-import com.study.lecture.user.service.IUserService;
+import com.study.lecture.common.service.UserService;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -29,8 +27,8 @@ import java.util.concurrent.TimeUnit;
  * @author zqc
  * @since 2022-04-05
  */
-@Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+@DubboService(version = "1.0")
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -87,6 +85,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         redisTemplate.delete("login:" + id);
 
         return R.ok("注销成功");
+    }
+
+    /**
+     * 根据用户id，从redis内获取用户信息
+     * @param key 用户key (格式为 login:用户id）
+     * @return 用户信息
+     */
+    @Override
+    public LoginUser getUserFromRedisById(String key) {
+        return (LoginUser) redisTemplate.opsForValue().get(key);
     }
 
 }

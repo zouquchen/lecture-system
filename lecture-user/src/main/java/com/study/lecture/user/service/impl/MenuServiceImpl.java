@@ -1,9 +1,9 @@
 package com.study.lecture.user.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.study.lecture.user.entity.Menu;
+import com.study.lecture.common.entity.Menu;
 import com.study.lecture.user.mapper.MenuMapper;
-import com.study.lecture.user.service.IMenuService;
+import com.study.lecture.common.service.MenuService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2022-04-05
  */
 @Service
-public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IMenuService {
+public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
 
 }

@@ -1,7 +1,7 @@
 package com.study.lecture.user.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.study.lecture.user.entity.Menu;
+import com.study.lecture.common.entity.Menu;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

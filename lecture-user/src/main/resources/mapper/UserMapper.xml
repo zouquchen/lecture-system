@@ -3,7 +3,7 @@
 <mapper namespace="com.study.lecture.user.mapper.UserMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.study.lecture.user.entity.User">
+    <resultMap id="BaseResultMap" type="com.study.lecture.common.entity.User">
         <result column="id" property="id" />
         <result column="user_name" property="userName" />
         <result column="password" property="password" />

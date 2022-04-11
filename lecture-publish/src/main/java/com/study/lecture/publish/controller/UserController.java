@@ -1,31 +1,33 @@
-package com.study.lecture.user.controller;
+package com.study.lecture.publish.controller;
 
-
+import com.study.lecture.common.entity.User;
+import com.study.lecture.common.service.UserService;
 import com.study.lecture.common.utils.R;
-import com.study.lecture.user.entity.User;
-import com.study.lecture.user.mapper.UserMapper;
-import com.study.lecture.user.service.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 用户表 前端控制器
+ * 用户控制器
  * </p>
+ * <p>CrossOrigin 解决跨域问题</p>
+ * <br>
+ * Creation Time: 2022/4/11 12:35
  *
  * @author zqc
- * @since 2022-04-05
+ * @since 1.0
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private IUserService userService;
+    @DubboReference(version = "1.0")
+    private UserService userService;
 
     /**
      * 测试登录

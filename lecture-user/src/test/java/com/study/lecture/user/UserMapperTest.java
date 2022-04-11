@@ -1,7 +1,6 @@
 package com.study.lecture.user;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.study.lecture.user.entity.User;
+import com.study.lecture.common.entity.User;
 import com.study.lecture.user.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

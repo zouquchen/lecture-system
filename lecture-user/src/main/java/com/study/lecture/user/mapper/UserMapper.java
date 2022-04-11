@@ -1,8 +1,7 @@
 package com.study.lecture.user.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.study.lecture.common.utils.R;
-import com.study.lecture.user.entity.User;
+import com.study.lecture.common.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

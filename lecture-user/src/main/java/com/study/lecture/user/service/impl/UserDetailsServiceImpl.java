@@ -1,20 +1,19 @@
 package com.study.lecture.user.service.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.study.lecture.user.entity.LoginUser;
-import com.study.lecture.user.entity.User;
+import com.study.lecture.common.entity.LoginUser;
+import com.study.lecture.common.entity.User;
 import com.study.lecture.user.mapper.MenuMapper;
 import com.study.lecture.user.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -26,24 +25,24 @@ import org.springframework.stereotype.Service;
  * @author zqc
  * @since 1.0
  */
-@Service
+@DubboService(version = "1.0")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     /**
      * 用户表
      */
-    @Autowired
+    @Resource
     private UserMapper userMapper;
 
     /**
      * 权限表
      */
-    @Autowired
+    @Resource
     private MenuMapper menuMapper;
 
     /**
      * <p>通过数据库查询用户信息，封装成UserDetails传给Spring Security处理.</p>
-     * <p>{@link com.study.lecture.user.entity.LoginUser}就是UserDetails的实现类。</p>
+     * <p>{@link LoginUser}就是UserDetails的实现类。</p>
      * <br>
      *
      * @param username 用户登录账号
