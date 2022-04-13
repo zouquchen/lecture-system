@@ -3,10 +3,11 @@ package com.study.lecture.user.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.study.lecture.common.utils.JwtUtil;
 import com.study.lecture.common.utils.R;
-import com.study.lecture.common.entity.LoginUser;
-import com.study.lecture.common.entity.User;
+import com.study.lecture.common.entity.user.LoginUser;
+import com.study.lecture.common.entity.user.User;
 import com.study.lecture.user.mapper.UserMapper;
-import com.study.lecture.common.service.UserService;
+import com.study.lecture.common.service.user.UserService;
+import io.jsonwebtoken.Claims;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -45,7 +46,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public R login(User user) {
         // 认证的时候需要Authentication对象，所以需要一个Authentication的实现类，这里选择了UsernamePasswordAuthenticationToken
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(user.getUserName(),user.getPassword());
+                new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword());
 
         // AuthenticationManager authenticate方法进行认证。在SecurityConfig配置类中，我们将AuthenticationManager注入到容器中。
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
@@ -67,6 +68,37 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         // 返回响应类给前端
         return R.ok("登录成功").put("token", jwt);
+    }
+
+    /**
+     * 获取当前登录用户基本信息
+     * @param token token
+     * @return 响应信息
+     */
+    @Override
+    public R info(String token) {
+
+        // 解析token
+        String id;
+        try {
+            Claims claims = JwtUtil.parseJWT(token);
+            id = claims.getSubject();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("token非法");
+        }
+
+        // 从redis中获取用户信息
+        String redisKey = "login:" + id;
+        LoginUser loginUser = getUserFromRedisById(redisKey);
+        if (Objects.isNull(loginUser)) {
+            throw new RuntimeException("用户未登录");
+        }
+
+        return R.ok()
+                .put("name", loginUser.getUsername())
+                .put("roles", loginUser.getPermissions())
+                .put("avatar", loginUser.getUser().getAvatar());
     }
 
     /**
@@ -96,5 +128,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public LoginUser getUserFromRedisById(String key) {
         return (LoginUser) redisTemplate.opsForValue().get(key);
     }
+
+
 
 }

@@ -1,8 +1,10 @@
 package com.study.lecture.common.filter;
 
-import com.study.lecture.common.entity.LoginUser;
-import com.study.lecture.common.service.UserService;
+import com.study.lecture.common.entity.user.LoginUser;
+import com.study.lecture.common.exception.GlobalException;
+import com.study.lecture.common.service.user.UserService;
 import com.study.lecture.common.utils.JwtUtil;
+import com.study.lecture.common.utils.ResultCodeEnum;
 import io.jsonwebtoken.Claims;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,7 +41,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
+        System.out.println("经过JwtAuthenticationTokenFilter！");
         // 获取token
         String token = request.getHeader("token");
         if (!StringUtils.hasText(token)) {
@@ -56,14 +58,16 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             id = claims.getSubject();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("token非法");
+            // TOKEN非法
+            throw new GlobalException(ResultCodeEnum.TOKEN_ILLEGAL.getMessage(),ResultCodeEnum.TOKEN_ILLEGAL.getCode());
         }
 
         // 从redis中获取用户信息
         String redisKey = "login:" + id;
         LoginUser loginUser = userService.getUserFromRedisById(redisKey);
         if (Objects.isNull(loginUser)) {
-            throw new RuntimeException("用户未登录");
+            // 用户未登录
+            throw new GlobalException(ResultCodeEnum.USER_OFFLINE.getMessage(), ResultCodeEnum.USER_OFFLINE.getCode());
         }
 
         // 后面将需要一个Authentication的对象，在这里通过实现类UsernamePasswordAuthenticationToken构造这个对象

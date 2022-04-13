@@ -1,4 +1,4 @@
-INSERT INTO sys_user (id,user_name,PASSWORD,user_type) VALUE(1,'admin','admin','0');
+INSERT INTO sys_user (id,username,PASSWORD,user_type) VALUE(1,'admin','admin','0');
 
 -- INSERT INTO sys_menu (id,menu_name,perms) value (1,'查看列表', 'system:user:list');
 -- INSERT INTO sys_menu (id,menu_name,perms) value (2,'查看详情', 'system:user:info');

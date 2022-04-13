@@ -16,22 +16,22 @@ import java.util.Map;
 /**
  * 响应类，返回数据
  *
- * @author Mark sunlightcs@gmail.com
+ * @author zqc
  */
 public class R extends HashMap<String, Object> {
 	private static final long serialVersionUID = 1L;
 	
 	public R() {
-		put("code", HttpStatus.SC_OK);
-		put("msg", "success");
+		put("code", ResultCodeEnum.SUCCESS.getCode());
+		put("msg", ResultCodeEnum.SUCCESS.getMessage());
 	}
 	
 	public static R error() {
-		return error(HttpStatus.SC_INTERNAL_SERVER_ERROR, "未知异常，请联系管理员");
+		return error(ResultCodeEnum.ERROR.getCode(), ResultCodeEnum.ERROR.getMessage());
 	}
 	
 	public static R error(String msg) {
-		return error(HttpStatus.SC_INTERNAL_SERVER_ERROR, msg);
+		return error(ResultCodeEnum.ERROR.getCode(), msg);
 	}
 	
 	public static R error(int code, String msg) {

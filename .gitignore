@@ -34,5 +34,6 @@ build/
 
 
 ### reren-generator ###
-/renren-generator
-.renren-generator/
+/vue-admin-template/node_modules
+/vue-admin-template/.gitignore
+/vue-admin-template/vue-admin-template.code-workspace

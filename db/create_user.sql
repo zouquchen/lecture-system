@@ -1,4 +1,3 @@
-CREATE DATABASE `lecture_system`;
 USE `lecture_system`;
 -- ------------------------------------------------------------------------------
 -- RBAC权限模型（Role-Based Access Control）
@@ -16,7 +15,7 @@ USE `lecture_system`;
 -- ----------------------------
 CREATE TABLE `sys_user` (
     `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '用户id',
-    `user_name` VARCHAR(64) NOT NULL DEFAULT 'NULL' COMMENT '用户名',
+    `username` VARCHAR(64) NOT NULL DEFAULT 'NULL' COMMENT '用户名',
     `password` VARCHAR(64) NOT NULL DEFAULT 'NULL' COMMENT '密码',
     `status` CHAR(1) DEFAULT '0' COMMENT '账号状态（0正常 1停用）',
     `email` VARCHAR(64) DEFAULT NULL COMMENT '邮箱',

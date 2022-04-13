@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Objects;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.study.lecture.common.entity.LoginUser;
-import com.study.lecture.common.entity.User;
+import com.study.lecture.common.entity.user.LoginUser;
+import com.study.lecture.common.entity.user.User;
 import com.study.lecture.user.mapper.MenuMapper;
 import com.study.lecture.user.mapper.UserMapper;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -54,7 +54,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         // 查询用户信息
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUserName, username);
+        queryWrapper.eq(User::getUsername, username);
         User user = userMapper.selectOne(queryWrapper);
 
         // 如果没有查询到用户则抛出异常,在过滤链中有异常捕获，这里抛出的异常会被捕获

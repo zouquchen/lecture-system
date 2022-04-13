@@ -3,7 +3,7 @@
 <mapper namespace="com.study.lecture.user.mapper.MenuMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.study.lecture.common.entity.Menu">
+    <resultMap id="BaseResultMap" type="com.study.lecture.common.entity.user.Menu">
         <result column="id" property="id" />
         <result column="menu_name" property="menuName" />
         <result column="path" property="path" />

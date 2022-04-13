@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.lecture.lecture.mapper.LectureMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.study.lecture.common.entity.lecture.Lecture">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="type_id" property="typeId" />
+        <result column="description_id" property="descriptionId" />
+        <result column="organizer" property="organizer" />
+        <result column="undertaker" property="undertaker" />
+        <result column="sponsor" property="sponsor" />
+        <result column="space" property="space" />
+        <result column="speaker" property="speaker" />
+        <result column="reservation" property="reservation" />
+        <result column="poster" property="poster" />
+        <result column="order_start_time" property="orderStartTime" />
+        <result column="order_end_time" property="orderEndTime" />
+        <result column="lecture_start_time" property="lectureStartTime" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, title, type_id, description_id, organizer, undertaker, sponsor, space, speaker, reservation, poster, order_start_time, order_end_time, lecture_start_time, is_deleted, create_time, update_time
+    </sql>
+
+</mapper>

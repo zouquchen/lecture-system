@@ -1,6 +1,6 @@
 package com.study.lecture.user;
 
-import com.study.lecture.common.entity.User;
+import com.study.lecture.common.entity.user.User;
 import com.study.lecture.user.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

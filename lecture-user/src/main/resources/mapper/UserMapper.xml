@@ -3,9 +3,9 @@
 <mapper namespace="com.study.lecture.user.mapper.UserMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.study.lecture.common.entity.User">
+    <resultMap id="BaseResultMap" type="com.study.lecture.common.entity.user.User">
         <result column="id" property="id" />
-        <result column="user_name" property="userName" />
+        <result column="username" property="username" />
         <result column="password" property="password" />
         <result column="status" property="status" />
         <result column="email" property="email" />
