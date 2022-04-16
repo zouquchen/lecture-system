@@ -72,29 +72,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     /**
      * 获取当前登录用户基本信息
-     * @param token token
      * @return 响应信息
      */
     @Override
-    public R info(String token) {
-
-        // 解析token
-        String id;
-        try {
-            Claims claims = JwtUtil.parseJWT(token);
-            id = claims.getSubject();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("token非法");
-        }
-
-        // 从redis中获取用户信息
-        String redisKey = "login:" + id;
-        LoginUser loginUser = getUserFromRedisById(redisKey);
-        if (Objects.isNull(loginUser)) {
-            throw new RuntimeException("用户未登录");
-        }
-
+    public R info() {
+        // 因为用户已经登录，可以从SecurityContextHolder获取该用户信息
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return R.ok()
                 .put("name", loginUser.getUsername())
                 .put("roles", loginUser.getPermissions())
@@ -129,6 +112,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return (LoginUser) redisTemplate.opsForValue().get(key);
     }
 
+    /**
+     * 获取当前用户信息
+     * @return 用户信息
+     */
+    @Override
+    public R getLoginUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return R.ok().put("authentication", authentication);
+    }
 
 
 }

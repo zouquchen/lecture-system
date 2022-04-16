@@ -7,13 +7,15 @@
         <id column="id" property="id" />
         <result column="title" property="title" />
         <result column="type_id" property="typeId" />
-        <result column="description_id" property="descriptionId" />
+        <result column="creator_id" property="creatorId" />
         <result column="organizer" property="organizer" />
         <result column="undertaker" property="undertaker" />
         <result column="sponsor" property="sponsor" />
         <result column="space" property="space" />
         <result column="speaker" property="speaker" />
         <result column="reservation" property="reservation" />
+        <result column="store" property="store" />
+        <result column="description" property="description" />
         <result column="poster" property="poster" />
         <result column="order_start_time" property="orderStartTime" />
         <result column="order_end_time" property="orderEndTime" />
@@ -25,7 +27,36 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, type_id, description_id, organizer, undertaker, sponsor, space, speaker, reservation, poster, order_start_time, order_end_time, lecture_start_time, is_deleted, create_time, update_time
+        id, title, type_id, creator_id, organizer, undertaker, sponsor, space, speaker, reservation, store, description, poster, order_start_time, order_end_time, lecture_start_time, is_deleted, create_time, update_time
     </sql>
+
+    <!-- LectureForAdminListVo -->
+    <resultMap id="LectureForAdminListVoResultMap" type="com.study.lecture.common.vo.LectureForAdminListVo">
+        <result column="order_start_time" property="orderStartTime" />
+        <result column="order_end_time" property="orderEndTime" />
+        <result column="lecture_start_time" property="lectureStartTime" />
+    </resultMap>
+
+    <!-- 获取LectureAdminList-->
+    <select id="getLectureAdminList" resultMap="LectureForAdminListVoResultMap">
+        SELECT l.id, l.title, lt.name, l.space, lt.name as typeName, l.organizer, l.store, l.reservation, l.order_start_time, l.order_end_time, l.lecture_start_time
+        FROM lecture l, lecture_type lt
+        WHERE l.type_id = lt.id
+    </select>
+
+    <!-- 取LectureForAdminInfoVo查询映射结果 -->
+    <resultMap id="LectureForAdminInfoVoResultMap" type="com.study.lecture.common.vo.LectureForAdminInfoVo">
+        <result column="order_start_time" property="orderStartTime" />
+        <result column="order_end_time" property="orderEndTime" />
+        <result column="lecture_start_time" property="lectureStartTime" />
+    </resultMap>
+
+    <!-- 根据id获取讲座详情页面，显示详情页面-->
+    <select id="getLectureInfoById" resultMap="LectureForAdminInfoVoResultMap">
+        SELECT l.id, l.title, lt.name as typeName, u.username as creatorName, l.organizer, l.undertaker, l.sponsor, l.space, l.speaker, l.reservation, l.store, l.description, l.poster, l.order_start_time, l.order_end_time, l.lecture_start_time
+        FROM lecture l, lecture_type lt, sys_user u
+        WHERE l.type_id = lt.id and l.creator_id = u.id and l.id = #{id};
+    </select>
+
 
 </mapper>

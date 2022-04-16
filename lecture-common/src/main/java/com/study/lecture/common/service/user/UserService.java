@@ -24,10 +24,9 @@ public interface UserService extends IService<User> {
 
     /**
      * 获取当前登录用户基本信息
-     * @param token token
      * @return 响应信息
      */
-    R info(String token);
+    R info();
 
     /**
      * 登出服务
@@ -41,4 +40,10 @@ public interface UserService extends IService<User> {
      * @return 用户信息
      */
     LoginUser getUserFromRedisById(String key);
+
+    /**
+     * 获取当前用户信息
+     * @return 用户信息
+     */
+    R getLoginUser();
 }

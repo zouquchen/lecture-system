@@ -7,14 +7,16 @@ CREATE TABLE `lecture` (
     `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '讲座id',
     `title` VARCHAR(64) NOT NULL COMMENT '讲座名称',
     `type_id` BIGINT(20) COMMENT '讲座类型id',
-    `description_id` BIGINT(20) COMMENT '讲座描述信息id',
+    `creator_id` BIGINT(20) COMMENT '创建者id，只有创建者和管理才能修改信息',
     `organizer` VARCHAR(64) COMMENT '主办方',
     `undertaker` VARCHAR(64) COMMENT '承办方',
     `sponsor` VARCHAR(64) COMMENT '协办方',
     `space` VARCHAR(64) NOT NULL COMMENT '讲座地点',
     `speaker` VARCHAR(32) NOT NULL COMMENT '主讲人姓名',
     `reservation` SMALLINT NOT NULL COMMENT '讲座容纳人数',
-    `poster` VARCHAR(128) COMMENT '海报url',
+    `store` SMALLINT NOT NULL COMMENT '剩余预约数量',
+    `description` TEXT COMMENT '讲座描述信息',
+    `poster` VARCHAR(256) COMMENT '海报url',
     `order_start_time` DATETIME NOT NULL COMMENT '讲座预约开始时间',
     `order_end_time` DATETIME NOT NULL COMMENT '讲座预约结束时间',
     `lecture_start_time` DATETIME NOT NULL COMMENT '讲座开始时间',
@@ -56,18 +58,6 @@ CREATE TABLE `lecture_data_analysis` (
     `update_time` DATETIME DEFAULT NOW() COMMENT '更新时间',
     PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COMMENT='讲座数据分析表';
-
--- ----------------------------
--- 讲座描述表：用于描述讲座详细信息
--- ----------------------------
-CREATE TABLE `lecture_description` (
-    `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '讲座描述id',
-    `description` TEXT COMMENT '讲座描述',
-    `is_deleted` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '逻辑删除 1（true）已删除  0（false）未删除',
-    `create_time` DATETIME DEFAULT NOW() COMMENT '创建时间',
-    `update_time` DATETIME DEFAULT NOW() COMMENT '更新时间',
-    PRIMARY KEY (`id`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COMMENT='讲座描述表';
 
 -- ----------------------------
 -- 讲座类型表

@@ -1,5 +1,6 @@
-package com.study.lecture.common.exception;
+package com.study.lecture.common.handler;
 
+import com.study.lecture.common.exception.GlobalException;
 import com.study.lecture.common.utils.R;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

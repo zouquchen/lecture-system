@@ -25,9 +25,9 @@ public class JwtUtil {
 
     /**
      * 默认有效期
-     * 60 * 60 *1000  一个小时
+     * 24 * 60 * 60 *1000  一天
      */
-    public static final Long JWT_TTL = 60 * 60 *1000L;
+    public static final Long JWT_TTL = 24 * 60 * 60 *1000L;
 
     /**
      * 设置密钥明文

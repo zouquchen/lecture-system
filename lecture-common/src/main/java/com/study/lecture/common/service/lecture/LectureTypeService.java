@@ -2,6 +2,7 @@ package com.study.lecture.common.service.lecture;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.study.lecture.common.entity.lecture.LectureType;
+import com.study.lecture.common.utils.R;
 
 /**
  * <p>

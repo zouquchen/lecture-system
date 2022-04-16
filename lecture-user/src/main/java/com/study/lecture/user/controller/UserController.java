@@ -41,11 +41,19 @@ public class UserController {
      * @return
      */
     @GetMapping("info")
-    public R info(@RequestParam("token") String token) {
+    public R info() {
         System.out.println("收到info请求！");
-        return userService.info(token);
+        return userService.info();
     }
 
+    /**
+     * 获取当前已登录用户信息
+     * @return 当前用户信息
+     */
+    @GetMapping("getLoginUser")
+    public R getLoginUser() {
+        return userService.getLoginUser();
+    }
     /**
      * 用户登出，前端nginx转发到这里实现登出
      * @return

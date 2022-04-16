@@ -34,9 +34,11 @@ dubbo:
     timeout: 6000
   protocol:
     name: dubbo
-    port: 20880
+    port: 20882
   scan:
-    base-packages: com.study.lecture.user.service.impl
+    base-packages: com.study.lecture.lecture.service.impl
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true

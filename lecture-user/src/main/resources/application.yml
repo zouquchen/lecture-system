@@ -34,7 +34,7 @@ dubbo:
     timeout: 6000
   protocol:
     name: dubbo
-    port: 20880
+    port: 20881
   scan:
     base-packages: com.study.lecture.user.service.impl
 
