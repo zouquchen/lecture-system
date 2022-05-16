@@ -1,10 +1,11 @@
-INSERT INTO sys_user (id,username,PASSWORD,user_type) VALUE(1,'admin','admin','0');
-
--- INSERT INTO sys_menu (id,menu_name,perms) value (1,'查看列表', 'system:user:list');
--- INSERT INTO sys_menu (id,menu_name,perms) value (2,'查看详情', 'system:user:info');
--- INSERT INTO sys_menu (id,menu_name,perms) value (3,'新增', 'system:user:save');
--- INSERT INTO sys_menu (id,menu_name,perms) value (4,'删除', 'system:user:delete');
--- INSERT INTO sys_menu (id,menu_name,perms) value (5,'修改', 'system:user:update');
+-- ----------------------------
+-- 用户表
+-- ----------------------------
+INSERT INTO sys_user (id,username,PASSWORD,user_type, avatar)
+VALUES
+       (1,'admin','$2a$10$ha5kcAOTEswbCPjB9lXQ8uyep6QpbP7VusfBFUdKiEbigDk5j6uFe', '0', 'http://www.weixintouxiang.cn/weixin/20140607090832328.gif'),
+       (2,'manager','$2a$10$AJUfqCEQrI1H1k88eRlddOHGVEucaqn9L.lDFvM4YZFqMZ2x0zGou', '0', 'http://www.weixintouxiang.cn/weixin/20140607090832328.gif'),
+       (3,'student','$2a$10$NOIGGyky/vYSxgc2j6z3FuEVP8nMxZk5OuaWVjN4FUNRcqK2XEsYe', '1', 'http://www.weixintouxiang.cn/weixin/20140607090832328.gif');
 
 -- ----------------------------
 -- 角色表
@@ -18,9 +19,5 @@ INSERT INTO sys_role (id, name, role_key, remark) VALUE (3, '后台管理人员'
 -- 用户角色关联表
 -- ----------------------------
 INSERT INTO sys_user_role (user_id, role_id) VALUE (1,3);
-
-SELECT sr.role_key
-FROM sys_user su
-LEFT JOIN sys_user_role sur ON su.id = sur.user_id
-LEFT JOIN sys_role sr ON sr.id = sur.role_id
-WHERE su.id = 1;
+INSERT INTO sys_user_role (user_id, role_id) VALUE (2,2);
+INSERT INTO sys_user_role (user_id, role_id) VALUE (3,1);

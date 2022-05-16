@@ -6,6 +6,7 @@ import com.study.lecture.common.service.user.UserService;
 import com.study.lecture.common.utils.JwtUtil;
 import com.study.lecture.common.utils.ResultCodeEnum;
 import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +35,7 @@ import java.util.Objects;
  * @since 1.0
  */
 @Component
+@Slf4j
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @DubboReference(version = "1.0")
@@ -41,7 +43,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("经过JwtAuthenticationTokenFilter！");
+        log.info("经过JwtAuthenticationTokenFilter！");
         // 获取token
         String token = request.getHeader("token");
         if (!StringUtils.hasText(token)) {

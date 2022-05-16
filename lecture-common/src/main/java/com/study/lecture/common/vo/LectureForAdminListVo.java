@@ -17,7 +17,7 @@ import java.util.Date;
  * @author zqc
  * @since 1.0
  */
-@ApiModel(value = "Lecture查询对象", description = "讲师查询对象封装")
+@ApiModel(value = "Lecture查询对象", description = "管理员查询讲座列表对象")
 @Data
 public class LectureForAdminListVo implements Serializable {
 
@@ -35,10 +35,10 @@ public class LectureForAdminListVo implements Serializable {
     private String title;
 
     /**
-     * 未开放、预约中、已结束
+     * lecture定义的state包含 0：已发布， 1：已结束
      * 需要根据时间推算
      */
-    private String state;
+    private int state;
 
     /**
      * 讲座类别 lectureType表

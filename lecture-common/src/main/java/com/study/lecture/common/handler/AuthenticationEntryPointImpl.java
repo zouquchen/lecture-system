@@ -15,7 +15,7 @@ import java.io.IOException;
 
 /**
  * <p>
- * 用户未认证处理
+ * 用户未认证处理（用户未登录）
  * </p>
  * <br>
  * Creation Time: 2022/4/6 11:10

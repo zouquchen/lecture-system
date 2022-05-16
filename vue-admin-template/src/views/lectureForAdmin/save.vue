@@ -23,7 +23,7 @@
         <el-input v-model="lecture.speaker" placeholder="请输入主讲嘉宾姓名"/>
       </el-form-item>
       <el-form-item label="可预约人数" >
-        <el-input v-model="lecture.reservation" :maxlength="4" type="number" placeholder="400"/>
+        <el-input v-model="lecture.reservation" :maxlength="4" type="number" placeholder="400" min="1" max="2000" step-strictly="true"/>
       </el-form-item>
       <el-form-item label="讲座地点" >
         <el-input v-model="lecture.space" placeholder="请输入讲座地点"/>

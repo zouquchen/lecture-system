@@ -1,16 +1,17 @@
 package com.study.lecture.lecture.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.study.lecture.common.entity.lecture.Lecture;
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.utils.R;
-import com.study.lecture.common.vo.LectureForAdminInfoVo;
-import com.study.lecture.common.vo.LectureForAdminListVo;
+import com.study.lecture.common.vo.*;
 import com.study.lecture.lecture.mapper.LectureMapper;
 import com.study.lecture.common.service.lecture.LectureService;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -31,51 +32,80 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
     private LectureMapper lectureMapper;
 
     /**
-     * 分页查询
+     * <p> admin分页条件查询lecture列表 </p>
      * @param page 当前页
      * @param limit 每页显示数量
      * @return 分页查询结果
      */
     @Override
-    public R pageList(int page, int limit) {
-        Page<Lecture> pageParam = new Page<>(page, limit);
-        // 分页查询，查完后，会将数据封装在pageParam中
-        this.page(pageParam, null);
-        // 获取查询到的数据
-        List<Lecture> records = pageParam.getRecords();
-        long total = pageParam.getTotal();
+    public R lectureForAdminPageList(int page, int limit, LectureForAdminListQueryVo lectureForAdminListQueryVo) {
+
+        String title = null;
+        Long typeId = null;
+        Date start = null;
+        Date end = null;
+
+        // 取出值，判断他们是否有值
+        if (lectureForAdminListQueryVo != null) {
+            title = lectureForAdminListQueryVo.getTitle();
+            typeId = lectureForAdminListQueryVo.getTypeId();
+            start = lectureForAdminListQueryVo.getStart();
+            end = lectureForAdminListQueryVo.getEnd();
+        }
+
+        // 计算begin
+        int begin = (page - 1) * limit;
+
+        // 处理数据
+        int total = lectureMapper.countLectureAdminListByCondition(title, typeId, start, end);
+        List<LectureForAdminListVo> records = lectureMapper.getLectureAdminPageListByCondition(begin, limit, title, typeId, start, end);
+
         return R.ok().put("total", total).put("records", records);
     }
 
     /**
-     * admin分页查询lecture列表
+     * <p> user分页条件查询lecture列表 </p>
+     * <p> 可查询到的讲座：已发布，并且时间在讲座开始的15分钟之前，按照讲座开始预约时间顺序排序 </p>
+     *
      * @param page 当前页
      * @param limit 每页显示数量
+     * @param lectureForUserListQueryVo 查询条件
      * @return 分页查询结果
      */
     @Override
-    public R adminPageList(int page, int limit) {
-        Page<LectureForAdminListVo> pageParam = new Page<>(page, limit);
-        // 将查询结果封装到page中,作为page中的数据
-        pageParam.setRecords(baseMapper.getLectureAdminList(pageParam));
+    public R lectureForUserPageList(int page, int limit, LectureForUserListQueryVo lectureForUserListQueryVo) {
+        String title = null;
+        Long typeId = null;
+        Date start = null;
+        Date end = null;
+
+        // 取出值，判断他们是否有值
+        if (lectureForUserListQueryVo != null) {
+            title = lectureForUserListQueryVo.getTitle();
+            typeId = lectureForUserListQueryVo.getTypeId();
+            start = lectureForUserListQueryVo.getStart();
+            end = lectureForUserListQueryVo.getEnd();
+        }
+
+        // 计算begin
+        int begin = (page - 1) * limit;
 
         // 处理数据
-        List<LectureForAdminListVo> records = pageParam.getRecords();
-        long total = pageParam.getTotal();
-        // 根据时间设置状态
-        for (int i = 0; i < records.size(); i++) {
-            LectureForAdminListVo vo = records.get(i);
-            Date curDate = new Date();
-            if (curDate.before(vo.getOrderStartTime())) {
-                vo.setState("未开放");
-            } else if (curDate.after(vo.getOrderStartTime()) && curDate.before(vo.getOrderEndTime())) {
-                vo.setState("预约中");
-            } else {
-                vo.setState("已结束");
-            }
-        }
+        int total = lectureMapper.countLectureUserListByCondition(title, typeId, start, end);
+        List<LectureForUserListVo> records = lectureMapper.getLectureUserPageListByCondition(begin, limit, title, typeId, start, end);
+
         return R.ok().put("total", total).put("records", records);
     }
+
+    /**
+     * user(student)查询所有lecture列表，不分页
+     * @return 查询结果
+     */
+    @Override
+    public List<LectureForUserListVo> lectureForUserList() {
+        return null;
+    }
+
 
     /**
      * 添加 lecture
@@ -87,9 +117,11 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
         // TODO 事务、异常处理
         // 获取已登录用户，用于设置发布者
         LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         // 创建lecture lectureDescription对象并赋值
         lecture.setStore(lecture.getReservation());
         lecture.setCreatorId(loginUser.getUser().getId());
+
         // 数据库插入记录
         return lectureMapper.insert(lecture);
     }

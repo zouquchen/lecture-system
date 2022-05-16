@@ -8,12 +8,27 @@ export default {
       method: 'get'
     })
   },
-  // 分页查询数据
-  getLectureListPage(page, limit, lectureQuery) {
+  // 条件分页查询讲座列表数据（for admin）
+  getLectureAdminListPage(page, limit, lectureQuery) {
     return request({
       url: `/lecture/adminPageList/${page}/${limit}`,
       method: `post`,
       data: lectureQuery
+    })
+  },
+  // 条件分页查询讲座列表数据（for user）
+  getLectureUserListPage(page, limit, lectureQuery) {
+    return request({
+      url: `/lecture/userPageList/${page}/${limit}`,
+      method: `post`,
+      data: lectureQuery
+    })
+  },
+  // 分页查询已预约讲座列表（for user）
+  getLectureUserRecordPageList(page, limit) {
+    return request({
+      url: `/lecture/userRecordPageList/${page}/${limit}`,
+      method: `get`
     })
   },
   // 添加讲座

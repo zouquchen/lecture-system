@@ -77,23 +77,30 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/lectureOrder',
+    path: '/lectureForUser',
     component: Layout,
-    redirect: '/lectureOrder/table',
-    name: '个人中心',
-    meta: { title: '个人中心', icon: 'example' },
+    redirect: '/lectureForUser/listOrder',
+    name: '讲座预约',
+    meta: { title: '讲座预约', icon: 'example' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'listOrder',
+        name: '讲座列表',
+        component: () => import('@/views/lectureForUser/listOrder.vue'),
+        meta: { title: '讲座列表', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'listRecords',
+        name: '我的讲座',
+        component: () => import('@/views/lectureForUser/listRecords.vue'),
+        meta: { title: '我的讲座', icon: 'tree' }
+      },
+      {
+        path: 'info/:id',
+        name: '讲座详情',
+        component: () => import('@/views/lectureForUser/info.vue'),
+        meta: { title: '讲座详情' },
+        hidden: true
       }
     ]
   },

@@ -24,7 +24,8 @@
         <module>lecture-common</module>
         <module>lecture-user</module>
         <module>lecture-lecture</module>
-        <module>lecture-publish</module>
+        <module>lecture-order</module>
+        <module>lecture-oss</module>
     </modules>
 
 </project>

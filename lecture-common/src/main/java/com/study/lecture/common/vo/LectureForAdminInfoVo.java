@@ -47,6 +47,12 @@ public class LectureForAdminInfoVo implements Serializable {
     private String creatorName;
 
     /**
+     * lecture定义的state包含 0：已发布， 1：已结束
+     * 需要根据时间推算
+     */
+    private int state;
+
+    /**
      * 主办方 lecture表
      */
     @ApiModelProperty(value = "主办方", example = "东南大学研究生会")

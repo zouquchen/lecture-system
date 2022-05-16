@@ -49,6 +49,12 @@ public class LectureForAdminUpdateVo implements Serializable {
     private long creatorId;
 
     /**
+     * lecture定义的state包含 0：已发布， 1：已结束
+     * 需要根据时间推算
+     */
+    private int state;
+
+    /**
      * 讲座描述 lecture_description表, lecture表存id，
      */
     @ApiModelProperty(value = "讲座描述", example = "这将会是你见过最精彩的讲座")

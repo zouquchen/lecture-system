@@ -4,6 +4,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.study.lecture.common.entity.lecture.Lecture;
 import com.study.lecture.common.utils.R;
 import com.study.lecture.common.vo.LectureForAdminInfoVo;
+import com.study.lecture.common.vo.LectureForAdminListQueryVo;
+import com.study.lecture.common.vo.LectureForUserListQueryVo;
+import com.study.lecture.common.vo.LectureForUserListVo;
+
+import java.util.List;
 
 
 /**
@@ -17,20 +22,28 @@ import com.study.lecture.common.vo.LectureForAdminInfoVo;
 public interface LectureService extends IService<Lecture> {
 
     /**
-     * 分页查询
-     * @param page 当前页
-     * @param limit 每页显示数量
-     * @return 分页查询结果
-     */
-    R pageList(int page, int limit);
-
-    /**
      * admin分页查询lecture列表
      * @param page 当前页
      * @param limit 每页显示数量
+     * @param lectureForAdminListQueryVo 查询条件
      * @return 分页查询结果
      */
-    R adminPageList(int page, int limit);
+    R lectureForAdminPageList(int page, int limit, LectureForAdminListQueryVo lectureForAdminListQueryVo);
+
+    /**
+     * user(student)分页查询lecture列表
+     * @param page 当前页
+     * @param limit 每页显示数量
+     * @param lectureForUserListQueryVo 查询条件
+     * @return 分页查询结果
+     */
+    R lectureForUserPageList(int page, int limit, LectureForUserListQueryVo lectureForUserListQueryVo);
+
+    /**
+     * user(student)查询所有lecture列表，不分页
+     * @return 查询结果
+     */
+    List<LectureForUserListVo> lectureForUserList();
 
     /**
      * 添加 lecture
@@ -59,7 +72,5 @@ public interface LectureService extends IService<Lecture> {
      * @return 查询结果
      */
     LectureForAdminInfoVo getLectureInfoById(Long id);
-
-
 
 }

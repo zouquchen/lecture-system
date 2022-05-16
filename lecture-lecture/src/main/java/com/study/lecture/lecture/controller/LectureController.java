@@ -3,9 +3,13 @@ package com.study.lecture.lecture.controller;
 import com.study.lecture.common.entity.lecture.Lecture;
 import com.study.lecture.common.exception.GlobalException;
 import com.study.lecture.common.service.lecture.LectureService;
+import com.study.lecture.common.service.lecture.LectureUserRecordService;
 import com.study.lecture.common.utils.R;
 import com.study.lecture.common.vo.LectureForAdminInfoVo;
 
+import com.study.lecture.common.vo.LectureForAdminListQueryVo;
+import com.study.lecture.common.vo.LectureForUserListQueryVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -21,6 +25,7 @@ import java.util.List;
  * @author zqc
  * @since 1.0
  */
+@Slf4j(topic = "LectureController")
 @RestController
 @CrossOrigin
 @RequestMapping("/lecture")
@@ -29,6 +34,8 @@ public class LectureController {
     @Resource
     private LectureService lectureService;
 
+    @Resource
+    private LectureUserRecordService lectureUserRecordService;
 
     /**
      * 列出所有页面结果
@@ -41,25 +48,34 @@ public class LectureController {
     }
 
     /**
-     * 分页查询
+     * 管理员查看的讲座列表信息
      * @param page 当前页
-     * @param limit 每页显示数量
-     * @return 分页查询结果
+     * @param limit 当前页显示数量
+     * @param lectureForAdminListQueryVo 查询条件，设置为非必选，即使不传该参数也可以查询
+     * @return 响应类
      */
-    @PostMapping("/pageList/{page}/{limit}")
-    public R pageList(@PathVariable int page, @PathVariable int limit) {
-        return lectureService.pageList(page, limit);
+    @PostMapping("/adminPageList/{page}/{limit}")
+    public R adminPageList(@PathVariable int page, @PathVariable int limit,
+                           @RequestBody(required = false) LectureForAdminListQueryVo lectureForAdminListQueryVo) {
+        log.debug("进入adminPageList");
+        return lectureService.lectureForAdminPageList(page, limit, lectureForAdminListQueryVo);
     }
 
     /**
-     * 管理员查看的讲座列表信息
+     * 用户（学生）查看的讲座列表信息
      * @param page 当前页
      * @param limit 当前页显示数量
      * @return 响应类
      */
-    @PostMapping("/adminPageList/{page}/{limit}")
-    public R adminPageList(@PathVariable int page, @PathVariable int limit) {
-        return lectureService.adminPageList(page, limit);
+    @PostMapping("/userPageList/{page}/{limit}")
+    public R userPageList(@PathVariable int page, @PathVariable int limit,
+                          @RequestBody(required = false)LectureForUserListQueryVo lectureForUserListQueryVo) {
+        return lectureService.lectureForUserPageList(page, limit, lectureForUserListQueryVo);
+    }
+
+    @GetMapping("/userRecordPageList/{page}/{limit}")
+    public R userRecordPageList(@PathVariable int page, @PathVariable int limit) {
+        return lectureUserRecordService.getLectureUserRecordPageList(page, limit);
     }
 
     /**

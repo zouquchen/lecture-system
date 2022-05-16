@@ -42,7 +42,22 @@ public enum ResultCodeEnum {
     /**
      * 用户未登录
      */
-    USER_OFFLINE(500100, "用户未登录")
+    USER_OFFLINE(50010, "用户未登录"),
+
+    /**
+     * 用户重复预定讲座
+     */
+    REPEAT_ORDER(50101, "用户重复预定讲座"),
+
+    /**
+     * 预约讲座不存在
+     */
+    LECTURE_NOT_EXIT(50102, "预约讲座不存在"),
+
+    /**
+     * 讲座名额已被抢光
+     */
+    EMPTY_STORE(50103, "讲座名额已被抢光")
     ;
 
     /**

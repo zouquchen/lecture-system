@@ -18,7 +18,7 @@ public class EncodeTest {
     @Test
     void TestBCryptPasswordEncoder() {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encode = passwordEncoder.encode("admin");
+        String encode = passwordEncoder.encode("student");
 
         System.out.println(encode);
     }

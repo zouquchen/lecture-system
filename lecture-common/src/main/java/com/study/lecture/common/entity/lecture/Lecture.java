@@ -39,6 +39,10 @@ public class Lecture implements Serializable {
     private Long typeId;
 
     /**
+     * 讲座状态 0（已发布） 1 （已结束）
+     */
+    private int state;
+    /**
      * 讲座描述信息
      */
     private String description;

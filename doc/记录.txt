@@ -1,16 +1,12 @@
-1 添加讲座功能，添加到lecture、lecture_description
+如何显示用户能够查看的列表：根据时间进行条件查询
 
 
------------------------------------------------ 未来任务 -----------------------------------------------
-2 分库：lecture_order, lecture_user_record 要分到另一个库中
 
 
------------------------------------------------ 灵感想法 -----------------------------------------------
-预约后，可以取消
-
+----------------------------------------------- 未来优化：分库分表 -----------------------------------------------
 两个库里都有lecture_user_record，一个用来存储用户预约时的相关信息，另一个是在讲座结束后生成，存储用户听讲座的相关信息。
 
-讲座开始前两天：根据库lecture_system中lecture、lecture_description、lecture_type，
+讲座开始前两天：根据库lecture_system中lecture、lecture_type，
 在库lecture_subscribe中生成lecture_order、lecture_user_record
 
 讲座结束后一天：根据库lecture_subscribe中lecture_order更新lecture，
