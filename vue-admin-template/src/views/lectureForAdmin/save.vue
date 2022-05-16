@@ -1,74 +1,83 @@
 <template>
   <div class="app-container">
-    <!-- 表单-->
-    <el-form label-width="100px">
-      <el-form-item label="讲座名称" >
-        <el-input v-model="lecture.title" placeholder="请输入讲座名称" />
-      </el-form-item>
-      <el-form-item label="讲座类型">
-        <el-select v-model="lecture.typeId" placeholder="请选择活动类型">
-          <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="主办方" >
-        <el-input v-model="lecture.organizer" placeholder="东南大学研究生会" />
-      </el-form-item>
-      <el-form-item label="承办方" >
-        <el-input v-model="lecture.undertaker" placeholder="东南大学研究生会"/>
-      </el-form-item>
-      <el-form-item label="协办方" >
-        <el-input v-model="lecture.sponsor" placeholder="东南大学自动化学院"/>
-      </el-form-item>
-      <el-form-item label="主将嘉宾" >
-        <el-input v-model="lecture.speaker" placeholder="请输入主讲嘉宾姓名"/>
-      </el-form-item>
-      <el-form-item label="可预约人数" >
-        <el-input v-model="lecture.reservation" :maxlength="4" type="number" placeholder="400" min="1" max="2000" step-strictly="true"/>
-      </el-form-item>
-      <el-form-item label="讲座地点" >
-        <el-input v-model="lecture.space" placeholder="请输入讲座地点"/>
-      </el-form-item>
-      <el-form-item label="预约时间">
-        <el-col :span="4" >
-          <el-date-picker v-model="lecture.orderStartTime" type="datetime" placeholder="开始时间" style="width: 100%;"/>
-        </el-col>
-        <el-col :span="1" class="line" align="center">-</el-col>
-        <el-col :span="4">
-          <el-date-picker v-model="lecture.orderEndTime" type="datetime" placeholder="结束时间" style="width: 100%;"/>
-        </el-col>
-      </el-form-item>
-      <el-form-item label="讲座时间">
-        <el-col :span="4" >
-          <el-date-picker v-model="lecture.lectureStartTime" type="datetime" placeholder="开始时间" style="width: 100%;"/>
-        </el-col>
-      </el-form-item>
-      <el-form-item label="讲座介绍">
-        <el-input v-model="lecture.description" type="textarea" placeholder="讲座详细描述信息"/>
-      </el-form-item>
+    <el-row>
+      <el-col :span="14">
 
-      <!-- 上传文件 -->
-      <el-form-item label="讲座海报">
-        <el-upload
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :on-success="handleUploadSuccess"
-          :file-list="uploadElement.fileList"
-          :action="BASE_API + '/oss/uploadImage'"
-          :headers="uploadElement.headerSetToken"
-          :limit="uploadElement.limit"
-          list-type="picture">
-          <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件, 且仅能上传一张海报。</div>
-        </el-upload>
-      </el-form-item>
+        <!-- 表单-->
+        <el-form label-width="100px">
+          <el-form-item label="讲座名称" >
+            <el-input v-model="lecture.title" placeholder="请输入讲座名称" />
+          </el-form-item>
+          <el-form-item label="讲座类型">
+            <el-select v-model="lecture.typeId" placeholder="请选择活动类型">
+              <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="主办方" >
+            <el-input v-model="lecture.organizer" placeholder="东南大学研究生会" />
+          </el-form-item>
+          <el-form-item label="承办方" >
+            <el-input v-model="lecture.undertaker" placeholder="东南大学研究生会"/>
+          </el-form-item>
+          <el-form-item label="协办方" >
+            <el-input v-model="lecture.sponsor" placeholder="东南大学自动化学院"/>
+          </el-form-item>
+          <el-form-item label="主将嘉宾" >
+            <el-input v-model="lecture.speaker" placeholder="请输入主讲嘉宾姓名"/>
+          </el-form-item>
+          <el-form-item label="可预约人数" >
+            <el-input v-model="lecture.reservation" :maxlength="4" type="number" placeholder="400" min="1" max="2000" step-strictly="true"/>
+          </el-form-item>
+          <el-form-item label="讲座地点" >
+            <el-input v-model="lecture.space" placeholder="请输入讲座地点"/>
+          </el-form-item>
+          <el-form-item label="预约时间">
+            <el-col :span="4" >
+              <el-date-picker v-model="lecture.orderStartTime" type="datetime" placeholder="开始时间" style="width: 100%;"/>
+            </el-col>
+            <el-col :span="1" class="line" align="center">-</el-col>
+            <el-col :span="4">
+              <el-date-picker v-model="lecture.orderEndTime" type="datetime" placeholder="结束时间" style="width: 100%;"/>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="讲座时间">
+            <el-col :span="4" >
+              <el-date-picker v-model="lecture.lectureStartTime" type="datetime" placeholder="开始时间" style="width: 100%;"/>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="讲座介绍">
+            <el-input v-model="lecture.description" type="textarea" placeholder="讲座详细描述信息"/>
+          </el-form-item>
 
-      <!-- 按钮 -->
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">保存</el-button>
-        <el-button>取消</el-button>
-      </el-form-item>
-    </el-form>
+          <!-- 上传文件 -->
+          <el-form-item label="讲座海报">
+            <el-upload
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :on-success="handleUploadSuccess"
+              :file-list="uploadElement.fileList"
+              :action="BASE_API + '/oss/uploadImage'"
+              :headers="uploadElement.headerSetToken"
+              :limit="uploadElement.limit">
+              <el-button class="upload-button" size="small" type="primary">点击上传</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件, 且仅能上传一张海报。</div>
+            </el-upload>
+          </el-form-item>
 
+          <!-- 按钮 -->
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">保存</el-button>
+            <el-button>取消</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+      <!-- 显示上传的图片-->
+      <el-col :span="10">
+        <div align="center" class="block" style="">
+          <el-image :src="lecture.poster" style="width: 60%"/>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -127,7 +136,7 @@ export default {
       // 判断路径中是否有id值
       if (this.$route.params && this.$route.params.id) {
         // 从路径获取id值
-        console.log('有id：' + this.$route.params.id)
+        console.log('有id: ' + this.$route.params.id)
         this.lecture.id = this.$route.params.id
         // 调用根据id查询讲座信息
         this.getLecture(this.lecture.id)
@@ -145,7 +154,7 @@ export default {
           space: '',
           speaker: '',
           reservation: '',
-          poster: '',
+          poster: 'https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/noPicture.png',
           orderStartTime: '',
           orderEndTIme: '',
           lectureStartTime: ''
