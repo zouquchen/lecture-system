@@ -138,19 +138,46 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
     }
 
     /**
-     * 根据id获取lecture详情, 显示详情页面（for admin）
+     * 根据id获取lecture详情（讲座详情、预约该讲座的用户列表）, 显示详情页面（for admin），
      * 与上面的方法相比，信息更全面，比如获取的是typeName而不是typeId
      * @param id lecture的id
      * @return 查询结果
      */
     @Override
     public LectureForAdminInfoVo getLectureInfoForAdminById(Long id) {
-        return lectureMapper.getLectureInfoForAdminById(id);
+        // 根据id查询讲座详情
+        LectureForAdminInfoVo lecture = lectureMapper.getLectureInfoForAdminById(id);
+
+        // 根据id查询预约该讲座的所有用户信息
+        List<OrderRecordOfOneLectureVo> list = lectureMapper.getOrderRecordOfOneLectureListById(id);
+
+        // 修改list中每个用户的状态
+        int signCount = 0;
+        int notAttendCount = 0;
+        int state = lecture.getState();
+        for (OrderRecordOfOneLectureVo vo : list) {
+            if (state == 0) {
+                vo.setState("等待开始");
+            } else {
+                if (vo.getSignTime() == null) {
+                    vo.setState("未参加");
+                    notAttendCount++;
+                } else {
+                    vo.setState("已签到");
+                    signCount++;
+                }
+            }
+        }
+        lecture.setUserList(list);
+        lecture.setUserCount(list.size());
+        lecture.setNotAttendCount(signCount);
+        lecture.setNotAttendCount(notAttendCount);
+
+        return lecture;
     }
 
     /**
      * 根据id获取lecture详情, 显示详情页面（for User）
-     * 与上面的方法相比，信息更全面，比如获取的是typeName而不是typeId
      * @param id lecture的id
      * @return 查询结果
      */

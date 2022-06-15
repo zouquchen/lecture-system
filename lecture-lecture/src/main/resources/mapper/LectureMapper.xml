@@ -133,4 +133,12 @@
         WHERE l.type_id = lt.id and l.creator_id = u.id and l.id = #{id}
     </select>
 
+    <!-- 根据id获取预约此讲座的所有用户信息-->
+    <select id="getOrderRecordOfOneLectureListById"
+            resultType="com.study.lecture.common.vo.OrderRecordOfOneLectureVo">
+        SELECT lur.user_id, su.username, lur.order_time, lur.sign_time
+        FROM lecture_user_record lur, sys_user su
+        WHERE lur.user_id = su.id AND lur.lecture_id = #{id}
+    </select>
+
 </mapper>

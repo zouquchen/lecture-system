@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -127,4 +128,19 @@ public class LectureForAdminInfoVo implements Serializable {
      */
     @ApiModelProperty(value = "讲座开始时间", example = "2022-06-13T11:00:00.000+0000")
     private Date lectureStartTime;
+
+    /**
+     * 预约此讲座的用户列表
+     */
+    @ApiModelProperty(value = "用户列表")
+    private List<OrderRecordOfOneLectureVo> userList;
+
+    /**
+     * 预约的总人数（与可预约人数reservation、总预约人store数冗余，不过没关系）
+     */
+    private int userCount;
+
+    private int signCount;
+
+    private int notAttendCount;
 }

@@ -5,19 +5,33 @@
 Lecture是一款前后端分离的校园讲座预约系统，基于目前主流的技术栈
 （SpringBoot + MyBatis + MySQL + Redis + RabbitMQ + Spring Security + ...），提供详细的学习开发文档。
 
-## 💻 2 核心技术栈
+## 🎬 2 快速开始
 
-## 🔨 3 开发环境
+- 配置mysql
+  - 修改每一个项目中application.yml中mysql的url, username以及password。
+- 配置redis
+  - 修改每一个项目中application.yml中redis的host, port以及password。
+- 启动Nginx
+  - 方式1：Window10环境下，并保证所有项目都在该环境下运行时，启动nginx-lecture目录下的niginx.exe
+  - 方式2：自定义Nginx，并仿照nginx-lecture/conf/nginx.conf对自己的Nginx进行配置。
+- 配置Zookeeper
+  - 修改每一个项目中application.yml中zookeeper的ip地址。
+- 配置RabbitMQ
+  - 修改每一个项目中application.yml中rabbitmq的host, username以及password。
+  
+## 💻 3 核心技术栈
 
-## 🎀 4 界面展示
+## 🔨 4 开发环境
 
-## 🌱 5 本地运行
+## 🎀 5 界面展示
 
-## 🌌 6 部署架构
+## 🌱 6 本地运行
 
-## 🎯 7 功能逻辑图
+## 🌌 7 部署架构
 
-### 7.1 用户模块
+## 🎯 8 功能逻辑图
+
+### 8.1 用户模块
 
 用户模块使用Spring Security框架实现认证、授权两大功能。
 
@@ -25,7 +39,7 @@ Lecture是一款前后端分离的校园讲座预约系统，基于目前主流�
 > 
 >授权（Authoritarian）：经过认证后判断当前用户是否有权限进行某个操作。
 
-#### 7.1.1 认证
+#### 8.1.1 认证
 
 认证模块是验证当前访问系统的是不是本系统的用户，并且确认具体是哪个用户。
 如果用户未登录就需要让用户先登录再认证。
@@ -34,9 +48,9 @@ Lecture是一款前后端分离的校园讲座预约系统，基于目前主流�
 
 ![structure_login.png](doc/images/structure_login.png)
 
-#### 7.1.2 授权
+#### 8.1.2 授权
 
-#### 7.1.3 Spring Security原理
+#### 8.1.3 Spring Security原理
 
 下面对Spring Security的原理进行简单的介绍：
 

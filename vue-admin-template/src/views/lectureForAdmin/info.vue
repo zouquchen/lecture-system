@@ -2,6 +2,7 @@
   <div class="app-container">
     <el-row>
       <el-col :span="14">
+        <!-- 讲座详情 -->
         <el-descriptions :column="1" size="1" class="margin-top" title="讲座详情" border>
           <template slot="extra">
             <router-link :to="'/lectureForAdmin/edit/' + lecture.id">
@@ -47,7 +48,21 @@
             <template slot="label">讲座描述</template>{{ lecture.description }}
           </el-descriptions-item>
         </el-descriptions>
+
+        <!-- 预约统计 -->
+        <el-descriptions :column="1" size="1" class="margin-top" style="margin-top:50px" title="预约统计" border>
+          <el-descriptions-item>
+            <template slot="label">总预约人数</template>{{ lecture.userCount }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">签到人数</template>{{ lecture.signCount }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">缺席人数</template>{{ lecture.notAttendCount }}
+          </el-descriptions-item>
+        </el-descriptions>
       </el-col>
+      <!-- 海报 -->
       <el-col :span="10">
         <div align="center">
           <el-image :src="lecture.poster" style="width: 80%" lazy/>
@@ -59,11 +74,11 @@
     <el-descriptions :column="1" size="1" class="margin-top" style="margin-top:50px" title="预约情况" border/>
     <el-row>
       <el-col :span="24">
-        <el-table :data="tableData" height="250" border style="width: 100%">
-          <el-table-column prop="date" label="用户id" align="center" />
-          <el-table-column prop="date" label="用户名" align="center" />
-          <el-table-column prop="date" label="预约时间" align="center" />
-          <el-table-column prop="date" label="参与情况" align="center" />
+        <el-table :data="lecture.userList" border fit style="width: 100%" max-height="500">
+          <el-table-column fixed prop="userId" label="用户id" align="center" />
+          <el-table-column prop="username" label="用户名" align="center" />
+          <el-table-column :formatter="timeFormatter" label="预约时间" align="center" />
+          <el-table-column prop="state" label="参与情况" align="center" />
         </el-table>
       </el-col>
     </el-row>
@@ -93,7 +108,11 @@ export default {
         poster: '',
         orderStartTime: '',
         orderEndTIme: '',
-        lectureStartTime: ''
+        lectureStartTime: '',
+        userCount: '',
+        signCount: '',
+        notAttendCount: '',
+        userList: []
       },
       moment: require('moment')
     }
@@ -115,6 +134,10 @@ export default {
       }).catch(err => {
         console.log('getLectureById Error: ' + err)
       })
+    },
+    timeFormatter(data) { // 讲座开始时间
+      const moment = require('moment')
+      return moment(data.orderTime).utcOffset(480).format('YYYY-MM-DD HH:mm:ss')
     }
   }
 }

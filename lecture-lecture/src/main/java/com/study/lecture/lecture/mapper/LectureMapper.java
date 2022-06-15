@@ -2,10 +2,7 @@ package com.study.lecture.lecture.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.study.lecture.common.entity.lecture.Lecture;
-import com.study.lecture.common.vo.LectureForAdminListVo;
-import com.study.lecture.common.vo.LectureForAdminInfoVo;
-import com.study.lecture.common.vo.LectureForUserInfoVo;
-import com.study.lecture.common.vo.LectureForUserListVo;
+import com.study.lecture.common.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Date;
@@ -85,4 +82,11 @@ public interface LectureMapper extends BaseMapper<Lecture> {
      * @return lecture详情
      */
     LectureForAdminInfoVo getLectureInfoForAdminById(Long id);
+
+    /**
+     * 根据id获取预约此讲座的所有用户信息
+     * @param id lecture的id
+     * @return 所有预约此讲座的用户信息
+     */
+    List<OrderRecordOfOneLectureVo> getOrderRecordOfOneLectureListById(Long id);
 }
