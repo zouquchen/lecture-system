@@ -1,6 +1,40 @@
 <!-- 用户（学生）可预约讲座列表-->
 <template>
   <div class="app-container">
+    <!-- 条件查询-->
+    <el-form :inline="true" class="demo-form-inline" style="margin-left: 20px; margin-top: 12px;">
+      <el-form-item label="讲座名称">
+        <el-input v-model="lectureQuery.title" placeholder="请输入名称"/>
+      </el-form-item>
+      <el-form-item label="讲座时间">
+        <el-date-picker
+          v-model="lectureQuery.startTime"
+          placeholder="选择开始时间"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          default-time="00:00:00"
+          type="datetime"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-date-picker
+          v-model="lectureQuery.endTime"
+          placeholder="选择截止时间"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          default-time="00:00:00"
+          type="datetime"
+        />
+      </el-form-item>
+      <el-form-item label="讲座类型">
+        <el-select v-model="lectureQuery.typeId" placeholder="讲座类型">
+          <el-option label="全部" value=""/>
+          <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id" />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="getList()">查询</el-button>
+        <el-button type="default" @click="resetData()">清空</el-button>
+      </el-form-item>
+    </el-form>
 
     <!--表格内容-->
     <el-table :data="list" border fit highlight-current-row>
@@ -62,6 +96,7 @@
 
 <script>
 import lecture from '@/api/lecture/lecture.js'
+import lectureTypeApi from '@/api/lecture/lectureType'
 
 export default {
   data() {
@@ -71,11 +106,13 @@ export default {
       page: 1, // 当前页
       limit: 5, // 每页显示记录数
       lectureQuery: { }, // 条件封装对象
+      typeList: { }, // 讲座类型列表
       total: 0 // 总记录数
     }
   },
   created() {
     // 页面渲染之前执行，调用method定义的方法
+    this.getLectureTypeList()
     this.getList()
   },
   methods: {
@@ -89,6 +126,21 @@ export default {
         // 请求失败
         console.log(err)
       })
+    },
+    // 获取活动类型列表选项
+    getLectureTypeList() {
+      lectureTypeApi.getLectureTypeList().then(res => {
+        this.typeList = res.typeList
+      }).catch(err => {
+        console.log('获取活动类型列表失败：' + err)
+      })
+    },
+    // 清空方法
+    resetData() {
+      // 表单输入项数据清空
+      this.lectureQuery = {}
+      // 查询所有讲座数据
+      this.getList()
     },
     // 获取当前时间
     getCurrentTime() {

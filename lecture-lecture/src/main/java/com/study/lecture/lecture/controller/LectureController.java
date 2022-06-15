@@ -8,11 +8,15 @@ import com.study.lecture.common.utils.R;
 import com.study.lecture.common.vo.LectureForAdminInfoVo;
 
 import com.study.lecture.common.vo.LectureForAdminListQueryVo;
+import com.study.lecture.common.vo.LectureForUserInfoVo;
 import com.study.lecture.common.vo.LectureForUserListQueryVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -54,6 +58,7 @@ public class LectureController {
      * @param lectureForAdminListQueryVo 查询条件，设置为非必选，即使不传该参数也可以查询
      * @return 响应类
      */
+    @PreAuthorize("hasAnyAuthority('admin','manager')")
     @PostMapping("/adminPageList/{page}/{limit}")
     public R adminPageList(@PathVariable int page, @PathVariable int limit,
                            @RequestBody(required = false) LectureForAdminListQueryVo lectureForAdminListQueryVo) {
@@ -67,12 +72,20 @@ public class LectureController {
      * @param limit 当前页显示数量
      * @return 响应类
      */
+    @PreAuthorize("hasAnyAuthority('admin','manager','student')")
     @PostMapping("/userPageList/{page}/{limit}")
     public R userPageList(@PathVariable int page, @PathVariable int limit,
                           @RequestBody(required = false)LectureForUserListQueryVo lectureForUserListQueryVo) {
         return lectureService.lectureForUserPageList(page, limit, lectureForUserListQueryVo);
     }
 
+    /**
+     * 用户（学生）查看已经预约过的讲座信息列表
+     * @param page 当前页
+     * @param limit 当前页显示数量
+     * @return 响应类
+     */
+    @PreAuthorize("hasAnyAuthority('admin','manager','student')")
     @GetMapping("/userRecordPageList/{page}/{limit}")
     public R userRecordPageList(@PathVariable int page, @PathVariable int limit) {
         return lectureUserRecordService.getLectureUserRecordPageList(page, limit);
@@ -83,8 +96,9 @@ public class LectureController {
      * @param lecture 讲座信息
      * @return 添加成功标志
      */
+    @PreAuthorize("hasAnyAuthority('admin','manager')")
     @PostMapping("/addLecture")
-    public R addLecture(@RequestBody Lecture lecture) {
+    public R addLecture(@Validated @RequestBody Lecture lecture) {
         if (lectureService.addLecture(lecture) >= 1) {
             return R.ok("添加成功");
         } else {
@@ -97,6 +111,7 @@ public class LectureController {
      * @param id 讲座id
      * @return 讲座详情
      */
+    @PreAuthorize("hasAnyAuthority('admin','manager')")
     @GetMapping("/getLecture/{id}")
     public R getLectureForSaveById(@PathVariable long id) {
         Lecture lecture = lectureService.getLectureById(id);
@@ -108,8 +123,9 @@ public class LectureController {
      * @param lecture 讲座信息
      * @return 更新成功标志
      */
+    @PreAuthorize("hasAnyAuthority('admin','manager')")
     @PostMapping("/updateLecture")
-    public R updateLecture(@RequestBody Lecture lecture) {
+    public R updateLecture(@Validated @RequestBody Lecture lecture) {
         if (lectureService.updateLecture(lecture) >= 1) {
             return R.ok("更新成功");
         } else {
@@ -118,13 +134,27 @@ public class LectureController {
     }
 
     /**
-     * 根据id获取讲座详情，显示详情页面
+     * 根据id获取讲座详情，显示详情页面 (for admin)
      * @param id 讲座id
      * @return 讲座详情
      */
-    @GetMapping("/getLectureInfo/{id}")
-    public R getLectureInfo(@PathVariable long id) {
-        LectureForAdminInfoVo lecture = lectureService.getLectureInfoById(id);
+    @PreAuthorize("hasAnyAuthority('admin','manager')")
+    @GetMapping("/getLectureInfoForAdmin/{id}")
+    public R getLectureInfoForAdminById(@PathVariable long id) {
+        LectureForAdminInfoVo lecture = lectureService.getLectureInfoForAdminById(id);
         return R.ok("获取成功").put("lectureInfo", lecture);
     }
+
+    /**
+     * 根据id获取讲座详情，显示详情页面 (for user)
+     * @param id 讲座id
+     * @return 讲座详情
+     */
+    @PreAuthorize("hasAnyAuthority('admin','manager','student')")
+    @GetMapping("/getLectureInfoForUser/{id}")
+    public R getLectureInfo(@PathVariable long id) {
+        LectureForUserInfoVo lecture = lectureService.getLectureInfoForUserById(id);
+        return R.ok("获取成功").put("lectureInfo", lecture);
+    }
+
 }

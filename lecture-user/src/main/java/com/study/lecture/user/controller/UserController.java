@@ -4,6 +4,7 @@ package com.study.lecture.user.controller;
 import com.study.lecture.common.utils.R;
 import com.study.lecture.common.entity.user.User;
 import com.study.lecture.common.service.user.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ import javax.annotation.Resource;
  * @author zqc
  * @since 2022-04-05
  */
+@Slf4j
 @RestController
 @RequestMapping("/user")
 @CrossOrigin
@@ -30,8 +32,9 @@ public class UserController {
      * @param user 请求域中的用户
      * @return
      */
-    @RequestMapping("login")
+    @PostMapping("login")
     public R login(@RequestBody User user) {
+        log.debug("UserController : login");
         return userService.login(user);
     }
 
@@ -47,18 +50,10 @@ public class UserController {
     }
 
     /**
-     * 获取当前已登录用户信息
-     * @return 当前用户信息
-     */
-    @GetMapping("getLoginUser")
-    public R getLoginUser() {
-        return userService.getLoginUser();
-    }
-    /**
      * 用户登出，前端nginx转发到这里实现登出
      * @return
      */
-    @RequestMapping("logout")
+    @PostMapping("logout")
     public R logout() {
         return userService.logout();
     }

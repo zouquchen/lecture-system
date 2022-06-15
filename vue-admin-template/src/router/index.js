@@ -28,12 +28,12 @@ export const constantRouterMap = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
-    name: 'Dashboard',
+    redirect: '/index',
+    name: 'Index',
     hidden: true,
     children: [{
-      path: 'dashboard',
-      component: () => import('@/views/dashboard/index')
+      path: 'index',
+      component: () => import('@/views/index/index')
     }]
   },
 
@@ -49,7 +49,7 @@ export const constantRouterMap = [
     children: [
       {
         path: 'table',
-        name: '讲座列表',
+        name: '讲座列表（管理员）',
         component: () => import('@/views/lectureForAdmin/list.vue'),
         meta: { title: '讲座列表', icon: 'table' }
       },
@@ -68,7 +68,7 @@ export const constantRouterMap = [
       },
       {
         path: 'info/:id',
-        name: '讲座详情',
+        name: '讲座详情（管理员）',
         component: () => import('@/views/lectureForAdmin/info.vue'),
         meta: { title: '讲座详情' },
         hidden: true
@@ -85,7 +85,7 @@ export const constantRouterMap = [
     children: [
       {
         path: 'listOrder',
-        name: '讲座列表',
+        name: '讲座列表（用户）',
         component: () => import('@/views/lectureForUser/listOrder.vue'),
         meta: { title: '讲座列表', icon: 'table' }
       },
@@ -97,8 +97,15 @@ export const constantRouterMap = [
       },
       {
         path: 'info/:id',
-        name: '讲座详情',
+        name: '讲座详情（用户）',
         component: () => import('@/views/lectureForUser/info.vue'),
+        meta: { title: '讲座详情' },
+        hidden: true
+      },
+      {
+        path: 'infoRecord/:id',
+        name: '已预约讲座详情（用户）',
+        component: () => import('@/views/lectureForUser/infoRecord.vue'),
         meta: { title: '讲座详情' },
         hidden: true
       }
@@ -106,36 +113,49 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/example',
+    path: '/authManage',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    redirect: '/authManage/index',
+    name: '权限管理',
+    meta: { title: '权限管理', icon: 'example' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'index',
+        name: '用户权限',
+        component: () => import('@/views/authManage/index'),
+        meta: { title: '用户权限', icon: 'table' }
       },
       {
         path: 'tree',
         name: 'Tree',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/authManage/index'),
         meta: { title: 'Tree', icon: 'tree' }
       }
     ]
   },
 
   {
-    path: '/form',
+    path: '/webManage',
     component: Layout,
     children: [
       {
         path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        name: '网站管理',
+        component: () => import('@/views/webManage/index'),
+        meta: { title: '网站管理', icon: 'table' }
+      }
+    ]
+  },
+
+  {
+    path: '/personalCenter',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: '用户中心',
+        component: () => import('@/views/personalCenter/index'),
+        meta: { title: '用户中心', icon: 'form' }
       }
     ]
   },

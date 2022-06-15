@@ -34,6 +34,11 @@
             <artifactId>dubbo-spring-boot-starter</artifactId>
             <version>2.7.8</version>
         </dependency>
+        <!-- 校验-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
         <!-- curator提供zookeeper连接,不需要添加zookeeper依赖 -->
         <dependency>
             <groupId>org.apache.curator</groupId>

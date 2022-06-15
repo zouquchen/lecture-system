@@ -6,7 +6,7 @@ import { getToken } from '@/utils/auth'
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
-  timeout: 500000 // 请求超时时间
+  timeout: 900000000 // 请求超时时间
 })
 
 // request拦截器
@@ -33,7 +33,7 @@ service.interceptors.response.use(
     const res = response.data
     if (res.code !== 20000) {
       Message({
-        message: res.message,
+        message: res.msg, // 将res.message修改为res.msg，因为后端返回的是msg
         type: 'error',
         duration: 5 * 1000
       })

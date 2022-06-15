@@ -36,6 +36,18 @@
         SELECT l.id, l.title, lt.name, l.space, l.state, lt.name as typeName, l.organizer, l.store, l.reservation, l.order_start_time, l.order_end_time, l.lecture_start_time
         FROM lecture l, lecture_type lt
         WHERE l.type_id = lt.id
+        <if test="title != null">
+            AND l.title LIKE #{title}
+        </if>
+        <if test="typeId != null">
+            AND l.type_id=#{typeId}
+        </if>
+        <if test="startTime != null">
+            AND l.lecture_start_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            AND l.lecture_start_time &lt;= #{endTime}
+        </if>
         LIMIT #{begin}, #{limit}
     </select>
 
@@ -43,20 +55,46 @@
     <select id="countLectureAdminListByCondition" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM lecture
+        <where>
+            <if test="title != null">
+                title LIKE #{title}
+            </if>
+            <if test="typeId != null">
+                AND type_id=#{typeId}
+            </if>
+            <if test="startTime != null">
+                AND lecture_start_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND lecture_start_time &lt;= #{endTime}
+            </if>
+        </where>
     </select>
 
-    <!-- 查询用户（学生）可以查看的全部讲座列表-->
+    <!-- 查询用户（学生）可以查看的全部讲座列表，用于redis缓存-->
     <select id="getLectureUserList" resultType="com.study.lecture.common.vo.LectureForUserListVo">
         SELECT l.id, l.title, lt.name, l.space, lt.name as typeName, l.organizer, l.store, l.reservation, l.order_start_time, l.order_end_time, l.lecture_start_time
         FROM lecture l, lecture_type lt
-        WHERE l.type_id = lt.id and l.state = 0 and (l.lecture_start_time + INTERVAL 15 MINUTE) > CURRENT_TIME()
+        WHERE l.type_id = lt.id and l.state = 0
     </select>
 
     <!-- 分页条件查询用户（学生）可以查看的讲座列表，返回查询页的数据记录-->
     <select id="getLectureUserPageListByCondition" resultType="com.study.lecture.common.vo.LectureForUserListVo">
         SELECT l.id, l.title, lt.name, l.space, lt.name as typeName, l.organizer, l.store, l.reservation, l.order_start_time, l.order_end_time, l.lecture_start_time
         FROM lecture l, lecture_type lt
-        WHERE l.type_id = lt.id and l.state = 0 and (l.lecture_start_time + INTERVAL 15 MINUTE) > CURRENT_TIME()
+        WHERE l.type_id = lt.id and l.state = 0
+        <if test="title != null">
+            AND l.title LIKE #{title}
+        </if>
+        <if test="typeId != null">
+            AND l.type_id=#{typeId}
+        </if>
+        <if test="startTime != null">
+            AND l.lecture_start_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            AND l.lecture_start_time &lt;= #{endTime}
+        </if>
         ORDER BY l.order_start_time
         LIMIT #{begin}, #{limit}
     </select>
@@ -65,12 +103,31 @@
     <select id="countLectureUserListByCondition" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM lecture l, lecture_type lt
-        WHERE l.type_id = lt.id and l.state = 0 and (l.lecture_start_time + INTERVAL 15 MINUTE) > CURRENT_TIME()
+        WHERE l.type_id = lt.id and l.state = 0
+        <if test="title != null">
+            AND l.title LIKE #{title}
+        </if>
+        <if test="typeId != null">
+            AND l.type_id=#{typeId}
+        </if>
+        <if test="startTime != null">
+            AND l.lecture_start_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            AND l.lecture_start_time &lt;= #{endTime}
+        </if>
         ORDER BY l.order_start_time
     </select>
 
-    <!-- 根据id获取讲座详情页面，显示详情页面-->
-    <select id="getLectureInfoById" resultType="com.study.lecture.common.vo.LectureForAdminInfoVo">
+    <!-- 根据id获取讲座详情页面，显示详情页面（for user）-->
+    <select id="getLectureInfoForUserById" resultType="com.study.lecture.common.vo.LectureForUserInfoVo">
+        SELECT l.id, l.title, lt.name as typeName, l.state, u.username as creatorName, l.organizer, l.undertaker, l.sponsor, l.space, l.speaker, l.reservation, l.store, l.description, l.poster, l.order_start_time, l.order_end_time, l.lecture_start_time
+        FROM lecture l, lecture_type lt, sys_user u
+        WHERE l.type_id = lt.id and l.creator_id = u.id and l.id = #{id}
+    </select>
+
+    <!-- 根据id获取讲座详情页面，显示详情页面（for admin）-->
+    <select id="getLectureInfoForAdminById" resultType="com.study.lecture.common.vo.LectureForAdminInfoVo">
         SELECT l.id, l.title, lt.name as typeName, l.state, u.username as creatorName, l.organizer, l.undertaker, l.sponsor, l.space, l.speaker, l.reservation, l.store, l.description, l.poster, l.order_start_time, l.order_end_time, l.lecture_start_time
         FROM lecture l, lecture_type lt, sys_user u
         WHERE l.type_id = lt.id and l.creator_id = u.id and l.id = #{id}

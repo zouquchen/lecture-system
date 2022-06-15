@@ -40,10 +40,4 @@ public interface UserService extends IService<User> {
      * @return 用户信息
      */
     LoginUser getUserFromRedisById(String key);
-
-    /**
-     * 获取当前用户信息
-     * @return 用户信息
-     */
-    R getLoginUser();
 }

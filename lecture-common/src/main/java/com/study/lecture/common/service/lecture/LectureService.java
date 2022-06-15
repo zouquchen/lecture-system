@@ -3,10 +3,7 @@ package com.study.lecture.common.service.lecture;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.study.lecture.common.entity.lecture.Lecture;
 import com.study.lecture.common.utils.R;
-import com.study.lecture.common.vo.LectureForAdminInfoVo;
-import com.study.lecture.common.vo.LectureForAdminListQueryVo;
-import com.study.lecture.common.vo.LectureForUserListQueryVo;
-import com.study.lecture.common.vo.LectureForUserListVo;
+import com.study.lecture.common.vo.*;
 
 import java.util.List;
 
@@ -67,10 +64,16 @@ public interface LectureService extends IService<Lecture> {
     int updateLecture(Lecture lecture);
 
     /**
-     * 通过id获得lecture详情
+     * 通过id获得lecture详情 (for User)
      * @param id lecture的id
      * @return 查询结果
      */
-    LectureForAdminInfoVo getLectureInfoById(Long id);
+    LectureForUserInfoVo getLectureInfoForUserById(Long id);
 
+    /**
+     * 通过id获得lecture详情 (for admin)
+     * @param id lecture的id
+     * @return 查询结果
+     */
+    LectureForAdminInfoVo getLectureInfoForAdminById(Long id);
 }

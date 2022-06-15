@@ -30,14 +30,10 @@
 
       <el-table-column :formatter="signTimeFormatter" label="签到时间" width="100" align="center"/>
 
-      <el-table-column label="操作" width="200" align="center">
+      <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
-          <router-link :to="'/lectureForUser/info/' + scope.row.id">
+          <router-link :to="'/lectureForUser/infoRecord/' + scope.row.lectureId">
             <el-button type="primary" size="mini" icon="el-icon-document">详情</el-button>
-          </router-link>
-
-          <router-link :to="'/lectureForUser/info/' + scope.row.id">
-            <el-button type="primary" size="mini" icon="el-icon-document">签到码</el-button>
           </router-link>
         </template>
       </el-table-column>
@@ -102,6 +98,7 @@ export default {
       return moment(data.signTime).utcOffset(480).format('YYYY-MM-DD HH:mm:ss')
     },
     judgeSignState(data) {
+      console.log(data)
       if (data === '未开始') {
         return 'info'
       }

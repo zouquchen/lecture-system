@@ -51,8 +51,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // AuthenticationManager authenticate方法进行认证。在SecurityConfig配置类中，我们将AuthenticationManager注入到容器中。
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
 
-        // 如果认证通过，authenticate里将包含principal属性，该属性的值就是LoginUser，
-        // 如果认证没通过，给出对应的提示
+        // 如果认证(登录）通过，authenticate里将包含principal属性，该属性的值就是LoginUser，
+        // 如果认证(登录）没通过，给出对应的提示
         if (Objects.isNull(authenticate)) {
             throw new RuntimeException("登录失败");
         }
@@ -111,16 +111,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public LoginUser getUserFromRedisById(String key) {
         return (LoginUser) redisTemplate.opsForValue().get(key);
     }
-
-    /**
-     * 获取当前用户信息
-     * @return 用户信息
-     */
-    @Override
-    public R getLoginUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return R.ok().put("authentication", authentication);
-    }
-
 
 }

@@ -1,11 +1,6 @@
 <template>
   <div class="app-container">
     <el-row>
-      <el-col :span="10">
-        <div align="center">
-          <el-image :src="lecture.poster" style="width: 80%" lazy/>
-        </div>
-      </el-col>
       <el-col :span="14">
         <el-descriptions :column="1" size="1" class="margin-top" title="讲座详情" border>
           <template slot="extra">
@@ -53,6 +48,24 @@
           </el-descriptions-item>
         </el-descriptions>
       </el-col>
+      <el-col :span="10">
+        <div align="center">
+          <el-image :src="lecture.poster" style="width: 80%" lazy/>
+        </div>
+      </el-col>
+    </el-row>
+
+    <!-- 预约情况 -->
+    <el-descriptions :column="1" size="1" class="margin-top" style="margin-top:50px" title="预约情况" border/>
+    <el-row>
+      <el-col :span="24">
+        <el-table :data="tableData" height="250" border style="width: 100%">
+          <el-table-column prop="date" label="用户id" align="center" />
+          <el-table-column prop="date" label="用户名" align="center" />
+          <el-table-column prop="date" label="预约时间" align="center" />
+          <el-table-column prop="date" label="参与情况" align="center" />
+        </el-table>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -97,7 +110,7 @@ export default {
   },
   methods: {
     getInfo() {
-      lectureApi.getLectureInfoById(this.lecture.id).then(res => {
+      lectureApi.getLectureInfoForAdminById(this.lecture.id).then(res => {
         this.lecture = res.lectureInfo
       }).catch(err => {
         console.log('getLectureById Error: ' + err)

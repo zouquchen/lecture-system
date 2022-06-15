@@ -5,9 +5,9 @@
       <el-form-item label="讲座名称">
         <el-input v-model="lectureQuery.title" placeholder="请输入名称"/>
       </el-form-item>
-      <el-form-item label="时间筛选">
+      <el-form-item label="讲座时间">
         <el-date-picker
-          v-model="lectureQuery.begin"
+          v-model="lectureQuery.startTime"
           placeholder="选择开始时间"
           value-format="yyyy-MM-dd HH:mm:ss"
           default-time="00:00:00"
@@ -16,7 +16,7 @@
       </el-form-item>
       <el-form-item>
         <el-date-picker
-          v-model="lectureQuery.end"
+          v-model="lectureQuery.endTime"
           placeholder="选择截止时间"
           value-format="yyyy-MM-dd HH:mm:ss"
           default-time="00:00:00"
@@ -25,11 +25,12 @@
       </el-form-item>
       <el-form-item label="讲座类型">
         <el-select v-model="lectureQuery.typeId" placeholder="讲座类型">
+          <el-option label="全部" value=""/>
           <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id" />
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="search()">查询</el-button>
+        <el-button type="primary" @click="getList()">查询</el-button>
         <el-button type="default" @click="resetData()">清空</el-button>
       </el-form-item>
     </el-form>
@@ -134,15 +135,11 @@ export default {
         console.log('获取活动类型列表失败：' + err)
       })
     },
-    // 根据筛选条件进行查询
-    search() {
-
-    },
     // 清空方法
     resetData() {
       // 表单输入项数据清空
       this.lectureQuery = {}
-      // 查询所有讲师数据
+      // 查询所有讲座数据
       this.getList()
     },
     // 时间格式Formatter

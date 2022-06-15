@@ -39,10 +39,17 @@ export default {
       data: lectureInfo
     })
   },
-  // 根据id查询讲座，用于修改讲座信息
-  getLecutreById(id) {
+  // 根据id查询讲座，用于修改讲座信息(for user)
+  getLectureInfoForUserById(id) {
     return request({
-      url: `/lecture/getLecture/${id}`,
+      url: `/lecture/getLectureInfoForUser/${id}`,
+      method: `get`
+    })
+  },
+  // 根据id查询讲座，用于修改讲座信息(for admin)
+  getLectureInfoForAdminById(id) {
+    return request({
+      url: `/lecture/getLectureInfoForAdmin/${id}`,
       method: `get`
     })
   },

@@ -33,7 +33,4 @@ public class GlobalExceptionHandler {
 
         return r;
     }
-
-
-
 }

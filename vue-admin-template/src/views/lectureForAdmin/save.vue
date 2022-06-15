@@ -2,16 +2,21 @@
   <div class="app-container">
     <el-row>
       <el-col :span="14">
-
         <!-- 表单-->
         <el-form label-width="100px">
           <el-form-item label="讲座名称" >
-            <el-input v-model="lecture.title" placeholder="请输入讲座名称" />
+            <el-input v-model="lecture.title" placeholder="请输入讲座名称（30字以内）" />
           </el-form-item>
           <el-form-item label="讲座类型">
             <el-select v-model="lecture.typeId" placeholder="请选择活动类型">
               <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id" />
             </el-select>
+          </el-form-item>
+          <el-form-item label="讲座状态">
+            <el-radio-group v-model="lecture.state">
+              <el-radio :label="0">发布</el-radio>
+              <el-radio :label="1">结束</el-radio>
+            </el-radio-group>
           </el-form-item>
           <el-form-item label="主办方" >
             <el-input v-model="lecture.organizer" placeholder="东南大学研究生会" />
@@ -46,7 +51,7 @@
             </el-col>
           </el-form-item>
           <el-form-item label="讲座介绍">
-            <el-input v-model="lecture.description" type="textarea" placeholder="讲座详细描述信息"/>
+            <el-input v-model="lecture.description" type="textarea" placeholder="讲座详细描述信息（200字以内）"/>
           </el-form-item>
 
           <!-- 上传文件 -->
@@ -89,23 +94,7 @@ export default {
   data() {
     return {
       // lecutre参数详情
-      lecture: {
-        id: '',
-        title: '',
-        typeId: '',
-        creatorId: '',
-        description: '',
-        organizer: '',
-        undertaker: '',
-        sponsor: '',
-        space: '',
-        speaker: '',
-        reservation: '',
-        poster: '',
-        orderStartTime: '',
-        orderEndTIme: '',
-        lectureStartTime: ''
-      },
+      lecture: { },
       // 获取dev.env.js里面地址
       BASE_API: process.env.BASE_API,
       // 上传组件的参数
@@ -141,23 +130,23 @@ export default {
         // 调用根据id查询讲座信息
         this.getLecture(this.lecture.id)
       } else {
-        // 情况表单
+        // 清空表单，默认就是null
         this.lecture = {
-          id: '',
-          title: '',
-          typeId: '',
-          creatorId: '',
-          description: '',
-          organizer: '',
-          undertaker: '',
-          sponsor: '',
-          space: '',
-          speaker: '',
-          reservation: '',
-          poster: 'https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/noPicture.png',
-          orderStartTime: '',
-          orderEndTIme: '',
-          lectureStartTime: ''
+          // id: '',
+          // title: '',
+          // typeId: '',
+          // creatorId: '',
+          // description: '',
+          // organizer: '',
+          // undertaker: '',
+          // sponsor: '',
+          // space: '',
+          // speaker: '',
+          // reservation: '',
+          poster: 'https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/noPicture.png'
+          // orderStartTime: '',
+          // orderEndTIme: '',
+          // lectureStartTime: ''
         }
       }
     },
@@ -229,10 +218,33 @@ export default {
       // 判断是修改还是添加
       if (this.lecture.id) {
         // 有id，更新
+        this.$confirm('此操作将修改讲座信息, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.updateLecture()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消添加'
+          })
+        })
         this.updateLecture()
       } else {
-        // 无id，修改
-        this.addLecture()
+        // 无id，添加
+        this.$confirm('此操作将添加新的讲座, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.addLecture()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消修改'
+          })
+        })
       }
     }
   }

@@ -43,7 +43,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("经过JwtAuthenticationTokenFilter！");
+        System.out.println("经过JwtAuthenticationTokenFilter！");
+        log.debug("经过JwtAuthenticationTokenFilter！");
         // 获取token
         String token = request.getHeader("token");
         if (!StringUtils.hasText(token)) {
@@ -73,7 +74,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
 
         // 后面将需要一个Authentication的对象，在这里通过实现类UsernamePasswordAuthenticationToken构造这个对象
-        // 选择3个参数的构造器，principal：账号，credentials：密码，authorities：权限
+        // 选择3个参数的构造器，principal：UserDetail实现类对象，credentials：密码，认证后一般会清除，authorities：权限
         // 为什么要选择这个构造器呢？因为这个构造器中有，super.setAuthenticated(true); 标识用户为已认证。
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
         // 存入SecurityContextHolder

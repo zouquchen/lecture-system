@@ -49,10 +49,10 @@ public class LectureUserRecordServiceImpl extends ServiceImpl<LectureUserRecordM
                 // 如果讲座状态state = 0 表示已发布，那么打卡状态显示“未开始”
                 vo.setSignState("未开始");
             } else if (vo.getState() == 1 && vo.getSignTime() == null) {
-                // 如果讲座状态state = 0 表示结束，并且未到，那么打卡状态显示“未参加”
+                // 如果讲座状态state = 1 表示结束，并且未到，那么打卡状态显示“未参加”
                 vo.setSignState("未参加");
             } else if (vo.getState() == 1 && vo.getSignTime() != null) {
-                // 如果讲座状态state = 0 表示结束，并且已签到，那么打卡状态显示“已打卡”
+                // 如果讲座状态state = 1 表示结束，并且已签到，那么打卡状态显示“已打卡”
                 vo.setSignState("已打卡");
             } else {
                 vo.setSignState("状态错误！！");

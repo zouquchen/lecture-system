@@ -3,7 +3,11 @@ package com.study.lecture.common.entity.lecture;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -31,11 +35,15 @@ public class Lecture implements Serializable {
     /**
      * 讲座名称
      */
+    @NotNull(message = "请输入讲座名称")
+    @Length(max = 30, message = "讲座名称长度不符合要求，请确保长度在3到30之间")
+    @Length(min = 3, message = "讲座名称长度不符合要求，请确保长度在3到30之间")
     private String title;
 
     /**
      * 讲座类型id
      */
+    @NotNull(message = "请选择讲座类型")
     private Long typeId;
 
     /**
@@ -45,6 +53,7 @@ public class Lecture implements Serializable {
     /**
      * 讲座描述信息
      */
+    @Length(max = 200)
     private String description;
 
     /**
@@ -70,6 +79,9 @@ public class Lecture implements Serializable {
     /**
      * 讲座地点
      */
+    @NotNull(message = "请填写讲座地点")
+    @Length(max = 30, message = "地点长度不符合要求，请确保长度在3到30之间")
+    @Length(min = 3, message = "地点长度不符合要求，请确保长度在3到30之间")
     private String space;
 
     /**
@@ -80,6 +92,7 @@ public class Lecture implements Serializable {
     /**
      * 讲座容纳人数
      */
+    @NotNull(message = "请填写讲座容纳人数")
     private Integer reservation;
 
     /**
@@ -95,6 +108,7 @@ public class Lecture implements Serializable {
     /**
      * 讲座预约开始时间
      */
+    @NotNull(message = "请填写讲座预约开始时间")
     private Date orderStartTime;
 
     /**
@@ -123,6 +137,4 @@ public class Lecture implements Serializable {
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
-
-
 }

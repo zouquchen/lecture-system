@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.study.lecture.common.entity.lecture.Lecture;
 import com.study.lecture.common.vo.LectureForAdminListVo;
 import com.study.lecture.common.vo.LectureForAdminInfoVo;
+import com.study.lecture.common.vo.LectureForUserInfoVo;
 import com.study.lecture.common.vo.LectureForUserListVo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -29,7 +30,7 @@ public interface LectureMapper extends BaseMapper<Lecture> {
      * @param endTime 查询讲座范围的结束时间
      * @return 数据总数
      */
-    int countLectureAdminListByCondition(String title, Long typeId, Date startTime, Date endTime);
+    int countLectureAdminListByCondition(String title, Long typeId, String startTime, String endTime);
 
     /**
      * 分页条件查询管理员可以查看的讲座列表
@@ -41,7 +42,7 @@ public interface LectureMapper extends BaseMapper<Lecture> {
      * @param endTime 查询讲座范围的结束时间
      * @return 当前页的数据记录
      */
-    List<LectureForAdminListVo> getLectureAdminPageListByCondition(int begin, int limit, String title, Long typeId, Date startTime, Date endTime);
+    List<LectureForAdminListVo> getLectureAdminPageListByCondition(int begin, int limit, String title, Long typeId, String startTime, String endTime);
 
     /**
      * 在分页条件查询用户（学生）可以查看的讲座列表时，查询所有符合条件的记录数
@@ -51,7 +52,7 @@ public interface LectureMapper extends BaseMapper<Lecture> {
      * @param endTime 查询讲座范围的结束时间
      * @return 数据总数
      */
-    int countLectureUserListByCondition(String title, Long typeId, Date startTime, Date endTime);
+    int countLectureUserListByCondition(String title, Long typeId, String startTime, String endTime);
 
     /**
      * 分页条件查询用户（学生）可以查看的讲座列表
@@ -63,19 +64,25 @@ public interface LectureMapper extends BaseMapper<Lecture> {
      * @param endTime 查询讲座范围的结束时间
      * @return 当前页的数据记录
      */
-    List<LectureForUserListVo> getLectureUserPageListByCondition(int begin, int limit, String title, Long typeId, Date startTime, Date endTime);
+    List<LectureForUserListVo> getLectureUserPageListByCondition(int begin, int limit, String title, Long typeId, String startTime, String endTime);
 
     /**
-     * 查询用户（学生）可以查看的全部讲座列表
+     * 查询用户（学生）可以查看的全部讲座列表，用于redis缓存
      * @return 数据结果
      */
     List<LectureForUserListVo> getLectureUserList();
 
     /**
-     * 根据id获取lecture详情, 显示详情页面
+     * 根据id获取lecture详情, 显示详情页面 (for user)
      * @param id lecture的id
      * @return lecture详情
      */
-    LectureForAdminInfoVo getLectureInfoById(Long id);
+    LectureForUserInfoVo getLectureInfoForUserById(Long id);
 
+    /**
+     * 根据id获取lecture详情, 显示详情页面 (for admin)
+     * @param id lecture的id
+     * @return lecture详情
+     */
+    LectureForAdminInfoVo getLectureInfoForAdminById(Long id);
 }

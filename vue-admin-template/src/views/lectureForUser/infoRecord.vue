@@ -7,22 +7,7 @@
         </div>
       </el-col>
       <el-col :span="14">
-        <!-- 讲座详情 -->
         <el-descriptions :column="1" size="1" class="margin-top" title="讲座详情" border>
-          <template slot="extra">
-            <el-button :disabled="lecture.ordered" type="primary" size="small" @click="orderLecture">预约</el-button>
-          </template>
-          <!-- 预约情况 -->
-          <el-descriptions-item>
-            <template slot="label">预约情况</template>
-            <el-col v-show="lecture.ordered">
-              <el-tag type="success">已预约</el-tag>
-            </el-col>
-            <el-col v-show="!lecture.ordered">
-              <el-tag type="info">未预约</el-tag>
-            </el-col>
-          </el-descriptions-item>
-
           <el-descriptions-item>
             <template slot="label">讲座名称</template>{{ lecture.title }}
           </el-descriptions-item>
@@ -69,7 +54,6 @@
 
 <script>
 import lectureApi from '@/api/lecture/lecture'
-import lectureOrderApi from '@/api/lecture/lectureOrder'
 
 export default {
   data() {
@@ -78,7 +62,6 @@ export default {
       lecture: {
         id: '',
         title: '',
-        ordered: false,
         typeName: '',
         createrName: '',
         organizer: '',
@@ -114,18 +97,6 @@ export default {
         this.lecture = res.lectureInfo
       }).catch(err => {
         console.log('getLectureById Error: ' + err)
-      })
-    },
-    orderLecture() {
-      lectureOrderApi.orderLectureById(this.lecture.id).then(res => {
-        // 提示信息
-        this.$router.go(0)
-      }).catch(err => {
-        this.$notify.error({
-          title: '错误',
-          message: '预约失败'
-        })
-        console.log('预约失败：' + err)
       })
     }
   }

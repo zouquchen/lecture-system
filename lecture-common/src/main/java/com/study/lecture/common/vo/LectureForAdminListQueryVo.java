@@ -3,7 +3,6 @@ package com.study.lecture.common.vo;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * <p>
@@ -31,12 +30,12 @@ public class LectureForAdminListQueryVo implements Serializable {
     private Long typeId;
 
     /**
-     * 根据讲座开始时间范围查询，开始时间
+     * 根据讲座开始时间范围查询，开始时间，注意数据类型为String
      */
-    private Date start;
+    private String startTime;
 
     /**
-     * 根据讲座开始时间范围查询，截至时间
+     * 根据讲座开始时间范围查询，截至时间，注意数据类型为String
      */
-    private Date end;
+    private String endTime;
 }

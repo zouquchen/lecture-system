@@ -22,7 +22,7 @@
 
     <!-- 分页查询，根据用户id查询该用户已预约过的讲座-->
     <select id="getLectureUserRecordPageList" resultType="com.study.lecture.common.vo.LectureUserRecordVo">
-        select lur.lecture_id,lur.user_id,lur.sign_code_id, lur.order_time, lur.sign_time,
+        select lur.id, lur.lecture_id,lur.user_id,lur.sign_code_id, lur.order_time, lur.sign_time,
                l.title, l.organizer, l.state, l.space, l.lecture_start_time,
                lt.name as typeName
         from lecture l, lecture_type lt, lecture_user_record lur

@@ -40,6 +40,9 @@ public class LectureForUserListVo implements Serializable {
      */
     private int state;
 
+    @ApiModelProperty(value = "是否已被该用户预约", example = "false")
+    private boolean ordered;
+
     /**
      * 讲座类别 lectureType表
      */
@@ -59,6 +62,7 @@ public class LectureForUserListVo implements Serializable {
      * 剩余预约数量 lectureOrder表
      */
     private Integer store;
+
     /**
      * 可预约人数 lecture表
      */
