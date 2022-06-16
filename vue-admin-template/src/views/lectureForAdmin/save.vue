@@ -160,7 +160,7 @@ export default {
     },
     // 如果是更新，获取讲座信息
     getLecture() {
-      lectureApi.getLecutreById(this.lecture.id).then(res => {
+      lectureApi.getLectureInfoForAdminById(this.lecture.id).then(res => {
         this.lecture = res.lectureInfo
       }).catch(err => {
         console.log('修改讲座时，获取讲座信息失败：' + err)

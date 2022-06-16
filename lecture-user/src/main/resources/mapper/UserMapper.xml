@@ -18,12 +18,40 @@
         <result column="update_time" property="updateTime" />
     </resultMap>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id,
-        user_name, password, status, email, phone_number, sex, avatar, user_type, is_deleted, create_time, update_time
-    </sql>
+    <!-- 获取所有角色列表-->
+    <select id="getRoleList" resultType="com.study.lecture.common.vo.RoleListVo">
+        SELECT id, name
+        FROM sys_role
+    </select>
 
-    
+    <!-- 根据条件查询用户总量-->
+    <select id="countUserListByCondition" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM sys_user su, sys_user_role sur, sys_role sr
+        WHERE su.id = sur.user_id and sur.role_id = sr.id
+        <if test="username != null">
+            AND su.username LIKE #{username}
+        </if>
+        <if test="roleId != null">
+            AND sur.role_id = #{roleId}
+        </if>
+    </select>
+
+    <!-- 根据条件分页查询用户数据-->
+    <select id="getUserListByCondition" resultType="com.study.lecture.common.vo.UserListVo">
+        SELECT su.id, su.username, su.email, su.phone_number, su.sex, su.avatar, sr.name as role
+        FROM sys_user su, sys_user_role sur, sys_role sr
+        WHERE su.id = sur.user_id and sur.role_id = sr.id
+        <if test="username != null">
+            AND su.username LIKE #{username}
+        </if>
+        <if test="roleId != null">
+            AND sur.role_id = #{roleId}
+        </if>
+        LIMIT #{begin}, #{limit}
+    </select>
+
+
+
 
 </mapper>

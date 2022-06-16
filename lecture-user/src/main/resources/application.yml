@@ -40,3 +40,6 @@ dubbo:
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
+  configuration:
+    # 控制台打印日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

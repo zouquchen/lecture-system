@@ -45,19 +45,19 @@ export const constantRouterMap = [
     redirect: '/lectureForAdmin/table',
     name: '讲座管理',
     // title：显式标签，icon：显示图标
-    meta: { title: '讲座管理', icon: 'example' },
+    meta: { title: '讲座管理', icon: 'all-fill' },
     children: [
       {
         path: 'table',
         name: '讲座列表（管理员）',
         component: () => import('@/views/lectureForAdmin/list.vue'),
-        meta: { title: '讲座列表', icon: 'table' }
+        meta: { title: '讲座列表', icon: 'menu' }
       },
       {
         path: 'add',
         name: '添加讲座',
         component: () => import('@/views/lectureForAdmin/save.vue'),
-        meta: { title: '添加讲座', icon: 'tree' }
+        meta: { title: '添加讲座', icon: 'plus-square' }
       },
       {
         path: 'edit/:id',
@@ -87,13 +87,13 @@ export const constantRouterMap = [
         path: 'listOrder',
         name: '讲座列表（用户）',
         component: () => import('@/views/lectureForUser/listOrder.vue'),
-        meta: { title: '讲座列表', icon: 'table' }
+        meta: { title: '讲座列表', icon: 'menu' }
       },
       {
         path: 'listRecords',
         name: '我的讲座',
         component: () => import('@/views/lectureForUser/listRecords.vue'),
-        meta: { title: '我的讲座', icon: 'tree' }
+        meta: { title: '我的讲座', icon: 'collection' }
       },
       {
         path: 'info/:id',
@@ -113,22 +113,22 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/authManage',
+    path: '/userManage',
     component: Layout,
-    redirect: '/authManage/index',
-    name: '权限管理',
-    meta: { title: '权限管理', icon: 'example' },
+    redirect: '/userManage/index',
+    name: '用户管理',
+    meta: { title: '用户管理', icon: 'user-group-fill' },
     children: [
       {
-        path: 'index',
-        name: '用户权限',
-        component: () => import('@/views/authManage/index'),
-        meta: { title: '用户权限', icon: 'table' }
+        path: 'list',
+        name: '用户列表',
+        component: () => import('@/views/userManage/list'),
+        meta: { title: '用户列表', icon: 'menu' }
       },
       {
         path: 'tree',
         name: 'Tree',
-        component: () => import('@/views/authManage/index'),
+        component: () => import('@/views/userManage/index'),
         meta: { title: 'Tree', icon: 'tree' }
       }
     ]
@@ -142,7 +142,7 @@ export const constantRouterMap = [
         path: 'index',
         name: '网站管理',
         component: () => import('@/views/webManage/index'),
-        meta: { title: '网站管理', icon: 'table' }
+        meta: { title: '网站管理', icon: 'cog-fill' }
       }
     ]
   },
@@ -153,9 +153,9 @@ export const constantRouterMap = [
     children: [
       {
         path: 'index',
-        name: '用户中心',
+        name: '个人中心',
         component: () => import('@/views/personalCenter/index'),
-        meta: { title: '用户中心', icon: 'form' }
+        meta: { title: '个人中心', icon: 'user-fill' }
       }
     ]
   },

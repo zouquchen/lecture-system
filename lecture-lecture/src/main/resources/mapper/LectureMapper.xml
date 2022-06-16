@@ -128,7 +128,7 @@
 
     <!-- 根据id获取讲座详情页面，显示详情页面（for admin）-->
     <select id="getLectureInfoForAdminById" resultType="com.study.lecture.common.vo.LectureForAdminInfoVo">
-        SELECT l.id, l.title, lt.name as typeName, l.state, u.username as creatorName, l.organizer, l.undertaker, l.sponsor, l.space, l.speaker, l.reservation, l.store, l.description, l.poster, l.order_start_time, l.order_end_time, l.lecture_start_time
+        SELECT l.id, l.title, l.type_id, lt.name as typeName, l.state, u.username as creatorName, l.organizer, l.undertaker, l.sponsor, l.space, l.speaker, l.reservation, l.store, l.description, l.poster, l.order_start_time, l.order_end_time, l.lecture_start_time
         FROM lecture l, lecture_type lt, sys_user u
         WHERE l.type_id = lt.id and l.creator_id = u.id and l.id = #{id}
     </select>

@@ -4,6 +4,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.utils.R;
 import com.study.lecture.common.entity.user.User;
+import com.study.lecture.common.vo.UserListQueryVo;
+import com.study.lecture.common.vo.UserListVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -40,4 +44,19 @@ public interface UserService extends IService<User> {
      * @return 用户信息
      */
     LoginUser getUserFromRedisById(String key);
+
+    /**
+     * 获取所有角色列表
+     * @return 响应类
+     */
+    R getRoleList();
+
+    /**
+     * 根据条件对用户进行分页查询
+     * @param page 当前页
+     * @param limit 当前页数量
+     * @param userListQueryVo 查询条件
+     * @return 查询结果
+     */
+    R getUserPageList(int page, int limit, UserListQueryVo userListQueryVo);
 }

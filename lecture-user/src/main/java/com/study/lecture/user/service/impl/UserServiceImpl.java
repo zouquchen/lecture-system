@@ -5,6 +5,9 @@ import com.study.lecture.common.utils.JwtUtil;
 import com.study.lecture.common.utils.R;
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.entity.user.User;
+import com.study.lecture.common.vo.RoleListVo;
+import com.study.lecture.common.vo.UserListQueryVo;
+import com.study.lecture.common.vo.UserListVo;
 import com.study.lecture.user.mapper.UserMapper;
 import com.study.lecture.common.service.user.UserService;
 import io.jsonwebtoken.Claims;
@@ -17,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -33,6 +37,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Resource
+    private UserMapper userMapper;
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -110,6 +117,43 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public LoginUser getUserFromRedisById(String key) {
         return (LoginUser) redisTemplate.opsForValue().get(key);
+    }
+
+    /**
+     * 获取角色列表
+     * @return
+     */
+    @Override
+    public R getRoleList() {
+        List<RoleListVo> roleList = userMapper.getRoleList();
+        return R.ok().put("roleList", roleList);
+    }
+
+
+    /**
+     * 根据条件对用户进行分页查询
+     * @param page 当前页
+     * @param limit 当前页数量
+     * @param userListQueryVo 查询条件
+     * @return 查询结果
+     */
+    @Override
+    public R getUserPageList(int page, int limit, UserListQueryVo userListQueryVo) {
+        String username = userListQueryVo.getUsername();
+        Long roleId = userListQueryVo.getRoleId();
+
+        if (username != null) {
+            username = "%" + username + '%';
+        }
+
+        // 计算begin
+        int begin = (page - 1) * limit;
+
+        // 处理数据
+        int total = userMapper.countUserListByCondition(username, roleId);
+        List<UserListVo> records = userMapper.getUserListByCondition(begin, limit, username, roleId);
+
+        return R.ok().put("total", total).put("records", records);
     }
 
 }

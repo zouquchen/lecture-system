@@ -4,6 +4,7 @@ package com.study.lecture.user.controller;
 import com.study.lecture.common.utils.R;
 import com.study.lecture.common.entity.user.User;
 import com.study.lecture.common.service.user.UserService;
+import com.study.lecture.common.vo.UserListQueryVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -67,5 +68,22 @@ public class UserController {
     @PreAuthorize("hasAuthority('admin')")
     public R hello() {
         return R.ok("hello");
+    }
+
+    @GetMapping("/getRoleList")
+    public R getRoleList() {
+        return userService.getRoleList();
+    }
+    /**
+     * 用户列表
+     * @param page 当前页
+     * @param limit 当前页显示数量
+     * @param userListQueryVo 查询条件
+     * @return 相响应类
+     */
+    @PostMapping("/getUserList/{page}/{limit}")
+    public R getUserList(@PathVariable int page, @PathVariable int limit,
+                         @RequestBody(required = false) UserListQueryVo userListQueryVo) {
+        return userService.getUserPageList(page, limit, userListQueryVo);
     }
 }

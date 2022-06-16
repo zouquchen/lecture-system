@@ -37,3 +37,6 @@ build/
 /vue-admin-template/node_modules
 /vue-admin-template/.gitignore
 /vue-admin-template/vue-admin-template.code-workspace
+
+### nginx
+/nginx-lecture/logs

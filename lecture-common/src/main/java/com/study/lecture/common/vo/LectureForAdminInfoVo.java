@@ -37,7 +37,13 @@ public class LectureForAdminInfoVo implements Serializable {
     private String title;
 
     /**
-     * 讲座类别
+     * 讲座类别id
+     */
+    @ApiModelProperty(value = "讲座类别id", example = "1")
+    private Long typeId;
+
+    /**
+     * 讲座类别名称
      */
     @ApiModelProperty(value = "讲座类别名称", example = "法律")
     private String typeName;
