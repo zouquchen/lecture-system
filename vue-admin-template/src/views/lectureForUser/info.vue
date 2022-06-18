@@ -10,7 +10,8 @@
         <!-- 讲座详情 -->
         <el-descriptions :column="1" size="1" class="margin-top" title="讲座详情" border>
           <template slot="extra">
-            <el-button v-loading.fullscreen.lock="fullscreenLoading" :disabled="lecture.ordered" type="primary" size="small" @click="orderLecture">预约</el-button>
+            <el-button v-loading.fullscreen.lock="fullscreenLoading" v-show="!lecture.ordered" type="primary" size="small" @click="orderLecture">预约</el-button>
+            <el-button v-loading.fullscreen.lock="fullscreenLoading" v-show="lecture.ordered" type="danger" size="small" @click="cancelLecture">取消预约</el-button>
           </template>
           <!-- 预约情况 -->
           <el-descriptions-item>
@@ -130,6 +131,21 @@ export default {
           message: '预约失败'
         })
         console.log('预约失败：' + err)
+      })
+    },
+    cancelLecture() {
+      this.fullscreenLoading = true
+      lectureOrderApi.cancelLectureById(this.lecture.id).then(res => {
+        this.fullscreenLoading = false
+        // 提示信息
+        this.$router.go(0)
+      }).catch(err => {
+        this.fullscreenLoading = false
+        this.$notify.error({
+          title: '错误',
+          message: '取消失败'
+        })
+        console.log('取消失败：' + err)
       })
     }
   }

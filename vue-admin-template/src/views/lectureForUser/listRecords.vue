@@ -32,7 +32,7 @@
 
       <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
-          <router-link :to="'/lectureForUser/infoRecord/' + scope.row.lectureId">
+          <router-link :to="'/lectureForUser/info/' + scope.row.lectureId">
             <el-button type="primary" size="mini" icon="el-icon-document">详情</el-button>
           </router-link>
         </template>

@@ -7,12 +7,17 @@ import com.study.lecture.common.utils.R;
 import com.study.lecture.common.vo.*;
 import com.study.lecture.lecture.mapper.LectureMapper;
 import com.study.lecture.common.service.lecture.LectureService;
+import com.study.lecture.lecture.mapper.LectureUserRecordMapper;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.Resource;
+import java.sql.Time;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -27,6 +32,9 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
 
     @Resource
     private LectureMapper lectureMapper;
+
+    @Resource
+    private LectureUserRecordMapper lectureUserRecordMapper;
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -70,6 +78,10 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
      */
     @Override
     public R lectureForUserPageList(int page, int limit, LectureForUserListQueryVo lectureForUserListQueryVo) {
+        // 获取当前登录用户信息
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = loginUser.getUser().getId();
+
         String title = lectureForUserListQueryVo.getTitle();
         Long typeId = lectureForUserListQueryVo.getTypeId();
         String startTime = lectureForUserListQueryVo.getStartTime();
@@ -85,6 +97,22 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
         // 处理数据
         int total = lectureMapper.countLectureUserListByCondition(title, typeId, startTime, endTime);
         List<LectureForUserListVo> records = lectureMapper.getLectureUserPageListByCondition(begin, limit, title, typeId, startTime, endTime);
+
+        // 更新讲座预约状态
+        List<Long> lectures = lectureUserRecordMapper.getAlLectureUserRecord(userId);
+        Set<Long> lecturesOrderedByUser = new HashSet<>(lectures);
+        for (LectureForUserListVo vo : records) {
+            if (lecturesOrderedByUser.contains(vo.getId())) {
+                vo.setOrderState("已预约");
+            } else {
+                Date now = new Date();
+                if (vo.getOrderStartTime().before(now)) {
+                    vo.setOrderState("可预约");
+                } else {
+                    vo.setOrderState("未开放");
+                }
+            }
+        }
 
         return R.ok().put("total", total).put("records", records);
     }
@@ -141,37 +169,40 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
      * 根据id获取lecture详情（讲座详情、预约该讲座的用户列表）, 显示详情页面（for admin），
      * 与上面的方法相比，信息更全面，比如获取的是typeName而不是typeId
      * @param id lecture的id
+     * @param record 是否返回预约此讲座的用户信息
      * @return 查询结果
      */
     @Override
-    public LectureForAdminInfoVo getLectureInfoForAdminById(Long id) {
+    public LectureForAdminInfoVo getLectureInfoForAdminById(Long id, boolean record) {
         // 根据id查询讲座详情
         LectureForAdminInfoVo lecture = lectureMapper.getLectureInfoForAdminById(id);
 
-        // 根据id查询预约该讲座的所有用户信息
-        List<OrderRecordOfOneLectureVo> list = lectureMapper.getOrderRecordOfOneLectureListById(id);
+        if (record) {
+            // 根据id查询预约该讲座的所有用户信息
+            List<OrderRecordOfOneLectureVo> list = lectureMapper.getOrderRecordOfOneLectureListById(id);
 
-        // 修改list中每个用户的状态
-        int signCount = 0;
-        int notAttendCount = 0;
-        int state = lecture.getState();
-        for (OrderRecordOfOneLectureVo vo : list) {
-            if (state == 0) {
-                vo.setState("等待开始");
-            } else {
-                if (vo.getSignTime() == null) {
-                    vo.setState("未参加");
-                    notAttendCount++;
+            // 修改list中每个用户的状态
+            int signCount = 0;
+            int notAttendCount = 0;
+            int state = lecture.getState();
+            for (OrderRecordOfOneLectureVo vo : list) {
+                if (state == 0) {
+                    vo.setState("等待开始");
                 } else {
-                    vo.setState("已签到");
-                    signCount++;
+                    if (vo.getSignTime() == null) {
+                        vo.setState("未参加");
+                        notAttendCount++;
+                    } else {
+                        vo.setState("已签到");
+                        signCount++;
+                    }
                 }
             }
+            lecture.setUserList(list);
+            lecture.setUserCount(list.size());
+            lecture.setNotAttendCount(signCount);
+            lecture.setNotAttendCount(notAttendCount);
         }
-        lecture.setUserList(list);
-        lecture.setUserCount(list.size());
-        lecture.setNotAttendCount(signCount);
-        lecture.setNotAttendCount(notAttendCount);
 
         return lecture;
     }
@@ -197,5 +228,15 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
         }
 
         return lecture;
+    }
+
+
+    /**
+     * 增加给定id讲座的剩余可预约数量
+     * @param id 讲座id
+     */
+    @Override
+    public void increaseLectureStoreById(Long id) {
+        lectureMapper.increaseLectureStoreById(id);
     }
 }

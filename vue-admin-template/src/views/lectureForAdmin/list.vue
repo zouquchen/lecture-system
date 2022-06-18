@@ -69,8 +69,11 @@
 
       <el-table-column :formatter="lectureStartFormatter" label="开始时间" width="100" align="center"/>
 
-      <el-table-column label="操作" width="200" align="center">
+      <el-table-column label="操作" width="300" align="center">
         <template slot-scope="scope">
+          <router-link :to="'/lectureForAdmin/sign/' + scope.row.id">
+            <el-button type="warning" size="mini" icon="el-icon-message">签到</el-button>
+          </router-link>
           <router-link :to="'/lectureForAdmin/info/' + scope.row.id">
             <el-button type="info" size="mini" icon="el-icon-document">查看</el-button>
           </router-link>

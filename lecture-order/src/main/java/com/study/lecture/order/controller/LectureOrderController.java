@@ -1,6 +1,9 @@
 package com.study.lecture.order.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.study.lecture.common.constant.MqConstant;
+import com.study.lecture.common.entity.lecture.Lecture;
 import com.study.lecture.common.entity.lecture.LectureUserRecord;
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.exception.GlobalException;
@@ -11,6 +14,7 @@ import com.study.lecture.common.utils.R;
 import com.study.lecture.common.utils.ResultCodeEnum;
 import com.study.lecture.common.vo.LectureForUserListVo;
 import com.study.lecture.common.vo.LectureOrderMqVo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -33,6 +37,7 @@ import java.util.List;
  * @author zqc
  * @since 1.0
  */
+@Slf4j
 @RestController
 @RequestMapping("/lectureOrder")
 @CrossOrigin
@@ -46,6 +51,9 @@ public class LectureOrderController implements InitializingBean {
 
     @DubboReference(version = "1.0")
     private LectureService lectureService;
+
+    @DubboReference(version = "1.0")
+    private LectureUserRecordService lectureUserRecordService;
 
     /**
      * <p> 预定讲座，采用秒杀的方式实现 </p>
@@ -83,6 +91,29 @@ public class LectureOrderController implements InitializingBean {
         // TODO 发送到消息队列是否成功
         boolean b = mqSender.sendMessage(MqConstant.EXCHANGE_ORDER, MqConstant.ROUTE_ORDER, lectureOrderMqVo);
 
+        return R.ok();
+    }
+
+    @PostMapping("/cancelLectureById/{lectureId}")
+    public R cancelLectureById(@PathVariable Long lectureId) {
+        // 获取用户信息
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = loginUser.getUser().getId();
+
+        // 删除redis内存储的预约信息
+        redisTemplate.delete("lecture:" + userId + ":" + lectureId);
+
+        try {
+            // 讲座可预约数量加1
+            lectureService.increaseLectureStoreById(lectureId);
+            log.info("讲座可预约数量加1成功！");
+            // 根据讲座id和用户id删除预约记录
+            lectureUserRecordService.deleteLectureUserRecord(lectureId, userId);
+            log.info("讲座预约记录删除成功！");
+        } catch (Exception exception) {
+            throw new GlobalException(ResultCodeEnum.CANCEL_ORDER_LECTURE_ERROR.getMessage(), ResultCodeEnum.CANCEL_ORDER_LECTURE_ERROR.getCode());
+        }
+        // TODO 分布式锁
         return R.ok();
     }
 

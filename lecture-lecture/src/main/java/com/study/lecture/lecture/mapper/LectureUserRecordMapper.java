@@ -17,6 +17,15 @@ import java.util.List;
  */
 @Mapper
 public interface LectureUserRecordMapper extends BaseMapper<LectureUserRecord> {
+
+    /**
+     * 根据id查询该用户预约过的所有讲座id
+     * 用于更新用户讲座列表的讲座状态（未开始、可预约、已预约）
+     * @param userId 用户id
+     * @return
+     */
+    List<Long> getAlLectureUserRecord(Long userId);
+
     /**
      * 根据用户id查询该用户已预约过的讲座，分页查询
      * @param userId 用户id
@@ -24,6 +33,7 @@ public interface LectureUserRecordMapper extends BaseMapper<LectureUserRecord> {
      * @param limit 分页查询，数据结束位置
      * @return 查询列表
      */
+
     List<LectureUserRecordVo> getLectureUserRecordPageList(Long userId, int begin, int limit);
 
     /**
@@ -32,4 +42,11 @@ public interface LectureUserRecordMapper extends BaseMapper<LectureUserRecord> {
      * @return 查询列表
      */
     int countLectureUserRecord(Long userId);
+
+    /**
+     * 根据讲座id和用户id删除用户预约讲座记录
+     * @param lectureId 讲座id
+     * @param userId 用户id
+     */
+    void deleteLectureUserRecord(Long lectureId, Long userId);
 }

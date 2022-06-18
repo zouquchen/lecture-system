@@ -7,6 +7,7 @@ import com.study.lecture.common.utils.R;
 /**
  * <p>
  * 讲座预约记录表 服务类
+ * 可用于讲座签到
  * </p>
  *
  * @author zqc
@@ -21,4 +22,11 @@ public interface LectureUserRecordService extends IService<LectureUserRecord> {
      * @return 记录
      */
     R getLectureUserRecordPageList(int page, int limit);
+
+    /**
+     * 根据讲座id和用户id删除用户预约讲座记录
+     * @param lectureId 讲座id
+     * @param userId 用户id
+     */
+    void deleteLectureUserRecord(Long lectureId, Long userId);
 }

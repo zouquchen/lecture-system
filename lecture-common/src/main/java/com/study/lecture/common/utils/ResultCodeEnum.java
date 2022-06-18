@@ -57,7 +57,12 @@ public enum ResultCodeEnum {
     /**
      * 讲座名额已被抢光
      */
-    EMPTY_STORE(50103, "讲座名额已被抢光")
+    EMPTY_STORE(50103, "讲座名额已被抢光"),
+
+    /**
+     * 取消讲座预约失败
+     */
+    CANCEL_ORDER_LECTURE_ERROR(50201, "取消讲座预约失败")
     ;
 
     /**

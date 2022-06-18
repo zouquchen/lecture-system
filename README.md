@@ -9,6 +9,7 @@ Lecture是一款前后端分离的校园讲座预约系统，基于目前主流�
 
 - 配置mysql
   - 修改每一个项目中application.yml中mysql的url, username以及password。
+  - 运行db/data.sql添加数据到数据库
 - 配置redis
   - 修改每一个项目中application.yml中redis的host, port以及password。
 - 启动Nginx

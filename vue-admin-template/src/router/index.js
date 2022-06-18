@@ -72,6 +72,13 @@ export const constantRouterMap = [
         component: () => import('@/views/lectureForAdmin/info.vue'),
         meta: { title: '讲座详情' },
         hidden: true
+      },
+      {
+        path: 'sign/:id',
+        name: '讲座签到',
+        component: () => import('@/views/lectureForAdmin/sign.vue'),
+        meta: { title: '讲座签到' },
+        hidden: true
       }
     ]
   },
@@ -99,13 +106,6 @@ export const constantRouterMap = [
         path: 'info/:id',
         name: '讲座详情（用户）',
         component: () => import('@/views/lectureForUser/info.vue'),
-        meta: { title: '讲座详情' },
-        hidden: true
-      },
-      {
-        path: 'infoRecord/:id',
-        name: '已预约讲座详情（用户）',
-        component: () => import('@/views/lectureForUser/infoRecord.vue'),
         meta: { title: '讲座详情' },
         hidden: true
       }

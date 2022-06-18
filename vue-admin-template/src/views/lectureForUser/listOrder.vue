@@ -48,8 +48,8 @@
 
       <el-table-column label="状态" width="80" align="center">
         <template slot-scope="scope">
-          <el-tag :type="judgeState(scope.row.orderStartTime)? 'success' : 'danger'">
-            {{ judgeState(scope.row.orderStartTime) ? '可预约' : '未开放' }}
+          <el-tag :type="judgeState(scope.row.orderState)">
+            {{ scope.row.orderState }}
           </el-tag>
         </template>
       </el-table-column>
@@ -150,19 +150,11 @@ export default {
       console.log(cur)
       return cur
     },
-    // 格式化时间
-    formatterDateTime(date) {
-      const moment = require('moment')
-      var cur = moment(date).utcOffset(480).format('YYYY-MM-DD HH:mm:ss')
-      console.log(cur)
-      return cur
-    },
-    // 判断状态为：true: 可预约 fasle: 未开放
-    judgeState(date) {
-      const moment = require('moment')
-      var cur = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-      var start = moment(date).utcOffset(480).format('YYYY-MM-DD HH:mm:ss')
-      return cur > start
+    // 判断预约状态，返回标签样式
+    judgeState(state) {
+      if (state === '未开放') return 'danger'
+      if (state === '未预约') return ''
+      if (state === '已预约') return 'success'
     },
     // 时间格式Formatter
     orderStartFormatter(data) { // 预约开始时间

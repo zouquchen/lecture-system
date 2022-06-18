@@ -60,12 +60,5 @@ export default {
       method: `post`,
       data: lectureInfo
     })
-  },
-  // 根据id查询讲座详细信息，用于详情页面
-  getLectureInfoById(id) {
-    return request({
-      url: `/lecture/getLectureInfo/${id}`,
-      method: `get`
-    })
   }
 }

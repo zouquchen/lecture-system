@@ -7,6 +7,7 @@ import com.study.lecture.common.service.lecture.LectureUserRecordService;
 import com.study.lecture.common.utils.R;
 import com.study.lecture.common.vo.LectureUserRecordVo;
 import com.study.lecture.lecture.mapper.LectureUserRecordMapper;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ import java.util.List;
  * @author zqc
  * @since 2022-04-13
  */
-@Service
+@DubboService(version = "1.0")
 public class LectureUserRecordServiceImpl extends ServiceImpl<LectureUserRecordMapper, LectureUserRecord> implements LectureUserRecordService {
 
     @Resource
@@ -62,5 +63,15 @@ public class LectureUserRecordServiceImpl extends ServiceImpl<LectureUserRecordM
         int total = lectureUserRecordMapper.countLectureUserRecord(userId);
 
         return R.ok().put("records", records).put("total", total);
+    }
+
+    /**
+     * 根据讲座id和用户id删除用户预约讲座记录
+     * @param lectureId 讲座id
+     * @param userId 用户id
+     */
+    @Override
+    public void deleteLectureUserRecord(Long lectureId, Long userId) {
+        lectureUserRecordMapper.deleteLectureUserRecord(lectureId, userId);
     }
 }

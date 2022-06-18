@@ -26,7 +26,6 @@ public class LectureForUserListVo implements Serializable {
     /**
      * 讲座id lecture表
      */
-    @ApiModelProperty(value = "讲座id", example = "1")
     private Long id;
 
     /**
@@ -40,8 +39,16 @@ public class LectureForUserListVo implements Serializable {
      */
     private int state;
 
-    @ApiModelProperty(value = "是否已被该用户预约", example = "false")
-    private boolean ordered;
+    /**
+     * lecture预约状态
+     * 未开放、可预约、已预约
+     */
+    private String orderState;
+
+    /**
+     * 是否已被该用户预约
+     */
+    // private boolean ordered;
 
     /**
      * 讲座类别 lectureType表

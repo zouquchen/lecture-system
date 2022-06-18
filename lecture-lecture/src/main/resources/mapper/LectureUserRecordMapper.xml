@@ -15,10 +15,12 @@
         <result column="update_time" property="updateTime" />
     </resultMap>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id, lecture_id, user_id, sign_code_id, order_time, sign_time, is_deleted, create_time, update_time
-    </sql>
+    <!-- 根据id查询该用户预约过的所有讲座-->
+    <select id="getAlLectureUserRecord" resultType="Long">
+        select lecture_id
+        from lecture_user_record
+        where user_id = #{userId}
+    </select>
 
     <!-- 分页查询，根据用户id查询该用户已预约过的讲座-->
     <select id="getLectureUserRecordPageList" resultType="com.study.lecture.common.vo.LectureUserRecordVo">
@@ -36,5 +38,11 @@
         from lecture_user_record
         where user_id=#{userId}
     </select>
+
+    <!-- 根据讲座id和用户id删除用户预约讲座记录-->
+    <delete id="deleteLectureUserRecord">
+        DELETE FROM lecture_user_record
+        WHERE lecture_id = #{lectureId} AND user_id = #{userId}
+    </delete>
 
 </mapper>

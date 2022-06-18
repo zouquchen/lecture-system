@@ -72,7 +72,7 @@
           <!-- 按钮 -->
           <el-form-item>
             <el-button type="primary" @click="onSubmit">保存</el-button>
-            <el-button>取消</el-button>
+            <el-button @click="cancel">取消</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -227,10 +227,9 @@ export default {
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消添加'
+            message: '已取消修改'
           })
         })
-        this.updateLecture()
       } else {
         // 无id，添加
         this.$confirm('此操作将添加新的讲座, 是否继续?', '提示', {
@@ -242,10 +241,14 @@ export default {
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消修改'
+            message: '已取消添加'
           })
         })
       }
+    },
+    cancel() {
+      // 回到列表页面，路由跳转
+      this.$router.push({ path: '/lectureForAdmin/table' })
     }
   }
 }

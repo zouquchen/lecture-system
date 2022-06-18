@@ -141,9 +141,22 @@ public class LectureController {
     @PreAuthorize("hasAnyAuthority('admin','manager')")
     @GetMapping("/getLectureInfoForAdmin/{id}")
     public R getLectureInfoForAdminById(@PathVariable long id) {
-        LectureForAdminInfoVo lecture = lectureService.getLectureInfoForAdminById(id);
+        LectureForAdminInfoVo lecture = lectureService.getLectureInfoForAdminById(id, true);
         return R.ok("获取成功").put("lectureInfo", lecture);
     }
+
+    /**
+     * 根据id获取讲座详情，显示详情页面 (for admin)
+     * @param id 讲座id
+     * @return 讲座详情
+     */
+    @PreAuthorize("hasAnyAuthority('admin','manager')")
+    @GetMapping("/getLectureInfoForSign/{id}")
+    public R getLectureInfoForSignById(@PathVariable long id) {
+        LectureForAdminInfoVo lecture = lectureService.getLectureInfoForAdminById(id, false);
+        return R.ok("获取成功").put("lectureInfo", lecture);
+    }
+
 
     /**
      * 根据id获取讲座详情，显示详情页面 (for user)
@@ -152,7 +165,7 @@ public class LectureController {
      */
     @PreAuthorize("hasAnyAuthority('admin','manager','student')")
     @GetMapping("/getLectureInfoForUser/{id}")
-    public R getLectureInfo(@PathVariable long id) {
+    public R getLectureInfoForUserById(@PathVariable long id) {
         LectureForUserInfoVo lecture = lectureService.getLectureInfoForUserById(id);
         return R.ok("获取成功").put("lectureInfo", lecture);
     }
