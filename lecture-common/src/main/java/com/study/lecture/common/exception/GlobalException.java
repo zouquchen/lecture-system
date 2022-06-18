@@ -33,6 +33,7 @@ public class GlobalException extends RuntimeException{
         this.code = code;
     }
 
+
     public GlobalException(String msg, int code, Throwable e) {
         super(msg, e);
         this.msg = msg;

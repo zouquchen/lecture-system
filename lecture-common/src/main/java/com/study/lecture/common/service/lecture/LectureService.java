@@ -77,11 +77,4 @@ public interface LectureService extends IService<Lecture> {
      * @return 查询结果
      */
     LectureForAdminInfoVo getLectureInfoForAdminById(Long id, boolean record);
-
-
-    /**
-     * 增加给定id讲座的剩余可预约数量
-     * @param id 讲座id
-     */
-    void increaseLectureStoreById(Long id);
 }

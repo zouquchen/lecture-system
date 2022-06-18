@@ -3,13 +3,18 @@ package com.study.lecture.lecture.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.study.lecture.common.entity.lecture.LectureUserRecord;
 import com.study.lecture.common.entity.user.LoginUser;
+import com.study.lecture.common.exception.GlobalException;
 import com.study.lecture.common.service.lecture.LectureUserRecordService;
 import com.study.lecture.common.utils.R;
+import com.study.lecture.common.utils.ResultCodeEnum;
 import com.study.lecture.common.vo.LectureUserRecordVo;
+import com.study.lecture.lecture.mapper.LectureMapper;
 import com.study.lecture.lecture.mapper.LectureUserRecordMapper;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -27,6 +32,9 @@ public class LectureUserRecordServiceImpl extends ServiceImpl<LectureUserRecordM
 
     @Resource
     private LectureUserRecordMapper lectureUserRecordMapper;
+
+    @Resource
+    private LectureMapper lectureMapper;
 
     /**
      * 获取用户预约讲座记录表
@@ -65,13 +73,22 @@ public class LectureUserRecordServiceImpl extends ServiceImpl<LectureUserRecordM
         return R.ok().put("records", records).put("total", total);
     }
 
+
     /**
-     * 根据讲座id和用户id删除用户预约讲座记录
+     * 根据讲座id和用户id取消预约讲座
      * @param lectureId 讲座id
      * @param userId 用户id
+     * @exception Exception
      */
     @Override
-    public void deleteLectureUserRecord(Long lectureId, Long userId) {
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void cancelLectureById(Long lectureId, Long userId) throws Exception{
+        // 根据讲座id和用户id删除用户预约讲座记录
         lectureUserRecordMapper.deleteLectureUserRecord(lectureId, userId);
+
+        // 增加给定id讲座的剩余可预约数量
+        lectureMapper.increaseLectureStoreById(lectureId);
     }
+
+
 }

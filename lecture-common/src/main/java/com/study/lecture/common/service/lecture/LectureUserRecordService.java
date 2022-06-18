@@ -24,9 +24,9 @@ public interface LectureUserRecordService extends IService<LectureUserRecord> {
     R getLectureUserRecordPageList(int page, int limit);
 
     /**
-     * 根据讲座id和用户id删除用户预约讲座记录
+     * 根据讲座id和用户id取消预约讲座
      * @param lectureId 讲座id
      * @param userId 用户id
      */
-    void deleteLectureUserRecord(Long lectureId, Long userId);
+    void cancelLectureById(Long lectureId, Long userId) throws Exception;
 }

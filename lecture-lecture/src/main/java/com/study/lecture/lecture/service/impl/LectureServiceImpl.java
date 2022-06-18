@@ -11,6 +11,8 @@ import com.study.lecture.lecture.mapper.LectureUserRecordMapper;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.Time;
@@ -230,13 +232,4 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
         return lecture;
     }
 
-
-    /**
-     * 增加给定id讲座的剩余可预约数量
-     * @param id 讲座id
-     */
-    @Override
-    public void increaseLectureStoreById(Long id) {
-        lectureMapper.increaseLectureStoreById(id);
-    }
 }

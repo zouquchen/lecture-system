@@ -14,11 +14,14 @@ import com.study.lecture.common.utils.R;
 import com.study.lecture.common.utils.ResultCodeEnum;
 import com.study.lecture.common.vo.LectureForUserListVo;
 import com.study.lecture.common.vo.LectureOrderMqVo;
+import com.study.lecture.order.service.LectureOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,96 +44,30 @@ import java.util.List;
 @RestController
 @RequestMapping("/lectureOrder")
 @CrossOrigin
-public class LectureOrderController implements InitializingBean {
+public class LectureOrderController {
 
     @Resource
-    private RedisTemplate<String, Object> redisTemplate;
-
-    @Resource
-    private MqSender mqSender;
-
-    @DubboReference(version = "1.0")
-    private LectureService lectureService;
-
-    @DubboReference(version = "1.0")
-    private LectureUserRecordService lectureUserRecordService;
+    private LectureOrderService lectureOrderService;
 
     /**
      * <p> 预定讲座，采用秒杀的方式实现 </p>
      * <p> 查询用户是否重复预约，查询讲座剩余场次是否足够，最后将预约信息发送到消息队列</p>
      * @param lectureId 讲座Id
-     * @return
+     * @return 响应类
      */
     @PostMapping("/orderLectureById/{lectureId}")
     public R orderLectureById(@PathVariable Long lectureId) {
-        // 获取用户信息
-        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = loginUser.getUser().getId();
-
-        // 从redis内查询该用户是否重复预定讲座
-        LectureUserRecord lectureUserRecord = (LectureUserRecord) redisTemplate.opsForValue().get("lecture:" + userId + ":" + lectureId);
-        if (lectureUserRecord != null) {
-            throw new GlobalException(ResultCodeEnum.REPEAT_ORDER.getMessage(), ResultCodeEnum.REPEAT_ORDER.getCode());
-        }
-
-        // 递减redis内该讲座剩余可预约数量
-        // stock为递减之后的库存，decrement是原子操作
-        Long stock = redisTemplate.opsForValue().decrement("lectureStock:" + lectureId);
-        // 查询不到讲座库存，说明讲座不存在
-        if (stock == null) {
-            throw new GlobalException(ResultCodeEnum.LECTURE_NOT_EXIT.getMessage(), ResultCodeEnum.LECTURE_NOT_EXIT.getCode());
-        }
-        if (stock < 0) {
-            // 恢复到0
-            redisTemplate.opsForValue().increment("lectureStock:" + lectureId);
-            throw new GlobalException(ResultCodeEnum.EMPTY_STORE.getMessage(), ResultCodeEnum.EMPTY_STORE.getCode());
-        }
-
-        // 发送到消息队列，由消息队列异步处理：在数据库中创建用户预约讲座的记录
-        LectureOrderMqVo lectureOrderMqVo = new LectureOrderMqVo(userId, lectureId);
-        // TODO 发送到消息队列是否成功
-        boolean b = mqSender.sendMessage(MqConstant.EXCHANGE_ORDER, MqConstant.ROUTE_ORDER, lectureOrderMqVo);
-
-        return R.ok();
-    }
-
-    @PostMapping("/cancelLectureById/{lectureId}")
-    public R cancelLectureById(@PathVariable Long lectureId) {
-        // 获取用户信息
-        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = loginUser.getUser().getId();
-
-        // 删除redis内存储的预约信息
-        redisTemplate.delete("lecture:" + userId + ":" + lectureId);
-
-        try {
-            // 讲座可预约数量加1
-            lectureService.increaseLectureStoreById(lectureId);
-            log.info("讲座可预约数量加1成功！");
-            // 根据讲座id和用户id删除预约记录
-            lectureUserRecordService.deleteLectureUserRecord(lectureId, userId);
-            log.info("讲座预约记录删除成功！");
-        } catch (Exception exception) {
-            throw new GlobalException(ResultCodeEnum.CANCEL_ORDER_LECTURE_ERROR.getMessage(), ResultCodeEnum.CANCEL_ORDER_LECTURE_ERROR.getCode());
-        }
-        // TODO 分布式锁
-        return R.ok();
+        return lectureOrderService.orderLectureById(lectureId);
     }
 
     /**
-     * 初始化时执行的方法
-     * 把讲座的可预约数量加载到Redis
-     * @throws Exception
+     * 取消已预约讲座
+     * @param lectureId 讲座id
+     * @return 响应类
      */
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        List<LectureForUserListVo> list = lectureService.lectureForUserList();
-        if (CollectionUtils.isEmpty(list)) {
-            return;
-        }
-        list.forEach(vo -> {
-            // 设置讲座的剩余预约数量
-            redisTemplate.opsForValue().set("lectureStock:" + vo.getId(), vo.getStore());
-        });
+    @PostMapping("/cancelLectureById/{lectureId}")
+    public R cancelLectureById(@PathVariable Long lectureId) {
+        return lectureOrderService.cancelLectureById(lectureId);
     }
+
 }
