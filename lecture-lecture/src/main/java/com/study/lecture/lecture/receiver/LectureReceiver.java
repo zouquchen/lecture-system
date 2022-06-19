@@ -33,7 +33,7 @@ import java.util.Date;
  * @since 1.0
  */
 @Service
-@Slf4j
+@Slf4j(topic = "LectureReceiver")
 public class LectureReceiver {
 
     @Resource
@@ -53,34 +53,15 @@ public class LectureReceiver {
     @RabbitListener(queues = MqConstant.QUEUE_ORDER)
     public void receive(LectureOrderMqVo lectureOrderMqVo) {
         log.info("接收到消息：" + lectureOrderMqVo.toString());
+
         Long userId = lectureOrderMqVo.getUserId();
         Long lectureId = lectureOrderMqVo.getLectureId();
 
-        // 从redis内查询该用户是否重复预定讲座
-        LectureUserRecord record = (LectureUserRecord) redisTemplate.opsForValue().get("lecture:" + userId + ":" + lectureId);
-        if (record != null) {
-            return;
+        try {
+            lectureUserRecordService.orderLectureById(lectureId, userId);
+        } catch (Exception exception) {
+            log.error("讲座预约失败");
+            exception.printStackTrace();
         }
-
-        // 设置用户订阅讲座记录信息
-        LectureUserRecord lectureUserRecord = new LectureUserRecord();
-        lectureUserRecord.setUserId(userId);
-        lectureUserRecord.setLectureId(lectureId);
-        lectureUserRecord.setSignCodeId(12345678L);
-        lectureUserRecord.setOrderTime(new Date());
-
-        // 添加用户预约讲座的记录
-        lectureUserRecordService.save(lectureUserRecord);
-
-        // 修改订单,减少剩余可预约数量
-        UpdateWrapper<Lecture> lectureUpdateWrapper = new UpdateWrapper<>();
-        lectureUpdateWrapper.setSql("store = store - 1").eq("id", lectureId).gt("store", 0);
-
-        lectureService.update(lectureUpdateWrapper);
-
-        // 预约信息存储到redis内
-        redisTemplate.opsForValue().set("lecture:" + userId + ":" + lectureId, lectureUserRecord);
-
-        // TODO 添加事务
     }
 }

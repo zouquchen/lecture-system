@@ -27,6 +27,15 @@ public interface LectureUserRecordService extends IService<LectureUserRecord> {
      * 根据讲座id和用户id取消预约讲座
      * @param lectureId 讲座id
      * @param userId 用户id
+     * @throws Exception 异常
+     */
+    void orderLectureById(Long lectureId, Long userId) throws Exception;
+
+    /**
+     * 根据讲座id和用户id取消预约讲座
+     * @param lectureId 讲座id
+     * @param userId 用户id
+     * @throws Exception 异常
      */
     void cancelLectureById(Long lectureId, Long userId) throws Exception;
 }

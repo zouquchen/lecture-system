@@ -44,6 +44,13 @@ public interface LectureUserRecordMapper extends BaseMapper<LectureUserRecord> {
     int countLectureUserRecord(Long userId);
 
     /**
+     * 根据讲座id和用户id添加用户预约讲座记录
+     * @param lectureId 讲座id
+     * @param userId 用户id
+     */
+    // void insertLectureUserRecord(Long lectureId, Long userId);
+
+    /**
      * 根据讲座id和用户id删除用户预约讲座记录
      * @param lectureId 讲座id
      * @param userId 用户id

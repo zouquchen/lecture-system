@@ -21,18 +21,40 @@ Lecture是一款前后端分离的校园讲座预约系统，基于目前主流�
   - 修改每一个项目中application.yml中rabbitmq的host, username以及password。
   
 ## 💻 3 核心技术栈
+后端：
+- Spring
+- Spring MVC
+- Spring Boot 2.2.1.RELEASE
+- ORM：MyBatis
+- RPC：Dubbo 2.7.8
+- 注册中心：Zookeeper
+- 数据库：MySQL
+- 缓存：Redis
+- 消息队列：RabbitMQ
+- 权限：Spring Security
+
+前端：
+- Vue
+- 模板：[vue-admin-template-3.8.0](https://github.com/PanJiaChen/vue-admin-template)
+- 样式：[element-ui](https://element.eleme.cn/#/zh-CN)
 
 ## 🔨 4 开发环境
+- 操作系统：Windows 10
+- 后端IDE：IDEA
+- 前端IDE：VS code
+- 构建工具：Apache Maven
+- 接口测试工具：Postman
+- 压力测试工具：Apache JMeter
+- 版本控制工具：Git
+- Java 版本：8
 
 ## 🎀 5 界面展示
 
-## 🌱 6 本地运行
+## 🌌 6 部署架构
 
-## 🌌 7 部署架构
+## 🎯 7 功能逻辑图
 
-## 🎯 8 功能逻辑图
-
-### 8.1 用户模块
+### 7.1 用户模块
 
 用户模块使用Spring Security框架实现认证、授权两大功能。
 
@@ -40,7 +62,7 @@ Lecture是一款前后端分离的校园讲座预约系统，基于目前主流�
 > 
 >授权（Authoritarian）：经过认证后判断当前用户是否有权限进行某个操作。
 
-#### 8.1.1 认证
+#### 7.1.1 认证
 
 认证模块是验证当前访问系统的是不是本系统的用户，并且确认具体是哪个用户。
 如果用户未登录就需要让用户先登录再认证。
@@ -49,9 +71,9 @@ Lecture是一款前后端分离的校园讲座预约系统，基于目前主流�
 
 ![structure_login.png](doc/images/structure_login.png)
 
-#### 8.1.2 授权
+#### 7.1.2 授权
 
-#### 8.1.3 Spring Security原理
+#### 7.1.3 Spring Security原理
 
 下面对Spring Security的原理进行简单的介绍：
 
@@ -76,3 +98,18 @@ Lecture是一款前后端分离的校园讲座预约系统，基于目前主流�
 
   
 ![structure_login.png](doc/images/structure_SpringSecurity.png)
+
+
+## 7.3 预约讲座模块
+讲座预约模块主要实现两个功能： 用户预约讲座、用户取消讲座
+
+该过程需要lecture-lecture和lecture-order两个微服务共同完成。其中：
+- lecture-order微服务：不操作mysql数据库，从redis中查询用户是否重复预定讲座、讲座是否还有剩余的可预约数量，
+  如果用户未预约且该讲座有剩余可预约数量，则把讲座id和用户id封装为一个对象发送到消息队列。返回前端预约成功。
+  
+- lecture-lecture微服务：从消息队列中获取消息，操作数据库减少讲座可预约数量，添加用户预约记录；
+  操作redis减少讲座可预约数量，添加用户预约记录。
+  
+具体流程见下图：
+
+![structure_login.png](doc/images/structure_order.png)

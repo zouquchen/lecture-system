@@ -141,8 +141,14 @@
         WHERE lur.user_id = su.id AND lur.lecture_id = #{id}
     </select>
 
-    <!--  增加给定id讲座的剩余可预约数量-->
+    <!-- 减少给定id讲座的剩余可预约数量-->
+    <update id="decreaseLectureStoreById">
+        UPDATE lecture SET store = store - 1 WHERE store > 0 AND id = #{id}
+    </update>
+
+    <!-- 增加给定id讲座的剩余可预约数量-->
     <update id="increaseLectureStoreById">
         UPDATE lecture SET store = store + 1 WHERE id = #{id}
     </update>
+
 </mapper>

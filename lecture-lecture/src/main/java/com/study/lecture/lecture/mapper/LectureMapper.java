@@ -91,6 +91,12 @@ public interface LectureMapper extends BaseMapper<Lecture> {
     List<OrderRecordOfOneLectureVo> getOrderRecordOfOneLectureListById(Long id);
 
     /**
+     * 减少给定id讲座的剩余可预约数量
+     * @param id 讲座id
+     */
+    void decreaseLectureStoreById(Long id);
+
+    /**
      * 增加给定id讲座的剩余可预约数量
      * @param id 讲座id
      */

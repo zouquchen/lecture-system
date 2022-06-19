@@ -40,6 +40,13 @@
     </select>
 
     <!-- 根据讲座id和用户id删除用户预约讲座记录-->
+<!--    <insert id="insertLectureUserRecord">-->
+<!--        INSERT INTO lecture_user_record-->
+<!--        VALUE (lecture_id, #{lectureId})-->
+<!--        <if test=""-->
+<!--    </insert>-->
+
+    <!-- 根据讲座id和用户id删除用户预约讲座记录-->
     <delete id="deleteLectureUserRecord">
         DELETE FROM lecture_user_record
         WHERE lecture_id = #{lectureId} AND user_id = #{userId}

@@ -83,8 +83,9 @@ public class LectureOrderServiceImpl implements LectureOrderService, Initializin
 
         // 发送到消息队列，由消息队列异步处理：在数据库中创建用户预约讲座的记录
         LectureOrderMqVo lectureOrderMqVo = new LectureOrderMqVo(userId, lectureId);
+
         // TODO 发送到消息队列是否成功
-        boolean b = mqSender.sendMessage(MqConstant.EXCHANGE_ORDER, MqConstant.ROUTE_ORDER, lectureOrderMqVo);
+        mqSender.sendMessage(MqConstant.EXCHANGE_ORDER, MqConstant.ROUTE_ORDER, lectureOrderMqVo);
 
         return R.ok();
     }
@@ -95,7 +96,6 @@ public class LectureOrderServiceImpl implements LectureOrderService, Initializin
      * @return 响应类
      */
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class, GlobalException.class})
     public R cancelLectureById(Long lectureId) {
         // 获取用户信息
         LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -103,7 +103,6 @@ public class LectureOrderServiceImpl implements LectureOrderService, Initializin
 
         try {
             lectureUserRecordService.cancelLectureById(lectureId, userId);
-            redisTemplate.delete("lecture:" + userId + ":" + lectureId);
             return R.ok();
         } catch (Exception exception) {
             throw new GlobalException(ResultCodeEnum.CANCEL_ORDER_LECTURE_ERROR.getMessage(), ResultCodeEnum.CANCEL_ORDER_LECTURE_ERROR.getCode());
@@ -113,10 +112,10 @@ public class LectureOrderServiceImpl implements LectureOrderService, Initializin
     /**
      * 初始化时执行的方法
      * 把讲座的可预约数量加载到Redis
-     * @throws Exception
+     * @throws Exception 异常
      */
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet(){
         List<LectureForUserListVo> list = lectureService.lectureForUserList();
         if (CollectionUtils.isEmpty(list)) {
             return;
