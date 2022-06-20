@@ -28,7 +28,7 @@ Lecture是一款前后端分离的校园讲座预约系统，基于目前主流�
 - ORM：MyBatis
 - RPC：Dubbo 2.7.8
 - 注册中心：Zookeeper
-- 数据库：MySQL
+- 数据库：MySQL 8.0
 - 缓存：Redis
 - 消息队列：RabbitMQ
 - 权限：Spring Security
@@ -100,7 +100,7 @@ Lecture是一款前后端分离的校园讲座预约系统，基于目前主流�
 ![structure_login.png](doc/images/structure_SpringSecurity.png)
 
 
-## 7.3 预约讲座模块
+### 7.3 预约讲座模块
 讲座预约模块主要实现两个功能： 用户预约讲座、用户取消讲座
 
 该过程需要lecture-lecture和lecture-order两个微服务共同完成。其中：

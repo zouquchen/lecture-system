@@ -60,9 +60,24 @@ public enum ResultCodeEnum {
     EMPTY_STORE(50103, "讲座名额已被抢光"),
 
     /**
+     * 讲座未开始
+     */
+    ORDER_NOT_START(50104, "讲座预约未开始"),
+
+    /**
+     * 讲座已结束
+     */
+    LECTURE_IS_OVER(50105, "讲座已结束"),
+
+    /**
      * 取消讲座预约失败
      */
-    CANCEL_ORDER_LECTURE_ERROR(50201, "取消讲座预约失败")
+    CANCEL_ORDER_LECTURE_ERROR(50201, "取消讲座预约失败"),
+
+    /**
+     * 用户未预约讲座，取消预约讲座失败
+     */
+    USER_NOT_ORDER_LECTURE(50201, "用户未预约讲座，取消预约讲座失败"),
     ;
 
     /**

@@ -1,6 +1,7 @@
 package com.study.lecture.order.service.impl;
 
 import com.study.lecture.common.constant.MqConstant;
+import com.study.lecture.common.constant.RedisConstant;
 import com.study.lecture.common.entity.lecture.LectureUserRecord;
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.exception.GlobalException;
@@ -18,11 +19,10 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,23 +62,38 @@ public class LectureOrderServiceImpl implements LectureOrderService, Initializin
         LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = loginUser.getUser().getId();
 
+        // 从Redis内查询讲座是否开始或结束
+        Date startTime = (Date) redisTemplate.opsForValue().get(RedisConstant.getKeyOfLectureOrderStartTime(lectureId));
+        Date endTime = (Date) redisTemplate.opsForValue().get(RedisConstant.getKeyOfLectureOrderEndTime(lectureId));
+        if (startTime == null || endTime == null) {
+            throw new GlobalException("未知错误！");
+        }
+        Date now = new Date();
+        if (now.before(startTime)) {
+            throw new GlobalException(ResultCodeEnum.ORDER_NOT_START);
+        }
+        if (now.after(endTime)) {
+            throw new GlobalException(ResultCodeEnum.LECTURE_IS_OVER);
+        }
+
         // 从redis内查询该用户是否重复预定讲座
-        LectureUserRecord lectureUserRecord = (LectureUserRecord) redisTemplate.opsForValue().get("lecture:" + userId + ":" + lectureId);
+        LectureUserRecord lectureUserRecord =
+                (LectureUserRecord) redisTemplate.opsForValue().get(RedisConstant.getKeyOfUserRecord(userId, lectureId));
         if (lectureUserRecord != null) {
-            throw new GlobalException(ResultCodeEnum.REPEAT_ORDER.getMessage(), ResultCodeEnum.REPEAT_ORDER.getCode());
+            throw new GlobalException(ResultCodeEnum.REPEAT_ORDER);
         }
 
         // 递减redis内该讲座剩余可预约数量
         // stock为递减之后的库存，decrement是原子操作
-        Long stock = redisTemplate.opsForValue().decrement("lectureStock:" + lectureId);
+        Long stock = redisTemplate.opsForValue().decrement(RedisConstant.getKeyOfLectureStore(lectureId));
         // 查询不到讲座库存，说明讲座不存在
         if (stock == null) {
-            throw new GlobalException(ResultCodeEnum.LECTURE_NOT_EXIT.getMessage(), ResultCodeEnum.LECTURE_NOT_EXIT.getCode());
+            throw new GlobalException(ResultCodeEnum.LECTURE_NOT_EXIT);
         }
         if (stock < 0) {
             // 恢复到0
-            redisTemplate.opsForValue().increment("lectureStock:" + lectureId);
-            throw new GlobalException(ResultCodeEnum.EMPTY_STORE.getMessage(), ResultCodeEnum.EMPTY_STORE.getCode());
+            redisTemplate.opsForValue().increment(RedisConstant.getKeyOfLectureStore(lectureId));
+            throw new GlobalException(ResultCodeEnum.EMPTY_STORE);
         }
 
         // 发送到消息队列，由消息队列异步处理：在数据库中创建用户预约讲座的记录
@@ -101,11 +116,18 @@ public class LectureOrderServiceImpl implements LectureOrderService, Initializin
         LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = loginUser.getUser().getId();
 
+        // 判断用户是否预约该讲座
+        LectureUserRecord lectureUserRecord =
+                (LectureUserRecord) redisTemplate.opsForValue().get(RedisConstant.getKeyOfUserRecord(userId, lectureId));
+        if (lectureUserRecord == null) {
+            throw new GlobalException(ResultCodeEnum.USER_NOT_ORDER_LECTURE);
+        }
+
         try {
             lectureUserRecordService.cancelLectureById(lectureId, userId);
             return R.ok();
         } catch (Exception exception) {
-            throw new GlobalException(ResultCodeEnum.CANCEL_ORDER_LECTURE_ERROR.getMessage(), ResultCodeEnum.CANCEL_ORDER_LECTURE_ERROR.getCode());
+            throw new GlobalException(ResultCodeEnum.CANCEL_ORDER_LECTURE_ERROR);
         }
     }
 
@@ -118,11 +140,18 @@ public class LectureOrderServiceImpl implements LectureOrderService, Initializin
     public void afterPropertiesSet(){
         List<LectureForUserListVo> list = lectureService.lectureForUserList();
         if (CollectionUtils.isEmpty(list)) {
+            log.info("可预约讲座为空！！！！");
             return;
         }
         list.forEach(vo -> {
+            // TODO 清空原设置
+
             // 设置讲座的剩余预约数量
-            redisTemplate.opsForValue().set("lectureStock:" + vo.getId(), vo.getStore());
+            redisTemplate.opsForValue().set(RedisConstant.getKeyOfLectureStore(vo.getId()), vo.getStore());
+
+            // 设置讲座预约时间
+            redisTemplate.opsForValue().set(RedisConstant.getKeyOfLectureOrderStartTime(vo.getId()), vo.getOrderStartTime());
+            redisTemplate.opsForValue().set(RedisConstant.getKeyOfLectureOrderEndTime(vo.getId()), vo.getOrderEndTime());
         });
     }
 }

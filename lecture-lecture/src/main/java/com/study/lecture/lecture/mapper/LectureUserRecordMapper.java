@@ -3,6 +3,7 @@ package com.study.lecture.lecture.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.study.lecture.common.entity.lecture.LectureUserRecord;
 import com.study.lecture.common.vo.LectureUserRecordVo;
+import com.study.lecture.common.vo.OrderRecordOfOneLectureVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -44,16 +45,31 @@ public interface LectureUserRecordMapper extends BaseMapper<LectureUserRecord> {
     int countLectureUserRecord(Long userId);
 
     /**
-     * 根据讲座id和用户id添加用户预约讲座记录
-     * @param lectureId 讲座id
-     * @param userId 用户id
-     */
-    // void insertLectureUserRecord(Long lectureId, Long userId);
-
-    /**
      * 根据讲座id和用户id删除用户预约讲座记录
      * @param lectureId 讲座id
      * @param userId 用户id
      */
     void deleteLectureUserRecord(Long lectureId, Long userId);
+
+    /**
+     * 根据id获取预约此讲座的所有用户信息
+     * @param id lecture的id
+     * @return 所有预约此讲座的用户信息
+     */
+    List<OrderRecordOfOneLectureVo> getOrderRecordOfOneLectureListById(Long id);
+
+    /**
+     * 根据id获取预约且签到此讲座的所有用户信息
+     * @param id lecture的id
+     * @return 所有预约此讲座的用户信息
+     */
+    List<OrderRecordOfOneLectureVo> getSignedUserOfOneLectureListById(Long id);
+
+    /**
+     * 用户签到
+     * @param lectureId 讲座id
+     * @param username 用户名/账号
+     * @return 成功标志
+     */
+    int userSign(Long lectureId, String username);
 }

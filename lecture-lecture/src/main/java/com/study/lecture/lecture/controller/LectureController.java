@@ -99,7 +99,7 @@ public class LectureController {
     @PreAuthorize("hasAnyAuthority('admin','manager')")
     @PostMapping("/addLecture")
     public R addLecture(@Validated @RequestBody Lecture lecture) {
-        if (lectureService.addLecture(lecture) >= 1) {
+        if (lectureService.addLecture(lecture)) {
             return R.ok("添加成功");
         } else {
             throw new GlobalException("添加讲座失败！");
@@ -126,7 +126,7 @@ public class LectureController {
     @PreAuthorize("hasAnyAuthority('admin','manager')")
     @PostMapping("/updateLecture")
     public R updateLecture(@Validated @RequestBody Lecture lecture) {
-        if (lectureService.updateLecture(lecture) >= 1) {
+        if (lectureService.updateLecture(lecture)) {
             return R.ok("更新成功");
         } else {
             throw new GlobalException("更新讲座失败！");
@@ -134,29 +134,16 @@ public class LectureController {
     }
 
     /**
-     * 根据id获取讲座详情，显示详情页面 (for admin)
+     * 根据id获取讲座详细信息
      * @param id 讲座id
      * @return 讲座详情
      */
     @PreAuthorize("hasAnyAuthority('admin','manager')")
     @GetMapping("/getLectureInfoForAdmin/{id}")
     public R getLectureInfoForAdminById(@PathVariable long id) {
-        LectureForAdminInfoVo lecture = lectureService.getLectureInfoForAdminById(id, true);
-        return R.ok("获取成功").put("lectureInfo", lecture);
+        LectureForAdminInfoVo lectureInfo = lectureService.getLectureInfoForAdminById(id);
+        return R.ok().put("lectureInfo", lectureInfo);
     }
-
-    /**
-     * 根据id获取讲座详情，显示详情页面 (for admin)
-     * @param id 讲座id
-     * @return 讲座详情
-     */
-    @PreAuthorize("hasAnyAuthority('admin','manager')")
-    @GetMapping("/getLectureInfoForSign/{id}")
-    public R getLectureInfoForSignById(@PathVariable long id) {
-        LectureForAdminInfoVo lecture = lectureService.getLectureInfoForAdminById(id, false);
-        return R.ok("获取成功").put("lectureInfo", lecture);
-    }
-
 
     /**
      * 根据id获取讲座详情，显示详情页面 (for user)
@@ -170,4 +157,16 @@ public class LectureController {
         return R.ok("获取成功").put("lectureInfo", lecture);
     }
 
+    /**
+     * 根据id获取讲座详细信息和用户预约列表，用于讲座详情页面
+     * @param id 讲座id
+     * @return 讲座详情
+     */
+    @PreAuthorize("hasAnyAuthority('admin','manager')")
+    @GetMapping("/getLectureInfoAndUserListForAdminById/{id}")
+    public R getLectureInfoAndUserListForAdminById(@PathVariable long id) {
+        LectureForAdminInfoVo lectureInfo = lectureService.getLectureInfoForAdminById(id);
+        lectureUserRecordService.setOrderedUserListAndData(lectureInfo);
+        return R.ok().put("lectureInfo", lectureInfo);
+    }
 }

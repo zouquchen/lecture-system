@@ -1,6 +1,7 @@
 package com.study.lecture.lecture.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.study.lecture.common.constant.RedisConstant;
 import com.study.lecture.common.entity.lecture.Lecture;
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.utils.R;
@@ -120,12 +121,13 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
     }
 
     /**
-     * user(student)查询所有lecture列表，不分页
+     * <p> user(student)查询所有lecture列表，不分页 </p>
+     * <p> 用于redis缓存, 启动服务时，查询所有用户可预约讲座列表 </p>
      * @return 查询结果
      */
     @Override
     public List<LectureForUserListVo> lectureForUserList() {
-        return null;
+        return lectureMapper.getLectureUserList();
     }
 
     /**
@@ -134,7 +136,7 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
      * @return 添加是否成功
      */
     @Override
-    public int addLecture(Lecture lecture) {
+    public boolean addLecture(Lecture lecture) {
         // TODO 事务、异常处理
         // 获取已登录用户，用于设置发布者
         LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -144,7 +146,17 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
         lecture.setCreatorId(loginUser.getUser().getId());
 
         // 数据库插入记录
-        return lectureMapper.insert(lecture);
+        int insert = lectureMapper.insert(lecture);
+        if (insert > 0) {
+            // 设置讲座的剩余预约数量
+            redisTemplate.opsForValue().set(RedisConstant.getKeyOfLectureStore(lecture.getId()), lecture.getStore());
+
+            // 设置讲座预约时间
+            redisTemplate.opsForValue().set(RedisConstant.getKeyOfLectureOrderStartTime(lecture.getId()), lecture.getOrderStartTime());
+            redisTemplate.opsForValue().set(RedisConstant.getKeyOfLectureOrderEndTime(lecture.getId()), lecture.getOrderEndTime());
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -153,9 +165,20 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
      * @return 更新是否成功
      */
     @Override
-    public int updateLecture(Lecture lecture) {
-        return lectureMapper.updateById(lecture);
+    public boolean updateLecture(Lecture lecture) {
+        int update = lectureMapper.updateById(lecture);
+        if (update > 0) {
+            // 设置讲座的剩余预约数量
+            redisTemplate.opsForValue().set(RedisConstant.getKeyOfLectureStore(lecture.getId()), lecture.getStore());
+
+            // 设置讲座预约时间
+            redisTemplate.opsForValue().set(RedisConstant.getKeyOfLectureOrderStartTime(lecture.getId()), lecture.getOrderStartTime());
+            redisTemplate.opsForValue().set(RedisConstant.getKeyOfLectureOrderEndTime(lecture.getId()), lecture.getOrderEndTime());
+            return true;
+        }
+        return false;
     }
+
 
     /**
      * 通过id获得lecture详情
@@ -165,48 +188,6 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
     @Override
     public Lecture getLectureById(Long id) {
         return lectureMapper.selectById(id);
-    }
-
-    /**
-     * 根据id获取lecture详情（讲座详情、预约该讲座的用户列表）, 显示详情页面（for admin），
-     * 与上面的方法相比，信息更全面，比如获取的是typeName而不是typeId
-     * @param id lecture的id
-     * @param record 是否返回预约此讲座的用户信息
-     * @return 查询结果
-     */
-    @Override
-    public LectureForAdminInfoVo getLectureInfoForAdminById(Long id, boolean record) {
-        // 根据id查询讲座详情
-        LectureForAdminInfoVo lecture = lectureMapper.getLectureInfoForAdminById(id);
-
-        if (record) {
-            // 根据id查询预约该讲座的所有用户信息
-            List<OrderRecordOfOneLectureVo> list = lectureMapper.getOrderRecordOfOneLectureListById(id);
-
-            // 修改list中每个用户的状态
-            int signCount = 0;
-            int notAttendCount = 0;
-            int state = lecture.getState();
-            for (OrderRecordOfOneLectureVo vo : list) {
-                if (state == 0) {
-                    vo.setState("等待开始");
-                } else {
-                    if (vo.getSignTime() == null) {
-                        vo.setState("未参加");
-                        notAttendCount++;
-                    } else {
-                        vo.setState("已签到");
-                        signCount++;
-                    }
-                }
-            }
-            lecture.setUserList(list);
-            lecture.setUserCount(list.size());
-            lecture.setNotAttendCount(signCount);
-            lecture.setNotAttendCount(notAttendCount);
-        }
-
-        return lecture;
     }
 
     /**
@@ -224,7 +205,7 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
         Long userId = loginUser.getUser().getId();
 
         // 查看该用户是否预约此讲座
-        Object o = redisTemplate.opsForValue().get("lecture:" + userId + ":" + lectureId);
+        Object o = redisTemplate.opsForValue().get(RedisConstant.getKeyOfUserRecord(userId, lectureId));
         if (o != null) {
             lecture.setOrdered(true);
         }
@@ -232,4 +213,15 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
         return lecture;
     }
 
+    /**
+     * 根据id获取lecture详情（讲座详情、预约该讲座的用户列表）, 显示详情页面（for admin），
+     * 与上面的方法相比，信息更全面，比如获取的是typeName而不是typeId
+     * @param id lecture的id
+     * @return 查询结果
+     */
+    @Override
+    public LectureForAdminInfoVo getLectureInfoForAdminById(Long id) {
+        // 根据id查询讲座详情
+        return lectureMapper.getLectureInfoForAdminById(id);
+    }
 }

@@ -40,16 +40,32 @@
     </select>
 
     <!-- 根据讲座id和用户id删除用户预约讲座记录-->
-<!--    <insert id="insertLectureUserRecord">-->
-<!--        INSERT INTO lecture_user_record-->
-<!--        VALUE (lecture_id, #{lectureId})-->
-<!--        <if test=""-->
-<!--    </insert>-->
-
-    <!-- 根据讲座id和用户id删除用户预约讲座记录-->
     <delete id="deleteLectureUserRecord">
         DELETE FROM lecture_user_record
         WHERE lecture_id = #{lectureId} AND user_id = #{userId}
     </delete>
 
+    <!-- 根据id获取预约此讲座的所有用户信息-->
+    <select id="getOrderRecordOfOneLectureListById"
+            resultType="com.study.lecture.common.vo.OrderRecordOfOneLectureVo">
+        SELECT lur.user_id, su.username, lur.order_time, lur.sign_time
+        FROM lecture_user_record lur, sys_user su
+        WHERE lur.user_id = su.id AND lur.lecture_id = #{id}
+    </select>
+
+    <!-- 根据id获取预约且签到此讲座的所有用户信息-->
+    <select id="getSignedUserOfOneLectureListById"
+            resultType="com.study.lecture.common.vo.OrderRecordOfOneLectureVo">
+        SELECT lur.user_id, su.username, lur.order_time, lur.sign_time
+        FROM lecture_user_record lur, sys_user su
+        WHERE lur.user_id = su.id AND lur.lecture_id = #{id} AND lur.sign_time IS NOT NULL
+    </select>
+
+    <!-- 用户签到-->
+    <update id="userSign">
+        UPDATE lecture_user_record lur
+        JOIN sys_user su ON su.username = #{username}
+        SET lur.sign_time=NOW()
+        WHERE lur.lecture_id = #{lectureId} and su.id = lur.user_id
+    </update>
 </mapper>

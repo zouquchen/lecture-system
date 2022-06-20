@@ -23,6 +23,13 @@
 
         <!-- 签到统计 -->
         <el-descriptions :column="2" size="1" class="margin-top" style="margin-top:50px" title="签到统计" border>
+          <el-descriptions-item :span="2">
+            <template slot="label">账号</template>
+            <el-row>
+              <el-input v-model="username" placeholder="用户账号" style="width:200px"/>
+              <el-button type="success" @click="userSign">签到</el-button>
+            </el-row>
+          </el-descriptions-item>
           <el-descriptions-item>
             <template slot="label">预约数</template><el-tag>{{ lecture.reservation - lecture.store }}</el-tag>
           </el-descriptions-item>
@@ -30,6 +37,15 @@
             <template slot="label">签到数</template><el-tag type="success">{{ lecture.signCount }}</el-tag>
           </el-descriptions-item>
         </el-descriptions>
+
+        <!-- 已签到用户 -->
+        <el-descriptions class="margin-top" style="margin-top:50px" title="已签到用户" border/>
+        <el-table :data="recordList" height="500" border style="width: 100%">
+          <el-table-column label="签到时间">
+            <template slot-scope="scope">{{ moment(scope.row.signTime).utcOffset(480).format('YYYY-MM-DD HH:mm:ss') }}</template>
+          </el-table-column>
+          <el-table-column prop="username" label="用户"/>
+        </el-table>
       </el-col>
       <!-- 海报 -->
       <el-col :span="10">
@@ -43,6 +59,7 @@
 
 <script>
 import lectureApi from '@/api/lecture/lecture'
+import lectureUserRecordApi from '@/api/lecture/lectureUserRecord'
 
 export default {
   data() {
@@ -70,6 +87,8 @@ export default {
         notAttendCount: '',
         userList: []
       },
+      recordList: [],
+      username: '',
       moment: require('moment')
     }
   },
@@ -88,12 +107,21 @@ export default {
       lectureApi.getLectureInfoForAdminById(this.lecture.id).then(res => {
         this.lecture = res.lectureInfo
       }).catch(err => {
-        console.log('getLectureById Error: ' + err)
+        console.log('getLectureInfoForSignById Error: ' + err)
+      })
+      lectureUserRecordApi.getSignedUserList(this.lecture.id).then(res => {
+        this.recordList = res.recordList
+      }).catch(err => {
+        console.log('getSignedUserList Error: ' + err)
       })
     },
-    timeFormatter(data) { // 讲座开始时间
-      const moment = require('moment')
-      return moment(data.orderTime).utcOffset(480).format('YYYY-MM-DD HH:mm:ss')
+    // 用户签到
+    userSign() {
+      lectureUserRecordApi.orderLectureById(this.lecture.id, this.username).then(res => {
+        this.$router.go(0)
+      }).catch(err => {
+        console.log('签到失败：' + err)
+      })
     }
   }
 }

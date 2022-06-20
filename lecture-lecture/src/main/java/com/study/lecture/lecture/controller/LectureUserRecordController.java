@@ -1,9 +1,14 @@
 package com.study.lecture.lecture.controller;
 
+import com.study.lecture.common.service.lecture.LectureUserRecordService;
+import com.study.lecture.common.utils.R;
+import com.study.lecture.common.vo.OrderRecordOfOneLectureVo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -21,4 +26,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/lecture/userRecord")
 public class LectureUserRecordController {
 
+    @Resource
+    public LectureUserRecordService lectureUserRecordService;
+
+    /**
+     * 用户讲座签到
+     * @param lectureId 讲座id
+     * @param username 用户名/账号
+     */
+    @PreAuthorize("hasAnyAuthority('admin','manager')")
+    @PostMapping("/userSign/{lectureId}/{username}")
+    public R userSign(@PathVariable long lectureId, @PathVariable String username) {
+        return lectureUserRecordService.userSign(lectureId, username);
+    }
+
+    /**
+     * 根据id查询已经预约并签到此讲座的所有用户
+     * @param id 讲座id
+     */
+    @PreAuthorize("hasAnyAuthority('admin','manager')")
+    @GetMapping("/getSignedUserList/{id}")
+    public R getSignedUserList(@PathVariable long id) {
+        List<OrderRecordOfOneLectureVo> recordList = lectureUserRecordService.getSignedUserList(id);
+        return R.ok().put("recordList", recordList);
+    }
 }

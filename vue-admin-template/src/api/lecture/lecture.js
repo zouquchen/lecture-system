@@ -46,10 +46,17 @@ export default {
       method: `get`
     })
   },
-  // 根据id查询讲座，用于修改讲座信息(for admin)
+  // 根据id查询讲座，用于修改或查询讲座信息(for admin)
   getLectureInfoForAdminById(id) {
     return request({
       url: `/lecture/getLectureInfoForAdmin/${id}`,
+      method: `get`
+    })
+  },
+  // 根据id获取讲座详细信息和用户预约列表，用于讲座详情页面
+  getLectureInfoAndUserListForAdminById(id) {
+    return request({
+      url: `/lecture/getLectureInfoAndUserListForAdminById/${id}`,
       method: `get`
     })
   },

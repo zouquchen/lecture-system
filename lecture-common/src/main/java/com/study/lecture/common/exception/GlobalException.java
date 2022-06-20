@@ -1,6 +1,8 @@
 package com.study.lecture.common.exception;
 
 
+import com.study.lecture.common.utils.ResultCodeEnum;
+
 /**
  * <p>
  * 自定义异常
@@ -22,6 +24,11 @@ public class GlobalException extends RuntimeException{
         this.msg = msg;
     }
 
+    public GlobalException(ResultCodeEnum resultCodeEnum) {
+        super(resultCodeEnum.getMessage());
+        this.msg = resultCodeEnum.getMessage();
+        this.code = resultCodeEnum.getCode();
+    }
     public GlobalException(String msg, Throwable e) {
         super(msg, e);
         this.msg = msg;

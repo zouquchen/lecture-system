@@ -10,17 +10,20 @@
         <!-- 讲座详情 -->
         <el-descriptions :column="1" size="1" class="margin-top" title="讲座详情" border>
           <template slot="extra">
-            <el-button v-loading.fullscreen.lock="fullscreenLoading" v-show="!lecture.ordered" type="primary" size="small" @click="orderLecture">预约</el-button>
-            <el-button v-loading.fullscreen.lock="fullscreenLoading" v-show="lecture.ordered" type="danger" size="small" @click="cancelLecture">取消预约</el-button>
+            <el-button v-loading.fullscreen.lock="fullscreenLoading" v-show="orderStart && !lecture.ordered" type="primary" size="small" @click="orderLecture">预约</el-button>
+            <el-button v-loading.fullscreen.lock="fullscreenLoading" v-show="orderStart && lecture.ordered" type="danger" size="small" @click="cancelLecture">取消预约</el-button>
           </template>
           <!-- 预约情况 -->
           <el-descriptions-item>
             <template slot="label">预约情况</template>
-            <el-col v-show="lecture.ordered">
+            <el-col v-show="orderStart && lecture.ordered">
               <el-tag type="success">已预约</el-tag>
             </el-col>
-            <el-col v-show="!lecture.ordered">
+            <el-col v-show="orderStart && !lecture.ordered">
               <el-tag type="info">未预约</el-tag>
+            </el-col>
+            <el-col v-show="!orderStart">
+              <el-tag type="danger">未开放</el-tag>
             </el-col>
           </el-descriptions-item>
 
@@ -52,12 +55,10 @@
             <template slot="label"><i class="el-icon-user"/>可预约人数</template>{{ lecture.store }} / {{ lecture.reservation }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-time"/>预约时间</template>
-            {{ moment(lecture.orderStartTime).utcOffset(480).format('YYYY-MM-DD HH:mm:ss') }} —
-            {{ moment(lecture.orderEndTime).utcOffset(480).format('YYYY-MM-DD HH:mm:ss') }}
+            <template slot="label"><i class="el-icon-time"/>预约时间</template>{{ lecture.orderStartTime }} — {{ lecture.orderEndTime }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-time"/>开始时间</template>{{ moment(lecture.lectureStartTime).utcOffset(480).format('YYYY-MM-DD HH:mm:ss') }}
+            <template slot="label"><i class="el-icon-time"/>开始时间</template>{{ lecture.lectureStartTime }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template slot="label">讲座描述</template>{{ lecture.description }}
@@ -92,9 +93,10 @@ export default {
         description: '',
         poster: '',
         orderStartTime: '',
-        orderEndTIme: '',
+        orderEndTime: '',
         lectureStartTime: ''
       },
+      orderStart: false,
       moment: require('moment'),
       fullscreenLoading: false
     }
@@ -114,6 +116,16 @@ export default {
       console.log(this.lecture.id)
       lectureApi.getLectureInfoForUserById(this.lecture.id).then(res => {
         this.lecture = res.lectureInfo
+        // 格式化时间
+        this.lecture.orderStartTime = this.moment(this.lecture.orderStartTime).utcOffset(480).format('YYYY-MM-DD HH:mm:ss')
+        this.lecture.orderEndTime = this.moment(this.lecture.orderEndTime).utcOffset(480).format('YYYY-MM-DD HH:mm:ss')
+        this.lecture.lectureStartTime = this.moment(this.lecture.lectureStartTime).utcOffset(480).format('YYYY-MM-DD HH:mm:ss')
+
+        // 判断预约时间
+        var curTime = this.moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+        if (curTime > this.lecture.orderStartTime && curTime < this.lecture.orderEndTime) {
+          this.orderStart = true
+        }
       }).catch(err => {
         console.log('getLectureById Error: ' + err)
       })
@@ -122,14 +134,10 @@ export default {
       this.fullscreenLoading = true
       lectureOrderApi.orderLectureById(this.lecture.id).then(res => {
         this.fullscreenLoading = false
-        // 提示信息
+        // 刷新页面
         this.$router.go(0)
       }).catch(err => {
         this.fullscreenLoading = false
-        this.$notify.error({
-          title: '错误',
-          message: '预约失败'
-        })
         console.log('预约失败：' + err)
       })
     },
@@ -137,14 +145,10 @@ export default {
       this.fullscreenLoading = true
       lectureOrderApi.cancelLectureById(this.lecture.id).then(res => {
         this.fullscreenLoading = false
-        // 提示信息
+        // 刷新页面
         this.$router.go(0)
       }).catch(err => {
         this.fullscreenLoading = false
-        this.$notify.error({
-          title: '错误',
-          message: '取消失败'
-        })
         console.log('取消失败：' + err)
       })
     }

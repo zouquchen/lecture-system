@@ -3,6 +3,10 @@ package com.study.lecture.common.service.lecture;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.study.lecture.common.entity.lecture.LectureUserRecord;
 import com.study.lecture.common.utils.R;
+import com.study.lecture.common.vo.LectureForAdminInfoVo;
+import com.study.lecture.common.vo.OrderRecordOfOneLectureVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -38,4 +42,25 @@ public interface LectureUserRecordService extends IService<LectureUserRecord> {
      * @throws Exception 异常
      */
     void cancelLectureById(Long lectureId, Long userId) throws Exception;
+
+    /**
+     * 用户签到
+     * @param lectureId 讲座id
+     * @param username 用户名/账号
+     * @return 响应类
+     */
+    R userSign(Long lectureId, String username);
+
+    /**
+     * 通过id获得已预约到该场讲座的所有用户
+     * @param lectureForAdminInfoVo 讲座信息
+     */
+    void setOrderedUserListAndData(LectureForAdminInfoVo lectureForAdminInfoVo);
+
+    /**
+     * 通过id获得已签到该场讲座的所有用户
+     * @param id 讲座id
+     * @return 查询结果
+     */
+    List<OrderRecordOfOneLectureVo> getSignedUserList(Long id);
 }

@@ -84,13 +84,6 @@ public interface LectureMapper extends BaseMapper<Lecture> {
     LectureForAdminInfoVo getLectureInfoForAdminById(Long id);
 
     /**
-     * 根据id获取预约此讲座的所有用户信息
-     * @param id lecture的id
-     * @return 所有预约此讲座的用户信息
-     */
-    List<OrderRecordOfOneLectureVo> getOrderRecordOfOneLectureListById(Long id);
-
-    /**
      * 减少给定id讲座的剩余可预约数量
      * @param id 讲座id
      */

@@ -129,7 +129,8 @@ export default {
   },
   methods: {
     getInfo() {
-      lectureApi.getLectureInfoForAdminById(this.lecture.id).then(res => {
+      // 获得讲座详情
+      lectureApi.getLectureInfoAndUserListForAdminById(this.lecture.id).then(res => {
         this.lecture = res.lectureInfo
       }).catch(err => {
         console.log('getLectureById Error: ' + err)

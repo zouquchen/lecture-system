@@ -37,7 +37,7 @@ public interface LectureService extends IService<Lecture> {
     R lectureForUserPageList(int page, int limit, LectureForUserListQueryVo lectureForUserListQueryVo);
 
     /**
-     * user(student)查询所有lecture列表，不分页
+     * user(student)查询所有lecture列表，不分页，用于redis缓存
      * @return 查询结果
      */
     List<LectureForUserListVo> lectureForUserList();
@@ -47,7 +47,7 @@ public interface LectureService extends IService<Lecture> {
      * @param lecture lecture信息
      * @return 添加是否成功
      */
-    int addLecture(Lecture lecture);
+    boolean addLecture(Lecture lecture);
 
     /**
      * 通过id获得lecture详情
@@ -61,7 +61,7 @@ public interface LectureService extends IService<Lecture> {
      * @param lecture lecture信息
      * @return 更新是否成功
      */
-    int updateLecture(Lecture lecture);
+    boolean updateLecture(Lecture lecture);
 
     /**
      * 通过id获得lecture详情 (for User)
@@ -71,10 +71,10 @@ public interface LectureService extends IService<Lecture> {
     LectureForUserInfoVo getLectureInfoForUserById(Long id);
 
     /**
-     * 通过id获得lecture详情 (for admin)
+     * 通过id获得lecture详情，包含预约该讲座的用户信息 (for admin)
      * @param id lecture的id
-     * @param record 是否返回预约此讲座的用户信息
      * @return 查询结果
      */
-    LectureForAdminInfoVo getLectureInfoForAdminById(Long id, boolean record);
+    LectureForAdminInfoVo getLectureInfoForAdminById(Long id);
+
 }
