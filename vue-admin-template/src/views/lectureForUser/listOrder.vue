@@ -48,8 +48,8 @@
 
       <el-table-column label="状态" width="80" align="center">
         <template slot-scope="scope">
-          <el-tag :type="judgeState(scope.row.orderState)">
-            {{ scope.row.orderState }}
+          <el-tag :type="judgeDisplayState(scope.row.displayState)">
+            {{ scope.row.displayState }}
           </el-tag>
         </template>
       </el-table-column>
@@ -151,10 +151,13 @@ export default {
       return cur
     },
     // 判断预约状态，返回标签样式
-    judgeState(state) {
-      if (state === '未开放') return 'danger'
-      if (state === '未预约') return ''
-      if (state === '已预约') return 'success'
+    judgeDisplayState(data) {
+      if (data === '未开放') return 'warning'
+      if (data === '已预约') return ''
+      if (data === '未预约') return 'info'
+      if (data === '已签到') return 'success'
+      if (data === '缺席') return 'danger'
+      if (data === '已结束') return 'warning'
     },
     // 时间格式Formatter
     orderStartFormatter(data) { // 预约开始时间

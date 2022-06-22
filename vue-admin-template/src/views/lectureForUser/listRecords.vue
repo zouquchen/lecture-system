@@ -12,7 +12,7 @@
 
       <el-table-column label="状态" width="100" align="center">
         <template slot-scope="scope">
-          <el-tag :type="judgeSignState(scope.row.signState)">{{ scope.row.signState }}</el-tag>
+          <el-tag :type="judgeDisplayState(scope.row.displayState)">{{ scope.row.displayState }}</el-tag>
         </template>
       </el-table-column>
 
@@ -97,17 +97,13 @@ export default {
       const moment = require('moment')
       return moment(data.signTime).utcOffset(480).format('YYYY-MM-DD HH:mm:ss')
     },
-    judgeSignState(data) {
-      console.log(data)
-      if (data === '未开始') {
-        return 'info'
-      }
-      if (data === '未参加') {
-        return 'danger'
-      }
-      if (data === '已打卡') {
-        return 'success'
-      }
+    judgeDisplayState(data) {
+      if (data === '未开放') return 'warning'
+      if (data === '已预约') return ''
+      if (data === '未预约') return 'info'
+      if (data === '已签到') return 'success'
+      if (data === '缺席') return 'danger'
+      if (data === '已结束') return 'warning'
     }
 
   }

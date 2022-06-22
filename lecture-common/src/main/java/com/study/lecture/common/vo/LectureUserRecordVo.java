@@ -57,10 +57,9 @@ public class LectureUserRecordVo implements Serializable {
     private int state;
 
     /**
-     * 前端显示的状态：
-     * 未开始、已打卡、未参加
+     * 用户关于讲座的状态
      */
-    private String signState;
+    private String displayState;
 
     /**
      * 讲座地点 lecture表

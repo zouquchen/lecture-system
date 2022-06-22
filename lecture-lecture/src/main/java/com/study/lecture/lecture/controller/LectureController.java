@@ -1,5 +1,6 @@
 package com.study.lecture.lecture.controller;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.study.lecture.common.entity.lecture.Lecture;
 import com.study.lecture.common.exception.GlobalException;
 import com.study.lecture.common.service.lecture.LectureService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.sql.Wrapper;
 import java.util.List;
 
 /**
@@ -168,5 +170,19 @@ public class LectureController {
         LectureForAdminInfoVo lectureInfo = lectureService.getLectureInfoForAdminById(id);
         lectureUserRecordService.setOrderedUserListAndData(lectureInfo);
         return R.ok().put("lectureInfo", lectureInfo);
+    }
+
+    /**
+     * 关闭签到系统（就是将讲座状态从0改为1，结束讲座）
+     * @param id 讲座id
+     * @return
+     */
+    @PreAuthorize("hasAnyAuthority('admin','manager')")
+    @PostMapping("/finishLectureSignById/{id}")
+    public R finishLectureSignById(@PathVariable long id) {
+        UpdateWrapper<Lecture> wrapper = new UpdateWrapper<>();
+        wrapper.eq("id",id).set("state", 1);
+        lectureService.update(wrapper);
+        return R.ok();
     }
 }

@@ -4,6 +4,17 @@
       <el-col :span="14">
         <!-- 讲座详情 -->
         <el-descriptions :column="1" size="1" class="margin-top" title="讲座详情" border>
+          <!-- 关闭签到按钮 -->
+          <template slot="extra">
+            <el-popover v-model="closeButtonVisible" placement="top" width="160">
+              <p>你确定要关闭签到系统吗？</p>
+              <div style="text-align: right; margin: 0">
+                <el-button type="text" size="mini" @click="closeButtonVisible = false">取消</el-button>
+                <el-button type="primary" size="mini" @click="closeSign">确定</el-button>
+              </div>
+              <el-button slot="reference" type="danger">关闭签到</el-button>
+            </el-popover>
+          </template>
           <el-descriptions-item>
             <template slot="label">讲座名称</template>{{ lecture.title }}
           </el-descriptions-item>
@@ -23,6 +34,7 @@
 
         <!-- 签到统计 -->
         <el-descriptions :column="2" size="1" class="margin-top" style="margin-top:50px" title="签到统计" border>
+          <!-- 签到统计内容 -->
           <el-descriptions-item :span="2">
             <template slot="label">账号</template>
             <el-row>
@@ -89,6 +101,7 @@ export default {
       },
       recordList: [],
       username: '',
+      closeButtonVisible: false,
       moment: require('moment')
     }
   },
@@ -121,6 +134,15 @@ export default {
         this.$router.go(0)
       }).catch(err => {
         console.log('签到失败：' + err)
+      })
+    },
+    // 关闭签到
+    closeSign() {
+      this.closeButtonVisible = false
+      lectureApi.finishLectureSignById(this.lecture.id).then(res => {
+        this.$router.push({ path: '/' })
+      }).catch(err => {
+        console.log('签到关闭失败：' + err)
       })
     }
   }

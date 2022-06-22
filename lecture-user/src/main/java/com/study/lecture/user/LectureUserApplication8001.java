@@ -16,7 +16,6 @@ public class LectureUserApplication8001 {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext run = SpringApplication.run(LectureUserApplication8001.class, args);
-        System.out.println("1");
     }
 
 }

@@ -6,6 +6,7 @@ import com.study.lecture.common.utils.R;
 import com.study.lecture.common.vo.LectureForAdminInfoVo;
 import com.study.lecture.common.vo.OrderRecordOfOneLectureVo;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -63,4 +64,13 @@ public interface LectureUserRecordService extends IService<LectureUserRecord> {
      * @return 查询结果
      */
     List<OrderRecordOfOneLectureVo> getSignedUserList(Long id);
+
+    /**
+     * 分析用户关于讲座的状态
+     * @param lectureState 讲座状态 0：发布， 1：结束
+     * @param orderStartTime 预约开始时间
+     * @param lectureUserRecord 用户预约讲座记录
+     * @return 讲座状态
+     */
+    String analyzeLectureState(int lectureState, Date orderStartTime, LectureUserRecord lectureUserRecord);
 }

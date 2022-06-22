@@ -10,21 +10,15 @@
         <!-- 讲座详情 -->
         <el-descriptions :column="1" size="1" class="margin-top" title="讲座详情" border>
           <template slot="extra">
-            <el-button v-loading.fullscreen.lock="fullscreenLoading" v-show="orderStart && !lecture.ordered" type="primary" size="small" @click="orderLecture">预约</el-button>
-            <el-button v-loading.fullscreen.lock="fullscreenLoading" v-show="orderStart && lecture.ordered" type="danger" size="small" @click="cancelLecture">取消预约</el-button>
+            <el-button v-loading.fullscreen.lock="fullscreenLoading" v-show="lecture.displayState == '未预约'" type="primary" size="small" @click="orderLecture">预约</el-button>
+            <el-button v-loading.fullscreen.lock="fullscreenLoading" v-show="lecture.displayState == '已预约'" type="danger" size="small" @click="cancelLecture">取消预约</el-button>
           </template>
           <!-- 预约情况 -->
           <el-descriptions-item>
             <template slot="label">预约情况</template>
-            <el-col v-show="orderStart && lecture.ordered">
-              <el-tag type="success">已预约</el-tag>
-            </el-col>
-            <el-col v-show="orderStart && !lecture.ordered">
-              <el-tag type="info">未预约</el-tag>
-            </el-col>
-            <el-col v-show="!orderStart">
-              <el-tag type="danger">未开放</el-tag>
-            </el-col>
+            <el-tag :type="judgeDisplayState(lecture.displayState)">
+              {{ lecture.displayState }}
+            </el-tag>
           </el-descriptions-item>
 
           <el-descriptions-item>
@@ -80,12 +74,13 @@ export default {
       lecture: {
         id: '',
         title: '',
-        ordered: false,
         typeName: '',
         createrName: '',
         organizer: '',
         undertaker: '',
         sponsor: '',
+        state: '',
+        displayState: '',
         space: '',
         speaker: '',
         reservation: '',
@@ -96,7 +91,6 @@ export default {
         orderEndTime: '',
         lectureStartTime: ''
       },
-      orderStart: false,
       moment: require('moment'),
       fullscreenLoading: false
     }
@@ -151,6 +145,15 @@ export default {
         this.fullscreenLoading = false
         console.log('取消失败：' + err)
       })
+    },
+    // 判断预约状态，返回标签样式
+    judgeDisplayState(data) {
+      if (data === '未开放') return 'warning'
+      if (data === '已预约') return ''
+      if (data === '未预约') return 'info'
+      if (data === '已签到') return 'success'
+      if (data === '缺席') return 'danger'
+      if (data === '已结束') return 'warning'
     }
   }
 }

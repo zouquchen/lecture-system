@@ -1,10 +1,8 @@
 package com.study.lecture.lecture.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.study.lecture.common.constant.LectureStateEnum;
 import com.study.lecture.common.constant.RedisConstant;
-import com.study.lecture.common.entity.lecture.Lecture;
 import com.study.lecture.common.entity.lecture.LectureUserRecord;
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.exception.GlobalException;
@@ -17,6 +15,7 @@ import com.study.lecture.common.vo.OrderRecordOfOneLectureVo;
 import com.study.lecture.lecture.mapper.LectureMapper;
 import com.study.lecture.lecture.mapper.LectureUserRecordMapper;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Propagation;
@@ -64,20 +63,12 @@ public class LectureUserRecordServiceImpl extends ServiceImpl<LectureUserRecordM
         List<LectureUserRecordVo> records = lectureUserRecordMapper.getLectureUserRecordPageList(userId, begin, limit);
         for(LectureUserRecordVo vo : records) {
 
-            // 前端显示的状态：未开始、已打卡、未参加
-            if (vo.getState() == 0) {
-                // 如果讲座状态state = 0 表示已发布，那么打卡状态显示“未开始”
-                vo.setSignState("未开始");
-            } else if (vo.getState() == 1 && vo.getSignTime() == null) {
-                // 如果讲座状态state = 1 表示结束，并且未到，那么打卡状态显示“未参加”
-                vo.setSignState("未参加");
-            } else if (vo.getState() == 1 && vo.getSignTime() != null) {
-                // 如果讲座状态state = 1 表示结束，并且已签到，那么打卡状态显示“已打卡”
-                vo.setSignState("已打卡");
-            } else {
-                vo.setSignState("状态错误！！");
-            }
+            // 分析讲座关于用户的状态
+            LectureUserRecord lectureUserRecord = new LectureUserRecord();
+            BeanUtils.copyProperties(vo, lectureUserRecord);
+            String s = analyzeLectureState(vo.getState(), vo.getOrderTime(), lectureUserRecord);
 
+            vo.setDisplayState(s);
         }
         int total = lectureUserRecordMapper.countLectureUserRecord(userId);
 
@@ -199,6 +190,64 @@ public class LectureUserRecordServiceImpl extends ServiceImpl<LectureUserRecordM
         return lectureUserRecordMapper.getSignedUserOfOneLectureListById(id);
     }
 
+    /**
+     * 分析用户关于讲座的状态
+     * @param lectureState 讲座状态 0：发布， 1：结束
+     * @param orderStartTime 预约开始时间
+     * @param lectureUserRecord 用户预约讲座记录
+     * @return 讲座状态
+     */
+    @Override
+    public String analyzeLectureState(int lectureState, Date orderStartTime, LectureUserRecord lectureUserRecord) {
+        Date now = new Date();
+        String displayState;
+
+        // 讲座开始预约时间还未到
+        if (orderStartTime.after(now)) {
+            displayState = LectureStateEnum.NOT_OPEN.getState();
+        }
+        // 讲座开始预约时间已到
+        else {
+            // 讲座状态：已发布
+            if (lectureState == 0) {
+                // 无预约记录
+                if (lectureUserRecord == null) {
+
+                    displayState = LectureStateEnum.NOT_ORDER.getState();
+                }
+                // 有预约记录
+                else {
+                    // 未签到
+                    if (lectureUserRecord.getSignTime() == null) {
+                        displayState = LectureStateEnum.ORDERED.getState();
+                    }
+                    // 已签到
+                    else {
+                        displayState = LectureStateEnum.SIGNED.getState();
+                    }
+                }
+            }
+            // 讲座状态：已结束
+            else {
+                // 无预约记录
+                if (lectureUserRecord == null) {
+                    displayState = LectureStateEnum.FINISH.getState();
+                }
+                // 有预约记录
+                else {
+                    // 未签到
+                    if (lectureUserRecord.getSignTime() == null) {
+                        displayState = LectureStateEnum.NOT_ATTEND.getState();
+                    }
+                    // 已签到
+                    else {
+                        displayState = LectureStateEnum.SIGNED.getState();
+                    }
+                }
+            }
+        }
+        return displayState;
+    }
 
 
 }

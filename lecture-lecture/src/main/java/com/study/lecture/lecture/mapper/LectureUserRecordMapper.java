@@ -25,7 +25,7 @@ public interface LectureUserRecordMapper extends BaseMapper<LectureUserRecord> {
      * @param userId 用户id
      * @return
      */
-    List<Long> getAlLectureUserRecord(Long userId);
+    List<LectureUserRecord> getAllLectureUserRecord(Long userId);
 
     /**
      * 根据用户id查询该用户已预约过的讲座，分页查询
@@ -43,6 +43,14 @@ public interface LectureUserRecordMapper extends BaseMapper<LectureUserRecord> {
      * @return 查询列表
      */
     int countLectureUserRecord(Long userId);
+
+    /**
+     * 根据讲座id和用户id获取用户预约讲座记录
+     * @param lectureId 讲座id
+     * @param userId 用户id
+     * @return 用户预约记录
+     */
+    LectureUserRecord getLectureUserRecord(Long lectureId, Long userId);
 
     /**
      * 根据讲座id和用户id删除用户预约讲座记录

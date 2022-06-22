@@ -40,15 +40,9 @@ public class LectureForUserListVo implements Serializable {
     private int state;
 
     /**
-     * lecture预约状态
-     * 未开放、可预约、已预约
+     * 讲座关于用户状态
      */
-    private String orderState;
-
-    /**
-     * 是否已被该用户预约
-     */
-    // private boolean ordered;
+    private String displayState;
 
     /**
      * 讲座类别 lectureType表

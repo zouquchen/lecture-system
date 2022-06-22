@@ -1,9 +1,12 @@
 package com.study.lecture.lecture.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.study.lecture.common.constant.LectureStateEnum;
 import com.study.lecture.common.constant.RedisConstant;
 import com.study.lecture.common.entity.lecture.Lecture;
+import com.study.lecture.common.entity.lecture.LectureUserRecord;
 import com.study.lecture.common.entity.user.LoginUser;
+import com.study.lecture.common.service.lecture.LectureUserRecordService;
 import com.study.lecture.common.utils.R;
 import com.study.lecture.common.vo.*;
 import com.study.lecture.lecture.mapper.LectureMapper;
@@ -17,10 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.Time;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>
@@ -38,6 +38,9 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
 
     @Resource
     private LectureUserRecordMapper lectureUserRecordMapper;
+
+    @Resource
+    private LectureUserRecordService lectureUserRecordService;
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -102,19 +105,15 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
         List<LectureForUserListVo> records = lectureMapper.getLectureUserPageListByCondition(begin, limit, title, typeId, startTime, endTime);
 
         // 更新讲座预约状态
-        List<Long> lectures = lectureUserRecordMapper.getAlLectureUserRecord(userId);
-        Set<Long> lecturesOrderedByUser = new HashSet<>(lectures);
+        List<LectureUserRecord> allLectureUserRecord = lectureUserRecordMapper.getAllLectureUserRecord(userId);
+        Map<Long, LectureUserRecord> map = new HashMap<>(allLectureUserRecord.size());
+        for (LectureUserRecord lectureUserRecord : allLectureUserRecord) {
+            map.put(lectureUserRecord.getLectureId(), lectureUserRecord);
+        }
+
         for (LectureForUserListVo vo : records) {
-            if (lecturesOrderedByUser.contains(vo.getId())) {
-                vo.setOrderState("已预约");
-            } else {
-                Date now = new Date();
-                if (vo.getOrderStartTime().before(now)) {
-                    vo.setOrderState("可预约");
-                } else {
-                    vo.setOrderState("未开放");
-                }
-            }
+            String s = lectureUserRecordService.analyzeLectureState(vo.getState(), vo.getOrderStartTime(), map.getOrDefault(vo.getId(), null));
+            vo.setDisplayState(s);
         }
 
         return R.ok().put("total", total).put("records", records);
@@ -205,10 +204,17 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
         Long userId = loginUser.getUser().getId();
 
         // 查看该用户是否预约此讲座
-        Object o = redisTemplate.opsForValue().get(RedisConstant.getKeyOfUserRecord(userId, lectureId));
-        if (o != null) {
-            lecture.setOrdered(true);
-        }
+        LectureUserRecord lectureUserRecord = lectureUserRecordMapper.getLectureUserRecord(lectureId, userId);
+
+        // 讲座预约开始时间
+        Date orderStartTime = lecture.getOrderStartTime();
+        // 讲座状态：0发布、1结束
+        int lectureState = lecture.getState();
+
+        // 分析用户关于讲座的状态
+        String displayState = lectureUserRecordService.analyzeLectureState(lectureState, orderStartTime, lectureUserRecord);
+
+        lecture.setDisplayState(displayState);
 
         return lecture;
     }
@@ -224,4 +230,6 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
         // 根据id查询讲座详情
         return lectureMapper.getLectureInfoForAdminById(id);
     }
+
+
 }

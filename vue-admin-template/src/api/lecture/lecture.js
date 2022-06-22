@@ -67,5 +67,12 @@ export default {
       method: `post`,
       data: lectureInfo
     })
+  },
+  // 结束签到，关闭讲座
+  finishLectureSignById(id) {
+    return request({
+      url: `/lecture/finishLectureSignById/${id}`,
+      method: `post`
+    })
   }
 }
