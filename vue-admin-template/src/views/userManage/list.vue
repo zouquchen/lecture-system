@@ -34,7 +34,11 @@
 
       <el-table-column prop="phoneNumber" label="电话" width="150" align="center"/>
 
-      <el-table-column prop="sex" label="性别" width="100" align="center"/>
+      <el-table-column prop="sex" label="性别" width="100" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.sex == null ? '' : (scope.row.sex == 0 ? '男' : '女') }}
+        </template>
+      </el-table-column>
     </el-table>
 
     <!--分页组件-->

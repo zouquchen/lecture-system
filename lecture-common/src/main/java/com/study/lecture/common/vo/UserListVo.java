@@ -43,7 +43,7 @@ public class UserListVo implements Serializable {
     /**
      * 用户性别（0男，1女）
      */
-    private Boolean sex;
+    private String sex;
 
     /**
      * 头像
