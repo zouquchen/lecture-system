@@ -8,6 +8,7 @@ import com.study.lecture.common.vo.OrderRecordOfOneLectureVo;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -73,4 +74,10 @@ public interface LectureUserRecordService extends IService<LectureUserRecord> {
      * @return 讲座状态
      */
     String analyzeLectureState(int lectureState, Date orderStartTime, LectureUserRecord lectureUserRecord);
+
+    /**
+     * 获取用户预约讲座相关数据
+     * @return 数据
+     */
+    Map<String, Integer> getDataOfUserRecord();
 }

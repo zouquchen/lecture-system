@@ -13,5 +13,21 @@ export default {
       url: `/user/getRoleList`,
       method: `get`
     })
+  },
+  // 获取用户详细信息（个人中心）
+  getUserInfo() {
+    return request({
+      url: `/user/getUserInfo`,
+      method: `get`
+    })
+  },
+  // 更新用户信息
+  updateUserInfo(user) {
+    return request({
+      url: `/user/updateUserInfo`,
+      method: `post`,
+      data: user
+    })
   }
+
 }

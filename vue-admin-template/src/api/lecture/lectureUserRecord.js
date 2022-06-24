@@ -14,5 +14,12 @@ export default {
       url: `/lecture/userRecord/getSignedUserList/${lectureId}`,
       method: 'get'
     })
+  },
+  // 获取用户预约讲座统计信息，预约数、缺席数
+  getDataOfUserRecord() {
+    return request({
+      url: `/lecture/userRecord/getDataOfUserRecord`,
+      method: 'get'
+    })
   }
 }

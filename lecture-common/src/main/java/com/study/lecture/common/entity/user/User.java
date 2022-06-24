@@ -56,7 +56,7 @@ public class User implements Serializable {
     /**
      * 用户性别（0男，1女）
      */
-    private Boolean sex;
+    private Integer sex;
 
     /**
      * 头像

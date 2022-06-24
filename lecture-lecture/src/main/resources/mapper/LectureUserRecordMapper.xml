@@ -17,9 +17,9 @@
 
     <!-- 根据id查询该用户预约过的所有讲座-->
     <select id="getAllLectureUserRecord" resultType="com.study.lecture.common.entity.lecture.LectureUserRecord">
-        SELECT id, lecture_id, user_id, sign_code_id, order_time, sign_time
-        FROM lecture_user_record
-        WHERE user_id = #{userId}
+        SELECT luc.id, luc.lecture_id, luc.user_id, luc.sign_code_id, luc.order_time, luc.sign_time, l.state
+        FROM lecture_user_record luc, lecture l
+        WHERE l.id = luc.lecture_id AND luc.user_id = #{userId}
     </select>
 
     <!-- 分页查询，根据用户id查询该用户已预约过的讲座-->

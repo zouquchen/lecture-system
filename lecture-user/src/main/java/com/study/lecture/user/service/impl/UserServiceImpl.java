@@ -12,6 +12,7 @@ import com.study.lecture.user.mapper.UserMapper;
 import com.study.lecture.common.service.user.UserService;
 import io.jsonwebtoken.Claims;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -154,6 +155,37 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         List<UserListVo> records = userMapper.getUserListByCondition(begin, limit, username, roleId);
 
         return R.ok().put("total", total).put("records", records);
+    }
+
+    /**
+     * 获取已登录用户详细信息
+     * @return 详细信息
+     */
+    @Override
+    public User getUserInfo() {
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = new User();
+        BeanUtils.copyProperties(loginUser.getUser(), user);
+        user.setPassword(null);
+        return user;
+    }
+
+    @Override
+    public void updateUserInfo(User user) {
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long id = loginUser.getUser().getId();
+        userMapper.updateUser(id, user.getUsername(), user.getEmail(), user.getPhoneNumber(), user.getSex(), user.getAvatar());
+
+        // 更新loginUser
+        loginUser.getUser().setUsername(user.getUsername());
+        loginUser.getUser().setEmail(user.getEmail());
+        loginUser.getUser().setPhoneNumber(user.getPhoneNumber());
+        loginUser.getUser().setSex(user.getSex());
+        loginUser.getUser().setAvatar(user.getAvatar());
+
+        // 更新redis
+        redisTemplate.opsForValue().set("login:" + id, loginUser, 1, TimeUnit.DAYS);
+
     }
 
 }

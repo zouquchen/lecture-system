@@ -44,6 +44,11 @@ public class LectureUserRecord implements Serializable {
     private Long signCodeId;
 
     /**
+     * 讲座状态 0发布 1结束
+     */
+    private Integer state;
+
+    /**
      * 预约时间
      */
     private Date orderTime;

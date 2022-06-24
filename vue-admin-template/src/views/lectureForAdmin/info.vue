@@ -78,7 +78,7 @@
           <el-table-column fixed prop="userId" label="用户id" align="center" />
           <el-table-column prop="username" label="用户名" align="center" />
           <el-table-column :formatter="timeFormatter" label="预约时间" align="center" />
-          <el-table-column prop="state" label="参与情况" align="center" />
+          <el-table-column prop="displayState" label="参与情况" align="center" />
         </el-table>
       </el-col>
     </el-row>

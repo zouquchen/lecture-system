@@ -62,7 +62,7 @@ public class LectureController {
      */
     @PreAuthorize("hasAnyAuthority('admin','manager')")
     @PostMapping("/adminPageList/{page}/{limit}")
-    public R adminPageList(@PathVariable int page, @PathVariable int limit,
+    public R lectureForAdminPageList(@PathVariable int page, @PathVariable int limit,
                            @RequestBody(required = false) LectureForAdminListQueryVo lectureForAdminListQueryVo) {
         log.debug("进入adminPageList");
         return lectureService.lectureForAdminPageList(page, limit, lectureForAdminListQueryVo);
@@ -76,7 +76,7 @@ public class LectureController {
      */
     @PreAuthorize("hasAnyAuthority('admin','manager','student')")
     @PostMapping("/userPageList/{page}/{limit}")
-    public R userPageList(@PathVariable int page, @PathVariable int limit,
+    public R lectureForUserPageList(@PathVariable int page, @PathVariable int limit,
                           @RequestBody(required = false)LectureForUserListQueryVo lectureForUserListQueryVo) {
         return lectureService.lectureForUserPageList(page, limit, lectureForUserListQueryVo);
     }
@@ -136,18 +136,6 @@ public class LectureController {
     }
 
     /**
-     * 根据id获取讲座详细信息
-     * @param id 讲座id
-     * @return 讲座详情
-     */
-    @PreAuthorize("hasAnyAuthority('admin','manager')")
-    @GetMapping("/getLectureInfoForAdmin/{id}")
-    public R getLectureInfoForAdminById(@PathVariable long id) {
-        LectureForAdminInfoVo lectureInfo = lectureService.getLectureInfoForAdminById(id);
-        return R.ok().put("lectureInfo", lectureInfo);
-    }
-
-    /**
      * 根据id获取讲座详情，显示详情页面 (for user)
      * @param id 讲座id
      * @return 讲座详情
@@ -157,6 +145,18 @@ public class LectureController {
     public R getLectureInfoForUserById(@PathVariable long id) {
         LectureForUserInfoVo lecture = lectureService.getLectureInfoForUserById(id);
         return R.ok("获取成功").put("lectureInfo", lecture);
+    }
+
+    /**
+     * 根据id获取讲座详细信息（for admin）
+     * @param id 讲座id
+     * @return 讲座详情
+     */
+    @PreAuthorize("hasAnyAuthority('admin','manager')")
+    @GetMapping("/getLectureInfoForAdmin/{id}")
+    public R getLectureInfoForAdminById(@PathVariable long id) {
+        LectureForAdminInfoVo lectureInfo = lectureService.getLectureInfoForAdminById(id);
+        return R.ok().put("lectureInfo", lectureInfo);
     }
 
     /**

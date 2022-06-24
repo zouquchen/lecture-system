@@ -19,9 +19,10 @@ import java.util.Date;
 public class OrderRecordOfOneLectureVo implements Serializable {
     private static final long serialVersionUID = 53675543234341L;
 
+    private Long lectureId;
     private Long userId;
     private String username;
     private Date orderTime;
     private Date signTime;
-    private String state;
+    private String displayState;
 }

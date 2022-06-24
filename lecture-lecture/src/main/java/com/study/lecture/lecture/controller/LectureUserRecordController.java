@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -48,6 +49,16 @@ public class LectureUserRecordController {
     @GetMapping("/getSignedUserList/{id}")
     public R getSignedUserList(@PathVariable long id) {
         List<OrderRecordOfOneLectureVo> recordList = lectureUserRecordService.getSignedUserList(id);
-        return R.ok().put("recordList", recordList);
+        return R.ok().put("recordList", recordList).put("signCount", recordList.size());
+    }
+
+    /**
+     * 获取用户预约讲座统计信息，预约数、缺席数
+     * @return 数据
+     */
+    @GetMapping("/getDataOfUserRecord")
+    public R getDataOfUserRecord() {
+        Map<String, Integer> data = lectureUserRecordService.getDataOfUserRecord();
+        return R.ok(data);
     }
 }

@@ -70,10 +70,11 @@ public class UserController {
         return R.ok("hello");
     }
 
-    @GetMapping("/getRoleList")
+    @GetMapping("getRoleList")
     public R getRoleList() {
         return userService.getRoleList();
     }
+
     /**
      * 用户列表
      * @param page 当前页
@@ -81,9 +82,31 @@ public class UserController {
      * @param userListQueryVo 查询条件
      * @return 相响应类
      */
-    @PostMapping("/getUserList/{page}/{limit}")
+    @PostMapping("getUserList/{page}/{limit}")
+    @PreAuthorize("hasAnyAuthority('admin', ',manager')")
     public R getUserList(@PathVariable int page, @PathVariable int limit,
                          @RequestBody(required = false) UserListQueryVo userListQueryVo) {
         return userService.getUserPageList(page, limit, userListQueryVo);
+    }
+
+    /**
+     * 获取用户详细信息
+     * @return 用户信息
+     */
+    @GetMapping("getUserInfo")
+    public R getUserInfo() {
+        User user = userService.getUserInfo();
+        return R.ok().put("userInfo", user);
+    }
+
+    /**
+     * 修改用户信息
+     * @param user 用户信息
+     * @return 成功标志
+     */
+    @PostMapping("updateUserInfo")
+    public R updateUserInfo(@RequestBody User user) {
+        userService.updateUserInfo(user);
+        return R.ok();
     }
 }

@@ -1,8 +1,10 @@
 package com.study.lecture.lecture.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.study.lecture.common.constant.LectureStateEnum;
 import com.study.lecture.common.constant.RedisConstant;
+import com.study.lecture.common.entity.lecture.Lecture;
 import com.study.lecture.common.entity.lecture.LectureUserRecord;
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.exception.GlobalException;
@@ -23,7 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -117,6 +121,20 @@ public class LectureUserRecordServiceImpl extends ServiceImpl<LectureUserRecordM
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void cancelLectureById(Long lectureId, Long userId) throws Exception {
+        // 查询讲座是否结束
+        QueryWrapper<Lecture> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", lectureId).select("state");
+        Lecture lecture = lectureMapper.selectOne(queryWrapper);
+        if (lecture.getState() == 1) {
+            throw new Exception("讲座已结束，无法取消预约！");
+        }
+
+        // 查询用户是否签到
+        LectureUserRecord lectureUserRecord = lectureUserRecordMapper.getLectureUserRecord(lectureId, userId);
+        if (lectureUserRecord.getSignTime() != null) {
+            throw new Exception("已签到，无法取消预约！");
+        }
+
         // 根据讲座id和用户id删除用户预约讲座记录
         lectureUserRecordMapper.deleteLectureUserRecord(lectureId, userId);
 
@@ -162,16 +180,16 @@ public class LectureUserRecordServiceImpl extends ServiceImpl<LectureUserRecordM
         // 修改list中每个用户的状态
         int state = lectureForAdminInfoVo.getState();
         for (OrderRecordOfOneLectureVo vo : recordList) {
-            if (state == 0) {
-                vo.setState("等待开始");
-            } else {
-                if (vo.getSignTime() == null) {
-                    vo.setState("未参加");
-                    notAttendCount++;
-                } else {
-                    vo.setState("已签到");
-                    signCount++;
-                }
+            // 分析状态
+            LectureUserRecord lectureUserRecord = new LectureUserRecord();
+            BeanUtils.copyProperties(vo, lectureUserRecord);
+            String s = analyzeLectureState(state, vo.getOrderTime(), lectureUserRecord);
+            vo.setDisplayState(s);
+            // 统计数量
+            if (s.equals(LectureStateEnum.SIGNED.getState())) {
+                signCount++;
+            } else if (s.equals(LectureStateEnum.NOT_ATTEND.getState())) {
+                notAttendCount++;
             }
         }
         lectureForAdminInfoVo.setUserCount(userCount);
@@ -247,6 +265,40 @@ public class LectureUserRecordServiceImpl extends ServiceImpl<LectureUserRecordM
             }
         }
         return displayState;
+    }
+
+    /**
+     * 获取用户预约讲座相关数据
+     * @return 数据
+     */
+    @Override
+    public Map<String, Integer> getDataOfUserRecord() {
+        // 获取已登录用户信息
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = loginUser.getUser().getId();
+
+        List<LectureUserRecord> record = lectureUserRecordMapper.getAllLectureUserRecord(userId);
+        int orderCount = record.size();
+        int notAttendCount = 0;
+        int signCount = 0;
+        int notOpen = 0;
+        for (LectureUserRecord vo : record) {
+            if (vo.getSignTime() != null) {
+                signCount++;
+            } else if (vo.getSignTime() == null && vo.getState() == 1) {
+                notAttendCount++;
+            } else {
+                notOpen++;
+            }
+        }
+
+        Map<String, Integer> map = new HashMap<>();
+        map.put("orderCount", orderCount);
+        map.put("notAttendCount", notAttendCount);
+        map.put("signCount", signCount);
+        map.put("notOpen", notOpen);
+
+        return map;
     }
 
 

@@ -46,7 +46,7 @@
             <template slot="label">预约数</template><el-tag>{{ lecture.reservation - lecture.store }}</el-tag>
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label">签到数</template><el-tag type="success">{{ lecture.signCount }}</el-tag>
+            <template slot="label">签到数</template><el-tag type="success">{{ signCount }}</el-tag>
           </el-descriptions-item>
         </el-descriptions>
 
@@ -95,11 +95,11 @@ export default {
         orderEndTIme: '',
         lectureStartTime: '',
         userCount: '',
-        signCount: '',
-        notAttendCount: '',
-        userList: []
+        signCount: '', // 不用这个signCount
+        notAttendCount: ''
       },
       recordList: [],
+      signCount: 0, // 用这个signCount
       username: '',
       closeButtonVisible: false,
       moment: require('moment')
@@ -124,6 +124,7 @@ export default {
       })
       lectureUserRecordApi.getSignedUserList(this.lecture.id).then(res => {
         this.recordList = res.recordList
+        this.signCount = res.signCount
       }).catch(err => {
         console.log('getSignedUserList Error: ' + err)
       })

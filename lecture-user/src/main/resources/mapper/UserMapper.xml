@@ -51,6 +51,12 @@
         LIMIT #{begin}, #{limit}
     </select>
 
+    <!-- 更新用户信息-->
+    <update id="updateUser">
+        UPDATE sys_user
+        SET username=#{username}, email=#{email}, phone_number=#{phoneNumber}, sex=#{sex}, avatar=#{avatar}
+        WHERE id = #{id}
+    </update>
 
 
 

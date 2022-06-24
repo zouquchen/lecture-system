@@ -59,4 +59,16 @@ public interface UserService extends IService<User> {
      * @return 查询结果
      */
     R getUserPageList(int page, int limit, UserListQueryVo userListQueryVo);
+
+    /**
+     * 获取已登录用户详细信息信息
+     * @return 用户信息
+     */
+    User getUserInfo();
+
+    /**
+     * 更新用户详细信息信息
+     * @param user 用户
+     */
+    void updateUserInfo(User user);
 }
