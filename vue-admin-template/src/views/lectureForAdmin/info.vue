@@ -16,33 +16,33 @@
             <template slot="label">讲座类型</template>{{ lecture.typeName }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-user"/>主讲嘉宾</template>{{ lecture.speaker }}
+            <template slot="label"><i class="el-icon-user" />主讲嘉宾</template>{{ lecture.speaker }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-location-information"/>讲座地点</template>{{ lecture.space }}
+            <template slot="label"><i class="el-icon-location-information" />讲座地点</template>{{ lecture.space }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-ice-cream-square"/>主办方</template>{{ lecture.organizer }}
+            <template slot="label"><i class="el-icon-ice-cream-square" />主办方</template>{{ lecture.organizer }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-ice-cream-square"/>承办方</template>{{ lecture.undertaker }}
+            <template slot="label"><i class="el-icon-ice-cream-square" />承办方</template>{{ lecture.undertaker }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-ice-cream-square"/>协办方</template>{{ lecture.sponsor }}
+            <template slot="label"><i class="el-icon-ice-cream-square" />协办方</template>{{ lecture.sponsor }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-user"/>发布者姓名</template>{{ lecture.creatorName }}
+            <template slot="label"><i class="el-icon-user" />发布者姓名</template>{{ lecture.creatorName }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-user"/>可预约人数</template>{{ lecture.store }} / {{ lecture.reservation }}
+            <template slot="label"><i class="el-icon-user" />可预约人数</template>{{ lecture.store }} / {{ lecture.reservation }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-time"/>预约时间</template>
+            <template slot="label"><i class="el-icon-time" />预约时间</template>
             {{ moment(lecture.orderStartTime).utcOffset(480).format('YYYY-MM-DD HH:mm:ss') }} —
             {{ moment(lecture.orderEndTime).utcOffset(480).format('YYYY-MM-DD HH:mm:ss') }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-time"/>开始时间</template>{{ moment(lecture.lectureStartTime).utcOffset(480).format('YYYY-MM-DD HH:mm:ss') }}
+            <template slot="label"><i class="el-icon-time" />开始时间</template>{{ moment(lecture.lectureStartTime).utcOffset(480).format('YYYY-MM-DD HH:mm:ss') }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template slot="label">讲座描述</template>{{ lecture.description }}
@@ -65,13 +65,13 @@
       <!-- 海报 -->
       <el-col :span="10">
         <div align="center">
-          <el-image :src="lecture.poster" style="width: 80%" lazy/>
+          <el-image :src="lecture.poster" style="width: 80%" lazy />
         </div>
       </el-col>
     </el-row>
 
     <!-- 预约情况 -->
-    <el-descriptions :column="1" size="1" class="margin-top" style="margin-top:50px" title="预约情况" border/>
+    <el-descriptions :column="1" size="1" class="margin-top" style="margin-top:50px" title="预约情况" border />
     <el-row>
       <el-col :span="24">
         <el-table :data="lecture.userList" border fit style="width: 100%" max-height="500">

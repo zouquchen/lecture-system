@@ -22,42 +22,42 @@
             <el-input v-model="lecture.organizer" placeholder="东南大学研究生会" />
           </el-form-item>
           <el-form-item label="承办方" prop="undertaker">
-            <el-input v-model="lecture.undertaker" placeholder="东南大学研究生会"/>
+            <el-input v-model="lecture.undertaker" placeholder="东南大学研究生会" />
           </el-form-item>
           <el-form-item label="协办方" prop="sponsor">
-            <el-input v-model="lecture.sponsor" placeholder="东南大学自动化学院"/>
+            <el-input v-model="lecture.sponsor" placeholder="东南大学自动化学院" />
           </el-form-item>
           <el-form-item label="主讲嘉宾" prop="speaker">
-            <el-input v-model="lecture.speaker" placeholder="请输入主讲嘉宾姓名"/>
+            <el-input v-model="lecture.speaker" placeholder="请输入主讲嘉宾姓名" />
           </el-form-item>
           <el-form-item label="可预约人数" prop="reservation">
             <el-input v-model.number="lecture.reservation" placeholder="400" />
           </el-form-item>
           <el-form-item label="讲座地点" prop="space">
-            <el-input v-model="lecture.space" placeholder="请输入讲座地点"/>
+            <el-input v-model="lecture.space" placeholder="请输入讲座地点" />
           </el-form-item>
           <el-form-item label="预约时间" required>
             <el-col :span="6">
               <el-form-item prop="orderStartTime">
-                <el-date-picker v-model="lecture.orderStartTime" type="datetime" placeholder="开始时间" style="width: 100%;"/>
+                <el-date-picker v-model="lecture.orderStartTime" type="datetime" placeholder="开始时间" style="width: 100%;" />
               </el-form-item>
             </el-col>
             <el-col :span="1" class="line" align="center">-</el-col>
             <el-col :span="6">
               <el-form-item prop="orderEndTime">
-                <el-date-picker v-model="lecture.orderEndTime" type="datetime" placeholder="结束时间" style="width: 100%;"/>
+                <el-date-picker v-model="lecture.orderEndTime" type="datetime" placeholder="结束时间" style="width: 100%;" />
               </el-form-item>
             </el-col>
           </el-form-item>
           <el-form-item label="讲座时间" required>
-            <el-col :span="6" >
+            <el-col :span="6">
               <el-form-item prop="lectureStartTime">
-                <el-date-picker v-model="lecture.lectureStartTime" type="datetime" placeholder="开始时间" style="width: 100%;"/>
+                <el-date-picker v-model="lecture.lectureStartTime" type="datetime" placeholder="开始时间" style="width: 100%;" />
               </el-form-item>
             </el-col>
           </el-form-item>
           <el-form-item label="讲座介绍" prop="description">
-            <el-input v-model="lecture.description" type="textarea" placeholder="讲座详细描述信息（200字以内）"/>
+            <el-input v-model="lecture.description" type="textarea" placeholder="讲座详细描述信息（200字以内）" />
           </el-form-item>
 
           <!-- 上传文件 -->
@@ -69,7 +69,8 @@
               :file-list="uploadElement.fileList"
               :action="BASE_API + '/oss/uploadImage'"
               :headers="uploadElement.headerSetToken"
-              :limit="uploadElement.limit">
+              :limit="uploadElement.limit"
+            >
               <el-button class="upload-button" size="small" type="primary">点击上传</el-button>
               <div slot="tip" class="el-upload__tip">只能上传jpg/png文件, 且仅能上传一张海报。</div>
             </el-upload>
@@ -85,7 +86,7 @@
       <!-- 显示上传的图片-->
       <el-col :span="10">
         <div align="center" class="block" style="">
-          <el-image :src="lecture.poster" style="width: 60%"/>
+          <el-image :src="lecture.poster" style="width: 60%" />
         </div>
       </el-col>
     </el-row>
@@ -150,13 +151,13 @@ export default {
           { min: 2, max: 30, message: '长度在 2 到 200 个字符', trigger: 'blur' }
         ],
         orderStartTime: [
-          { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+          { required: true, message: '请选择时间', trigger: 'change' }
         ],
         orderEndTime: [
-          { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+          { required: true, message: '请选择时间', trigger: 'change' }
         ],
         lectureStartTime: [
-          { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+          { required: true, message: '请选择时间', trigger: 'change' }
         ]
       }
     }

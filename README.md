@@ -35,8 +35,9 @@ Lecture是一款前后端分离的校园讲座预约系统，基于目前主流�
 
 前端：
 - Vue
+- Node
 - 模板：[vue-admin-template-3.8.0](https://github.com/PanJiaChen/vue-admin-template)
-- 样式：[element-ui](https://element.eleme.cn/#/zh-CN)
+- 样式：[element-ui@2.15.7](https://element.eleme.cn/#/zh-CN)
 
 ## 🔨 4 开发环境
 - 操作系统：Windows 10

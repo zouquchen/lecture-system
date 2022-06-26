@@ -3,11 +3,11 @@
     <!-- 条件查询-->
     <el-form :inline="true" class="demo-form-inline" style="margin-left: 20px; margin-top: 12px;">
       <el-form-item label="用户名称">
-        <el-input v-model="userQuery.username" placeholder="请输入名称"/>
+        <el-input v-model="userQuery.username" placeholder="请输入名称" />
       </el-form-item>
       <el-form-item label="用户角色">
         <el-select v-model="userQuery.roleId" placeholder="用户角色">
-          <el-option label="全部" value=""/>
+          <el-option label="全部" value="" />
           <el-option v-for="item in roleList" :key="item.id" :label="item.name" :value="item.id" />
         </el-select>
       </el-form-item>
@@ -24,15 +24,15 @@
           {{ (page - 1) * limit + scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column prop="username" label="用户名" align="center"/>
+      <el-table-column prop="username" label="用户名" align="center" />
 
-      <el-table-column prop="role" label="角色" width="200" align="center"/>
+      <el-table-column prop="role" label="角色" width="200" align="center" />
 
-      <el-table-column prop="status" label="状态" width="150" align="center"/>
+      <el-table-column prop="status" label="状态" width="150" align="center" />
 
-      <el-table-column prop="email" label="邮箱" width="200" align="center"/>
+      <el-table-column prop="email" label="邮箱" width="200" align="center" />
 
-      <el-table-column prop="phoneNumber" label="电话" width="150" align="center"/>
+      <el-table-column prop="phoneNumber" label="电话" width="150" align="center" />
 
       <el-table-column prop="sex" label="性别" width="100" align="center">
         <template slot-scope="scope">

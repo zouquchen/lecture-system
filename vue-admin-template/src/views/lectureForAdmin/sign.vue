@@ -38,7 +38,7 @@
           <el-descriptions-item :span="2">
             <template slot="label">账号</template>
             <el-row>
-              <el-input v-model="username" placeholder="用户账号" style="width:200px"/>
+              <el-input v-model="username" placeholder="用户账号" style="width:200px" />
               <el-button type="success" @click="userSign">签到</el-button>
             </el-row>
           </el-descriptions-item>
@@ -51,18 +51,18 @@
         </el-descriptions>
 
         <!-- 已签到用户 -->
-        <el-descriptions class="margin-top" style="margin-top:50px" title="已签到用户" border/>
+        <el-descriptions class="margin-top" style="margin-top:50px" title="已签到用户" border />
         <el-table :data="recordList" height="500" border style="width: 100%">
           <el-table-column label="签到时间">
             <template slot-scope="scope">{{ moment(scope.row.signTime).utcOffset(480).format('YYYY-MM-DD HH:mm:ss') }}</template>
           </el-table-column>
-          <el-table-column prop="username" label="用户"/>
+          <el-table-column prop="username" label="用户" />
         </el-table>
       </el-col>
       <!-- 海报 -->
       <el-col :span="10">
         <div align="center">
-          <el-image :src="lecture.poster" style="width: 80%" lazy/>
+          <el-image :src="lecture.poster" style="width: 80%" lazy />
         </div>
       </el-col>
     </el-row>

@@ -8,19 +8,19 @@
         <el-dialog :visible.sync="dialogFormVisible" title="修改信息">
           <el-form :model="userInfoForUpdate" :rules="rules">
             <el-form-item :label-width="formLabelWidth" label="用户名" prop="username">
-              <el-input v-model="userInfoForUpdate.username" autocomplete="off"/>
+              <el-input v-model="userInfoForUpdate.username" autocomplete="off" />
             </el-form-item>
             <el-form-item :label-width="formLabelWidth" label="性别">
               <el-select v-model="userInfoForUpdate.sex" placeholder="请选择">
-                <el-option label="男" value="0"/>
-                <el-option label="女" value="1"/>
+                <el-option label="男" value="0" />
+                <el-option label="女" value="1" />
               </el-select>
             </el-form-item>
             <el-form-item :label-width="formLabelWidth" label="邮箱" prop="email">
-              <el-input v-model="userInfoForUpdate.email" autocomplete="off"/>
+              <el-input v-model="userInfoForUpdate.email" autocomplete="off" />
             </el-form-item>
             <el-form-item :label-width="formLabelWidth" label="手机号" prop="phoneNumber">
-              <el-input v-model="userInfoForUpdate.phoneNumber" autocomplete="off"/>
+              <el-input v-model="userInfoForUpdate.phoneNumber" autocomplete="off" />
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -31,7 +31,7 @@
       </div>
       <el-col :span="2">
         <div>
-          <el-image :src="userInfo.avatar" style="width: 100px; height: 100px"/>
+          <el-image :src="userInfo.avatar" style="width: 100px; height: 100px" />
         </div>
       </el-col>
       <el-col :span="20">
@@ -39,13 +39,13 @@
           <h2> {{ userInfo.username }} </h2>
           <el-descriptions :column="3" class="margin-top" title="">
             <el-descriptions-item>
-              <template slot="label"><i class="el-icon-user"/>性别</template>{{ userInfo.sex == null ? '' : (userInfo.sex == 0 ? '男' : '女') }}
+              <template slot="label"><i class="el-icon-user" />性别</template>{{ userInfo.sex == null ? '' : (userInfo.sex == 0 ? '男' : '女') }}
             </el-descriptions-item>
             <el-descriptions-item>
-              <template slot="label"><i class="el-icon-message"/>邮箱</template>{{ userInfo.email }}
+              <template slot="label"><i class="el-icon-message" />邮箱</template>{{ userInfo.email }}
             </el-descriptions-item>
             <el-descriptions-item>
-              <template slot="label"><i class="el-icon-mobile-phone"/>手机号</template>{{ userInfo.phoneNumber }}
+              <template slot="label"><i class="el-icon-mobile-phone" />手机号</template>{{ userInfo.phoneNumber }}
             </el-descriptions-item>
           </el-descriptions>
         </div>
@@ -60,16 +60,16 @@
       <div class="text item">
         <el-descriptions :column="2" class="margin-top" title="">
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-star-off"/>总场次</template>{{ orderCount }}
+            <template slot="label"><i class="el-icon-star-off" />总场次</template>{{ orderCount }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-magic-stick"/>未开始</template>{{ notOpen }}
+            <template slot="label"><i class="el-icon-magic-stick" />未开始</template>{{ notOpen }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-circle-check"/>出席次数</template>{{ signCount }}
+            <template slot="label"><i class="el-icon-circle-check" />出席次数</template>{{ signCount }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-circle-close"/>缺席次数</template>{{ notAttendCount }}
+            <template slot="label"><i class="el-icon-circle-close" />缺席次数</template>{{ notAttendCount }}
           </el-descriptions-item>
         </el-descriptions>
       </div>

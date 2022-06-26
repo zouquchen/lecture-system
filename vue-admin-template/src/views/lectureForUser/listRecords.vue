@@ -16,19 +16,19 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="title" label="活动名称" align="center"/>
+      <el-table-column prop="title" label="活动名称" align="center" />
 
-      <el-table-column prop="typeName" label="类型" width="60" align="center"/>
+      <el-table-column prop="typeName" label="类型" width="60" align="center" />
 
-      <el-table-column prop="organizer" label="主办方" width="200" align="center"/>
+      <el-table-column prop="organizer" label="主办方" width="200" align="center" />
 
-      <el-table-column prop="space" label="地点" width="150" align="center"/>
+      <el-table-column prop="space" label="地点" width="150" align="center" />
 
-      <el-table-column :formatter="lectureStartFormatter" label="开始时间" width="100" align="center"/>
+      <el-table-column :formatter="lectureStartFormatter" label="开始时间" width="100" align="center" />
 
-      <el-table-column :formatter="orderTimeFormatter" label="预约时间" width="100" align="center"/>
+      <el-table-column :formatter="orderTimeFormatter" label="预约时间" width="100" align="center" />
 
-      <el-table-column :formatter="signTimeFormatter" label="签到时间" width="100" align="center"/>
+      <el-table-column :formatter="signTimeFormatter" label="签到时间" width="100" align="center" />
 
       <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">

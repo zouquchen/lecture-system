@@ -4,7 +4,7 @@
     <!-- 条件查询-->
     <el-form :inline="true" class="demo-form-inline" style="margin-left: 20px; margin-top: 12px;">
       <el-form-item label="讲座名称">
-        <el-input v-model="lectureQuery.title" placeholder="请输入名称"/>
+        <el-input v-model="lectureQuery.title" placeholder="请输入名称" />
       </el-form-item>
       <el-form-item label="讲座时间">
         <el-date-picker
@@ -26,7 +26,7 @@
       </el-form-item>
       <el-form-item label="讲座类型">
         <el-select v-model="lectureQuery.typeId" placeholder="讲座类型">
-          <el-option label="全部" value=""/>
+          <el-option label="全部" value="" />
           <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id" />
         </el-select>
       </el-form-item>
@@ -44,7 +44,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="title" label="活动名称" align="center"/>
+      <el-table-column prop="title" label="活动名称" align="center" />
 
       <el-table-column label="状态" width="80" align="center">
         <template slot-scope="scope">
@@ -54,11 +54,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="typeName" label="类型" width="60" align="center"/>
+      <el-table-column prop="typeName" label="类型" width="60" align="center" />
 
-      <el-table-column prop="organizer" label="主办方" width="200" align="center"/>
+      <el-table-column prop="organizer" label="主办方" width="200" align="center" />
 
-      <el-table-column prop="space" label="地点" width="150" align="center"/>
+      <el-table-column prop="space" label="地点" width="150" align="center" />
 
       <el-table-column label="剩余数量" width="100" align="center">
         <template slot-scope="scope">
@@ -66,11 +66,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column :formatter="orderStartFormatter" label="预约开始" width="100" align="center"/>
+      <el-table-column :formatter="orderStartFormatter" label="预约开始" width="100" align="center" />
 
-      <el-table-column :formatter="orderEndFormatter" label="预约结束" width="100" align="center"/>
+      <el-table-column :formatter="orderEndFormatter" label="预约结束" width="100" align="center" />
 
-      <el-table-column :formatter="lectureStartFormatter" label="开始时间" width="100" align="center"/>
+      <el-table-column :formatter="lectureStartFormatter" label="开始时间" width="100" align="center" />
 
       <el-table-column label="操作" width="150" align="center">
         <template slot-scope="scope">

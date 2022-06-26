@@ -3,15 +3,15 @@
     <el-row>
       <el-col :span="10">
         <div align="center">
-          <el-image :src="lecture.poster" style="width: 80%" lazy/>
+          <el-image :src="lecture.poster" style="width: 80%" lazy />
         </div>
       </el-col>
       <el-col :span="14">
         <!-- 讲座详情 -->
         <el-descriptions :column="1" size="1" class="margin-top" title="讲座详情" border>
           <template slot="extra">
-            <el-button v-loading.fullscreen.lock="fullscreenLoading" v-show="lecture.displayState == '未预约'" type="primary" size="small" @click="orderLecture">预约</el-button>
-            <el-button v-loading.fullscreen.lock="fullscreenLoading" v-show="lecture.displayState == '已预约'" type="danger" size="small" @click="cancelLecture">取消预约</el-button>
+            <el-button v-show="lecture.displayState == '未预约'" v-loading.fullscreen.lock="fullscreenLoading" type="primary" size="small" @click="orderLecture">预约</el-button>
+            <el-button v-show="lecture.displayState == '已预约'" v-loading.fullscreen.lock="fullscreenLoading" type="danger" size="small" @click="cancelLecture">取消预约</el-button>
           </template>
           <!-- 预约情况 -->
           <el-descriptions-item>
@@ -28,31 +28,31 @@
             <template slot="label">讲座类型</template>{{ lecture.typeName }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-user"/>主讲嘉宾</template>{{ lecture.speaker }}
+            <template slot="label"><i class="el-icon-user" />主讲嘉宾</template>{{ lecture.speaker }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-location-information"/>讲座地点</template>{{ lecture.space }}
+            <template slot="label"><i class="el-icon-location-information" />讲座地点</template>{{ lecture.space }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-ice-cream-square"/>主办方</template>{{ lecture.organizer }}
+            <template slot="label"><i class="el-icon-ice-cream-square" />主办方</template>{{ lecture.organizer }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-ice-cream-square"/>承办方</template>{{ lecture.undertaker }}
+            <template slot="label"><i class="el-icon-ice-cream-square" />承办方</template>{{ lecture.undertaker }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-ice-cream-square"/>协办方</template>{{ lecture.sponsor }}
+            <template slot="label"><i class="el-icon-ice-cream-square" />协办方</template>{{ lecture.sponsor }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-user"/>发布者姓名</template>{{ lecture.creatorName }}
+            <template slot="label"><i class="el-icon-user" />发布者姓名</template>{{ lecture.creatorName }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-user"/>可预约人数</template>{{ lecture.store }} / {{ lecture.reservation }}
+            <template slot="label"><i class="el-icon-user" />可预约人数</template>{{ lecture.store }} / {{ lecture.reservation }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-time"/>预约时间</template>{{ lecture.orderStartTime }} — {{ lecture.orderEndTime }}
+            <template slot="label"><i class="el-icon-time" />预约时间</template>{{ lecture.orderStartTime }} — {{ lecture.orderEndTime }}
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"><i class="el-icon-time"/>开始时间</template>{{ lecture.lectureStartTime }}
+            <template slot="label"><i class="el-icon-time" />开始时间</template>{{ lecture.lectureStartTime }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template slot="label">讲座描述</template>{{ lecture.description }}
@@ -140,6 +140,7 @@ export default {
       lectureOrderApi.cancelLectureById(this.lecture.id).then(res => {
         this.fullscreenLoading = false
         // 刷新页面
+        // console.log('lecture.id' + this.lecture.id)
         this.$router.go(0)
       }).catch(err => {
         this.fullscreenLoading = false
