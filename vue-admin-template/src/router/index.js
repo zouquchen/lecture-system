@@ -50,20 +50,7 @@ export const constantRoutes = [
       path: 'index',
       component: () => import('@/views/index/index')
     }]
-  },
-  {
-    path: '/personalCenter',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: '个人中心',
-        component: () => import('@/views/personalCenter/index'),
-        meta: { title: '个人中心', icon: 'user-fill' }
-      }
-    ]
   }
-
 ]
 
 export const asyncRoutes = [
@@ -171,6 +158,19 @@ export const asyncRoutes = [
         name: '网站管理',
         component: () => import('@/views/webManage/index'),
         meta: { title: '网站管理', icon: 'cog-fill' }
+      }
+    ]
+  },
+  {
+    path: '/personalCenter',
+    component: Layout,
+    meta: { roles: ['admin', 'manager', 'student'] },
+    children: [
+      {
+        path: 'index',
+        name: '个人中心',
+        component: () => import('@/views/personalCenter/index'),
+        meta: { title: '个人中心', icon: 'user-fill' }
       }
     ]
   }

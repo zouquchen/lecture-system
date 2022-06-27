@@ -12,8 +12,8 @@
             </el-form-item>
             <el-form-item :label-width="formLabelWidth" label="性别">
               <el-select v-model="userInfoForUpdate.sex" placeholder="请选择">
-                <el-option label="男" value="0" />
-                <el-option label="女" value="1" />
+                <el-option label="男" :value="0" />
+                <el-option label="女" :value="1" />
               </el-select>
             </el-form-item>
             <el-form-item :label-width="formLabelWidth" label="邮箱" prop="email">
