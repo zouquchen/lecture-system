@@ -5,6 +5,7 @@ import com.study.lecture.common.utils.R;
 import com.study.lecture.common.entity.user.User;
 import com.study.lecture.common.service.user.UserService;
 import com.study.lecture.common.vo.UserListQueryVo;
+import com.study.lecture.common.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -105,8 +106,32 @@ public class UserController {
      * @return 成功标志
      */
     @PostMapping("updateUserInfo")
+    @PreAuthorize("hasAnyAuthority('admin', ',manager', 'student')")
     public R updateUserInfo(@RequestBody User user) {
         userService.updateUserInfo(user);
+        return R.ok();
+    }
+
+    /**
+     * 添加新用户
+     * @param userVo 新用户信息
+     * @return
+     */
+    @PostMapping("addUser")
+    @PreAuthorize("hasAuthority('admin')")
+    public R addUser(@RequestBody UserVo userVo) {
+        userService.addUser(userVo);
+        return R.ok();
+    }
+
+    /**
+     * 逻辑删除用户
+     * @param id 用户id
+     * @return
+     */
+    @PostMapping("deleteUser/{id}")
+    public R deleteUserById(@PathVariable Long id) {
+        userService.deleteUserById(id);
         return R.ok();
     }
 }

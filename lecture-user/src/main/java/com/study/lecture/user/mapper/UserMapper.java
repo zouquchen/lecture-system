@@ -55,4 +55,10 @@ public interface UserMapper extends BaseMapper<User> {
      * @return 成功标志
      */
     int updateUser(Long id, String username, String email, String phoneNumber, Integer sex, String avatar);
+
+    /**
+     * 逻辑删除用户
+     * @param id 用户id
+     */
+    void logicallyDeleteUser(Long id);
 }

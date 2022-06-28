@@ -53,6 +53,9 @@ export const constantRoutes = [
   }
 ]
 
+/**
+ * 根据权限显示的路由
+ */
 export const asyncRoutes = [
   {
     // 地址输出
@@ -139,18 +142,13 @@ export const asyncRoutes = [
         name: '用户列表',
         component: () => import('@/views/userManage/list'),
         meta: { title: '用户列表', icon: 'menu' }
-      },
-      {
-        path: 'save',
-        name: '添加用户',
-        component: () => import('@/views/userManage/save'),
-        meta: { title: '添加用户', icon: 'plus-square' }
       }
     ]
   },
   {
     path: '/webManage',
     component: Layout,
+    hidden: true,
     meta: { roles: ['admin'] },
     children: [
       {
@@ -173,7 +171,28 @@ export const asyncRoutes = [
         meta: { title: '个人中心', icon: 'user-fill' }
       }
     ]
-  }
+  },
+  {
+    path: '/about',
+    component: Layout,
+    meta: { title: '关于', icon: 'external-link', roles: ['admin'] },
+    children: [
+      {
+        path: 'project',
+        name: '关于项目',
+        component: () => import('@/views/about/project'),
+        meta: { title: '关于项目', icon: 'example' }
+      },
+      {
+        path: 'me',
+        name: '个人简介',
+        component: () => import('@/views/about/me'),
+        meta: { title: '个人简介', icon: 'user-fill' }
+      }
+    ]
+  },
+  // 404 页面必须放置在最后一个页面
+  { path: '*', redirect: '/404', hidden: true }
 
 ]
 

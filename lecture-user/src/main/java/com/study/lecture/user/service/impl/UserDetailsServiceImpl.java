@@ -6,6 +6,8 @@ import java.util.Objects;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.entity.user.User;
+import com.study.lecture.common.exception.GlobalException;
+import com.study.lecture.common.utils.ResultCodeEnum;
 import com.study.lecture.user.mapper.MenuMapper;
 import com.study.lecture.user.mapper.UserMapper;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -59,9 +61,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         // 如果没有查询到用户则抛出异常,在过滤链中有异常捕获，这里抛出的异常会被捕获
         if (Objects.isNull(user)) {
-            throw new RuntimeException("用户名或密码错误");
+            throw new GlobalException(ResultCodeEnum.PASSWORD_WRONG);
         }
 
+        if (user.getIsDeleted() == 1) {
+            throw new GlobalException(ResultCodeEnum.USER_NOT_EXIST);
+        }
         // 查询对应的角色信息
         List<String> list = menuMapper.selectRoleByUserId(user.getId());
         // 把数据封装成UserDetails返回

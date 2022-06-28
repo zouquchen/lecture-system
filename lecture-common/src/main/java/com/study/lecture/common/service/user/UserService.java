@@ -6,6 +6,7 @@ import com.study.lecture.common.utils.R;
 import com.study.lecture.common.entity.user.User;
 import com.study.lecture.common.vo.UserListQueryVo;
 import com.study.lecture.common.vo.UserListVo;
+import com.study.lecture.common.vo.UserVo;
 
 import java.util.List;
 
@@ -71,4 +72,16 @@ public interface UserService extends IService<User> {
      * @param user 用户
      */
     void updateUserInfo(User user);
+
+    /**
+     * 添加新用户
+     * @param userVo 新用户信息
+     */
+    void addUser(UserVo userVo);
+
+    /**
+     * 逻辑删除用户
+     * @param id 用户id
+     */
+    void deleteUserById(Long id);
 }

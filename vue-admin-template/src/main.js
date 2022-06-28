@@ -9,6 +9,8 @@ import locale from 'element-ui/lib/locale/lang/zh-CN' // lang i18n
 import 'moment' // 处理时间格式
 
 import '@/styles/index.scss' // global css
+import hljs from 'highlight.js'
+import 'highlight.js/styles/googlecode.css'
 
 import App from './App'
 import store from './store'
@@ -29,6 +31,14 @@ if (process.env.NODE_ENV === 'production') {
   const { mockXHR } = require('../mock')
   mockXHR()
 }
+
+// highlight.js
+Vue.directive('highlight', (el) => {
+  const blocks = el.querySelectorAll('pre code')
+  blocks.forEach((block) => {
+    hljs.highlightBlock(block)
+  })
+})
 
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })

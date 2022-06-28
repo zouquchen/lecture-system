@@ -30,6 +30,11 @@ public enum ResultCodeEnum {
     TOKEN_ILLEGAL(50008,"TOKEN非法"),
 
     /**
+     * 用户未登录
+     */
+    USER_OFFLINE(50010, "用户未登录"),
+
+    /**
      * 其他客户端登录
      */
     LOGIN_ANOTHER(50012, "其他客户端登录"),
@@ -40,9 +45,14 @@ public enum ResultCodeEnum {
     TOKEN_EXPIRE(50014, "TOKEN过期"),
 
     /**
-     * 用户未登录
+     * 用户不存在
      */
-    USER_OFFLINE(50010, "用户未登录"),
+    USER_NOT_EXIST(50015, "用户不存在"),
+
+    /**
+     * 用户不存在
+     */
+    PASSWORD_WRONG(50016, "用户名或密码错误"),
 
     /**
      * 用户重复预定讲座

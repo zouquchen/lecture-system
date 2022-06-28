@@ -103,7 +103,7 @@ export default {
       // lecutre参数详情
       lecture: { },
       // 获取dev.env.js里面地址
-      BASE_API: process.env.BASE_API,
+      BASE_API: process.env.VUE_APP_BASE_API,
       // 上传组件的参数
       uploadElement: {
         limit: 1,

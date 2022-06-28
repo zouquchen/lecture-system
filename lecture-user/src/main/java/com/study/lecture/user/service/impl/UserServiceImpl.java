@@ -1,6 +1,8 @@
 package com.study.lecture.user.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.study.lecture.common.entity.user.UserRole;
 import com.study.lecture.common.utils.JwtUtil;
 import com.study.lecture.common.utils.R;
 import com.study.lecture.common.entity.user.LoginUser;
@@ -8,8 +10,10 @@ import com.study.lecture.common.entity.user.User;
 import com.study.lecture.common.vo.RoleListVo;
 import com.study.lecture.common.vo.UserListQueryVo;
 import com.study.lecture.common.vo.UserListVo;
+import com.study.lecture.common.vo.UserVo;
 import com.study.lecture.user.mapper.UserMapper;
 import com.study.lecture.common.service.user.UserService;
+import com.study.lecture.user.mapper.UserRoleMapper;
 import io.jsonwebtoken.Claims;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +23,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -41,6 +48,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private UserRoleMapper userRoleMapper;
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -186,6 +196,38 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 更新redis
         redisTemplate.opsForValue().set("login:" + id, loginUser, 1, TimeUnit.DAYS);
 
+    }
+
+    /**
+     * 添加新用户
+     * @param userVo 新用户信息
+     */
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void addUser(UserVo userVo) {
+        // 密码编码，数据库中的密码非明文密码，是加密后的密码，放在数据库被盗，密码泄露
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        User user = new User();
+        BeanUtils.copyProperties(userVo, user);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userMapper.insert(user);
+
+        Long userId = user.getId();
+        Long roleId = userVo.getRole();
+        UserRole userRole = new UserRole();
+        userRole.setUserId(userId);
+        userRole.setRoleId(roleId);
+        userRoleMapper.insert(userRole);
+    }
+
+    /**
+     * 逻辑删除用户
+     * @param id 用户id
+     */
+    @Override
+    public void deleteUserById(Long id) {
+        userMapper.logicallyDeleteUser(id);
     }
 
 }

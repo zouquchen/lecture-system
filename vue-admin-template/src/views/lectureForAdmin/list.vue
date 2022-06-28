@@ -72,13 +72,13 @@
       <el-table-column label="操作" width="300" align="center">
         <template slot-scope="scope">
           <router-link :to="'/lectureForAdmin/sign/' + scope.row.id">
-            <el-button type="warning" size="mini" icon="el-icon-message" style="margin-left:5px margin-right:5px">签到</el-button>
+            <el-button type="warning" size="mini" icon="el-icon-message">签到</el-button>
           </router-link>
           <router-link :to="'/lectureForAdmin/info/' + scope.row.id">
-            <el-button type="info" size="mini" icon="el-icon-document" style="margin-left:5px margin-right:5px">查看</el-button>
+            <el-button type="info" size="mini" icon="el-icon-document">查看</el-button>
           </router-link>
           <router-link :to="'/lectureForAdmin/edit/' + scope.row.id">
-            <el-button type="primary" size="mini" icon="el-icon-edit" style="margin-left:5px margin-right:5px">修改</el-button>
+            <el-button type="primary" size="mini" icon="el-icon-edit">修改</el-button>
           </router-link>
         </template>
       </el-table-column>

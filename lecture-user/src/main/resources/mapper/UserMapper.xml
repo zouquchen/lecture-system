@@ -28,7 +28,7 @@
     <select id="countUserListByCondition" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM sys_user su, sys_user_role sur, sys_role sr
-        WHERE su.id = sur.user_id and sur.role_id = sr.id
+        WHERE su.id = sur.user_id and sur.role_id = sr.id and su.is_deleted = 0
         <if test="username != null">
             AND su.username LIKE #{username}
         </if>
@@ -41,7 +41,7 @@
     <select id="getUserListByCondition" resultType="com.study.lecture.common.vo.UserListVo">
         SELECT su.id, su.username, su.email, su.phone_number, su.sex, su.avatar, sr.name as role
         FROM sys_user su, sys_user_role sur, sys_role sr
-        WHERE su.id = sur.user_id and sur.role_id = sr.id
+        WHERE su.id = sur.user_id and sur.role_id = sr.id and su.is_deleted = 0
         <if test="username != null">
             AND su.username LIKE #{username}
         </if>
@@ -58,6 +58,10 @@
         WHERE id = #{id}
     </update>
 
+    <!-- 逻辑删除用户-->
+    <update id="logicallyDeleteUser">
+        UPDATE sys_user SET is_deleted = 1 WHERE id = #{id}
+    </update>
 
 
 </mapper>

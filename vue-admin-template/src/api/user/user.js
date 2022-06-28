@@ -28,6 +28,20 @@ export default {
       method: `post`,
       data: user
     })
+  },
+  // 添加新用户
+  addUser(user) {
+    return request({
+      url: `/user/addUser`,
+      method: `post`,
+      data: user
+    })
+  },
+  // 删除用户
+  deleteUser(id) {
+    return request({
+      url: `/user/deleteUser/${id}`,
+      method: `post`
+    })
   }
-
 }
