@@ -17,8 +17,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
-import java.sql.Wrapper;
 import java.util.List;
 
 /**
@@ -106,6 +104,18 @@ public class LectureController {
         } else {
             throw new GlobalException("添加讲座失败！");
         }
+    }
+
+    /**
+     * 逻辑删除讲座
+     * @param id 讲座id
+     * @return 删除成功标志
+     */
+    @PreAuthorize("hasAnyAuthority('admin','manager')")
+    @PostMapping("/deleteLecture/{id}")
+    public R deleteLecture(@PathVariable Long id) {
+        lectureService.deleteLecture(id);
+        return R.ok();
     }
 
     /**

@@ -29,6 +29,14 @@ export default {
       data: user
     })
   },
+  // 修改密码
+  updatePassword(updatePassword) {
+    return request({
+      url: `/user/updatePassword`,
+      method: `post`,
+      data: updatePassword
+    })
+  },
   // 添加新用户
   addUser(user) {
     return request({

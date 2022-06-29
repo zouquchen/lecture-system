@@ -25,9 +25,10 @@ public interface LectureMapper extends BaseMapper<Lecture> {
      * @param typeId 讲座类型id
      * @param startTime 查询讲座范围的开始时间
      * @param endTime 查询讲座范围的结束时间
+     * @param userId 发布者id
      * @return 数据总数
      */
-    int countLectureAdminListByCondition(String title, Long typeId, String startTime, String endTime);
+    int countLectureAdminListByCondition(String title, Long typeId, String startTime, String endTime, Long userId);
 
     /**
      * 分页条件查询管理员可以查看的讲座列表
@@ -37,9 +38,10 @@ public interface LectureMapper extends BaseMapper<Lecture> {
      * @param typeId 讲座类型id
      * @param startTime 查询讲座范围的开始时间
      * @param endTime 查询讲座范围的结束时间
+     * @param userId 发布者id
      * @return 当前页的数据记录
      */
-    List<LectureForAdminListVo> getLectureAdminPageListByCondition(int begin, int limit, String title, Long typeId, String startTime, String endTime);
+    List<LectureForAdminListVo> getLectureAdminPageListByCondition(int begin, int limit, String title, Long typeId, String startTime, String endTime, Long userId);
 
     /**
      * 在分页条件查询用户（学生）可以查看的讲座列表时，查询所有符合条件的记录数
@@ -94,4 +96,10 @@ public interface LectureMapper extends BaseMapper<Lecture> {
      * @param id 讲座id
      */
     void increaseLectureStoreById(Long id);
+
+    /**
+     * 逻辑删除讲座
+     * @param id 讲座id
+     */
+    void logicallyDeleteLectureById(Long id);
 }

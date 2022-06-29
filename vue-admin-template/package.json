@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "0.18.1",
     "core-js": "3.6.5",
+    "crypto-js": "^4.1.1",
     "element-ui": "^2.15.7",
     "github-markdown-css": "^5.1.0",
     "highlight": "^0.2.4",

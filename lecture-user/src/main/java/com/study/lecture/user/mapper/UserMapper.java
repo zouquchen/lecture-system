@@ -61,4 +61,11 @@ public interface UserMapper extends BaseMapper<User> {
      * @param id 用户id
      */
     void logicallyDeleteUser(Long id);
+
+    /**
+     * 修改密码
+     * @param userId 用户id
+     * @param password 加密后的密码
+     */
+    void updatePassword(Long userId, String password);
 }

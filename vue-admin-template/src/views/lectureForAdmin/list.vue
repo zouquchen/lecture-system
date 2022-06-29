@@ -69,7 +69,7 @@
 
       <el-table-column :formatter="lectureStartFormatter" label="开始时间" width="100" align="center" />
 
-      <el-table-column label="操作" width="300" align="center">
+      <el-table-column label="操作" width="350" align="center">
         <template slot-scope="scope">
           <router-link :to="'/lectureForAdmin/sign/' + scope.row.id">
             <el-button type="warning" size="mini" icon="el-icon-message">签到</el-button>
@@ -80,6 +80,7 @@
           <router-link :to="'/lectureForAdmin/edit/' + scope.row.id">
             <el-button type="primary" size="mini" icon="el-icon-edit">修改</el-button>
           </router-link>
+          <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteLectureById(scope.row.id, scope.row.title)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -136,6 +137,28 @@ export default {
         this.typeList = res.typeList
       }).catch(err => {
         console.log('获取活动类型列表失败：' + err)
+      })
+    },
+    // 删除讲座
+    deleteLecture(id) {
+      lectureApi.deleteLecture(id).then(res => {
+        this.$message({
+          type: 'success',
+          message: '删除成功'
+        })
+        this.$router.go(0)
+      }).catch({
+        type: 'error',
+        message: '删除失败'
+      })
+    },
+    deleteLectureById(id, title) {
+      this.$confirm('此操作将删除讲座【' + title + '】, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteLecture(id)
       })
     },
     // 清空方法

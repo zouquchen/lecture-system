@@ -63,5 +63,10 @@
         UPDATE sys_user SET is_deleted = 1 WHERE id = #{id}
     </update>
 
+    <!-- 修改密码-->
+    <update id="updatePassword">
+        UPDATE sys_user SET password = #{password} where id = #{userId}
+    </update>
+
 
 </mapper>

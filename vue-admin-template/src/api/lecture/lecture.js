@@ -31,6 +31,13 @@ export default {
       method: `get`
     })
   },
+  // 删除讲座
+  deleteLecture(id) {
+    return request({
+      url: `/lecture/deleteLecture/${id}`,
+      method: `post`
+    })
+  },
   // 添加讲座
   addLecture(lectureInfo) {
     return request({

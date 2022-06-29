@@ -118,6 +118,7 @@
 
 <script>
 import userApi from '@/api/user/user.js'
+import aes from '@/utils/aes'
 
 export default {
   data() {
@@ -218,7 +219,10 @@ export default {
     },
     // 添加用户
     addUser() {
-      userApi.addUser(this.newUser).then(res => {
+      const user = { ...this.newUser }
+      user.password = aes.encrypt(this.newUser.password, null, null)
+      user.checkPass = null
+      userApi.addUser(user).then(res => {
         // 提示信息
         this.$message({
           type: 'success',

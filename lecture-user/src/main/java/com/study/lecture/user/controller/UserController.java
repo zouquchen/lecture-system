@@ -4,6 +4,7 @@ package com.study.lecture.user.controller;
 import com.study.lecture.common.utils.R;
 import com.study.lecture.common.entity.user.User;
 import com.study.lecture.common.service.user.UserService;
+import com.study.lecture.common.vo.PasswordVo;
 import com.study.lecture.common.vo.UserListQueryVo;
 import com.study.lecture.common.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
@@ -84,7 +85,7 @@ public class UserController {
      * @return 相响应类
      */
     @PostMapping("getUserList/{page}/{limit}")
-    @PreAuthorize("hasAnyAuthority('admin', ',manager')")
+    @PreAuthorize("hasAnyAuthority('admin')")
     public R getUserList(@PathVariable int page, @PathVariable int limit,
                          @RequestBody(required = false) UserListQueryVo userListQueryVo) {
         return userService.getUserPageList(page, limit, userListQueryVo);
@@ -106,9 +107,21 @@ public class UserController {
      * @return 成功标志
      */
     @PostMapping("updateUserInfo")
-    @PreAuthorize("hasAnyAuthority('admin', ',manager', 'student')")
+    @PreAuthorize("hasAnyAuthority('admin', 'manager', 'student')")
     public R updateUserInfo(@RequestBody User user) {
         userService.updateUserInfo(user);
+        return R.ok();
+    }
+
+    /**
+     * 修改密码
+     * @param passwordVo 密码VO
+     * @return 成功标志
+     */
+    @PostMapping("updatePassword")
+    @PreAuthorize("hasAnyAuthority('admin', 'manager', 'student')")
+    public R updatePassword(@RequestBody PasswordVo passwordVo) {
+        userService.updatePassword(passwordVo);
         return R.ok();
     }
 
@@ -130,6 +143,7 @@ public class UserController {
      * @return
      */
     @PostMapping("deleteUser/{id}")
+    @PreAuthorize("hasAuthority('admin')")
     public R deleteUserById(@PathVariable Long id) {
         userService.deleteUserById(id);
         return R.ok();

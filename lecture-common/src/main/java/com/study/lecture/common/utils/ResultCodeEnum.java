@@ -88,6 +88,11 @@ public enum ResultCodeEnum {
      * 用户未预约讲座，取消预约讲座失败
      */
     USER_NOT_ORDER_LECTURE(50201, "用户未预约讲座，取消预约讲座失败"),
+
+    /**
+     * 无操作权限
+     */
+    PERMISSION_DENIED(50300, "无操作权限")
     ;
 
     /**

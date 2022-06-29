@@ -1,16 +1,17 @@
 package com.study.lecture.user.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.study.lecture.common.entity.user.UserRole;
+import com.study.lecture.common.exception.GlobalException;
+import com.study.lecture.common.utils.AesUtil;
 import com.study.lecture.common.utils.JwtUtil;
 import com.study.lecture.common.utils.R;
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.entity.user.User;
-import com.study.lecture.common.vo.RoleListVo;
-import com.study.lecture.common.vo.UserListQueryVo;
-import com.study.lecture.common.vo.UserListVo;
-import com.study.lecture.common.vo.UserVo;
+import com.study.lecture.common.vo.*;
 import com.study.lecture.user.mapper.UserMapper;
 import com.study.lecture.common.service.user.UserService;
 import com.study.lecture.user.mapper.UserRoleMapper;
@@ -26,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -210,6 +212,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         User user = new User();
         BeanUtils.copyProperties(userVo, user);
+        // 前端加密密码转为明文密码
+        user.setPassword(AesUtil.desEncrypt(user.getPassword()));
+        // 明文密码转为数据库加密密码
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userMapper.insert(user);
 
@@ -228,6 +233,43 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public void deleteUserById(Long id) {
         userMapper.logicallyDeleteUser(id);
+    }
+
+    /**
+     * 修改密码
+     * @param passwordVo 密码
+     */
+    @Override
+    public void updatePassword(PasswordVo passwordVo) {
+        // 数据库密码加密
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        // 获取登录用户信息
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = loginUser.getUser().getId();
+
+        String oldPassword = passwordVo.getOldPassword();
+        String newPassword = passwordVo.getNewPassword();
+        String newCheckPass = passwordVo.getNewCheckPass();
+
+        if (!newPassword.equals(newCheckPass)) {
+            throw new GlobalException("两次密码不一致，修改密码失败！");
+        }
+
+        // 对前端传入的密码进行解密
+        oldPassword = AesUtil.desEncrypt(oldPassword);
+        newPassword = AesUtil.desEncrypt(newPassword);
+
+        // 查询并判断原密码
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", userId);
+        User user = userMapper.selectOne(queryWrapper);
+        String encodedPass = user.getPassword();
+        if (!passwordEncoder.matches(oldPassword, encodedPass)) {
+            throw new GlobalException("原密码输入错误！");
+        }
+
+        userMapper.updatePassword(userId, passwordEncoder.encode(newPassword));
     }
 
 }

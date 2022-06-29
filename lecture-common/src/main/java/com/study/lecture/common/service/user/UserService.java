@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.utils.R;
 import com.study.lecture.common.entity.user.User;
+import com.study.lecture.common.vo.PasswordVo;
 import com.study.lecture.common.vo.UserListQueryVo;
 import com.study.lecture.common.vo.UserListVo;
 import com.study.lecture.common.vo.UserVo;
@@ -84,4 +85,10 @@ public interface UserService extends IService<User> {
      * @param id 用户id
      */
     void deleteUserById(Long id);
+
+    /**
+     * 修改密码
+     * @param passwordVo 密码
+     */
+    void updatePassword(PasswordVo passwordVo);
 }

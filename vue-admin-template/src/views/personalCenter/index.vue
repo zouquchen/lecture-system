@@ -3,10 +3,12 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>个人信息</span>
-        <el-button style="float: right; padding: 3px 0" type="text" @click="dialogFormVisible = true">编辑</el-button>
+        <el-button style="float: right; padding: 3px 0" type="text" @click="dialogEditInfoVisible = true">修改信息</el-button>
+        <el-button style="float: right; padding: 3px 0; margin-right:25px" type="text" @click="dialogEditPassVisible = true">修改密码</el-button>
 
-        <el-dialog :visible.sync="dialogFormVisible" title="修改信息">
-          <el-form :model="userInfoForUpdate" :rules="rules">
+        <!-- 修改个人信息 -->
+        <el-dialog :visible.sync="dialogEditInfoVisible" title="修改信息">
+          <el-form ref="userInfoForUpdate" :model="userInfoForUpdate" :rules="rules">
             <el-form-item :label-width="formLabelWidth" label="用户名" prop="username">
               <el-input v-model="userInfoForUpdate.username" autocomplete="off" />
             </el-form-item>
@@ -24,10 +26,30 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="updateUserInfo">确 定</el-button>
+            <el-button @click="dialogEditInfoVisible = false">取 消</el-button>
+            <el-button type="primary" @click="editInfo('userInfoForUpdate')">确 定</el-button>
           </div>
         </el-dialog>
+
+        <!-- 修改密码 -->
+        <el-dialog :visible.sync="dialogEditPassVisible" title="修改密码">
+          <el-form ref="passwordForUpdate" :model="passwordForUpdate" :rules="rules">
+            <el-form-item :label-width="formLabelWidth" label="原密码" prop="oldPassword">
+              <el-input v-model="passwordForUpdate.oldPassword" type="password" autocomplete="off" />
+            </el-form-item>
+            <el-form-item :label-width="formLabelWidth" label="新密码" prop="newPassword">
+              <el-input v-model="passwordForUpdate.newPassword" type="password" autocomplete="off" />
+            </el-form-item>
+            <el-form-item :label-width="formLabelWidth" label="新密码" prop="newCheckPass">
+              <el-input v-model="passwordForUpdate.newCheckPass" type="password" autocomplete="off" />
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogEditPassVisible = false">取 消</el-button>
+            <el-button type="primary" @click="editPass('passwordForUpdate')">确 定</el-button>
+          </div>
+        </el-dialog>
+
       </div>
       <el-col :span="2">
         <div>
@@ -81,9 +103,20 @@
 <script>
 import userApi from '@/api/user/user'
 import lectureUserRecordApi from '@/api/lecture/lectureUserRecord'
+import aes from '@/utils/aes'
 
 export default {
   data() {
+    var validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.passwordForUpdate.newPassword) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
+    // 定义变量和初始值
     return {
       userInfo: {
         username: '',
@@ -93,11 +126,22 @@ export default {
         avatar: ''
       },
       userInfoForUpdate: {},
+      passwordForUpdate: {
+        oldPassword: '',
+        newPassword: '',
+        newCheckPass: ''
+      },
+      passwordVo: {
+        oldPassword: '',
+        newPassword: '',
+        newCheckPass: ''
+      },
       orderCount: '',
       notAttendCount: '',
       signCount: '',
       notOpen: '',
-      dialogFormVisible: false,
+      dialogEditInfoVisible: false,
+      dialogEditPassVisible: false,
       formLabelWidth: '120px',
       rules: {
         usernmae: [
@@ -108,6 +152,17 @@ export default {
         ],
         phoneNumber: [
           { pattern: /^1[3456789]\d{9}$/, message: '请输入正确的手机号码', trigger: 'blur' }
+        ],
+        oldPassword: [
+          { required: true, message: '请输入原密码', trigger: 'blur' },
+          { min: 5, max: 12, message: '长度在 5 到 12 个字符', trigger: 'blur' }
+        ],
+        newPassword: [
+          { required: true, message: '请输入新密码', trigger: 'blur' },
+          { min: 5, max: 12, message: '长度在 5 到 12 个字符', trigger: 'blur' }
+        ],
+        newCheckPass: [
+          { required: true, validator: validatePass, trigger: 'blur' }
         ]
       }
     }
@@ -117,8 +172,8 @@ export default {
     this.getDataOfUserRecord()
   },
   methods: {
+    // 获得用户详情
     getInfo() {
-      // 获得用户详情
       userApi.getUserInfo().then(res => {
         this.userInfo = res.userInfo
         this.userInfoForUpdate = { ...this.userInfo }
@@ -126,12 +181,44 @@ export default {
         console.log('getUserInfo Error: ' + err)
       })
     },
+    // 更新用户信息
     updateUserInfo() {
-      this.dialogFormVisible = false
       userApi.updateUserInfo(this.userInfoForUpdate).then(res => {
         this.$router.go(0)
       }).catch(err => {
         console.log('updateUserInfo Error: ' + err)
+      })
+    },
+    // 修改密码
+    updatePassword() {
+      // AES加密
+      this.passwordVo.oldPassword = aes.encrypt(this.passwordForUpdate.oldPassword, null, null)
+      this.passwordVo.newPassword = aes.encrypt(this.passwordForUpdate.newPassword, null, null)
+      this.passwordVo.newCheckPass = aes.encrypt(this.passwordForUpdate.newCheckPass, null, null)
+      userApi.updatePassword(this.passwordVo).then(res => {
+        this.$router.go(0)
+      }).catch(err => {
+        console.log('updatePassword Error: ' + err)
+      })
+    },
+    editInfo(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.dialogEditInfoVisible = false
+          this.updateUserInfo()
+        } else {
+          return false
+        }
+      })
+    },
+    editPass(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.dialogEditPassVisible = false
+          this.updatePassword(this.passwordForUpdate)
+        } else {
+          return false
+        }
       })
     },
     getDataOfUserRecord() {

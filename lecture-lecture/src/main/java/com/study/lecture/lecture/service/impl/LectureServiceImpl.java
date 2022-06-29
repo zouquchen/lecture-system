@@ -1,13 +1,16 @@
 package com.study.lecture.lecture.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.study.lecture.common.constant.LectureStateEnum;
 import com.study.lecture.common.constant.RedisConstant;
 import com.study.lecture.common.entity.lecture.Lecture;
 import com.study.lecture.common.entity.lecture.LectureUserRecord;
 import com.study.lecture.common.entity.user.LoginUser;
+import com.study.lecture.common.exception.GlobalException;
 import com.study.lecture.common.service.lecture.LectureUserRecordService;
 import com.study.lecture.common.utils.R;
+import com.study.lecture.common.utils.ResultCodeEnum;
 import com.study.lecture.common.vo.*;
 import com.study.lecture.lecture.mapper.LectureMapper;
 import com.study.lecture.common.service.lecture.LectureService;
@@ -46,18 +49,30 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
     private RedisTemplate<String, Object> redisTemplate;
 
     /**
-     * <p> admin分页条件查询lecture列表 </p>
+     * <p> 管理员分页条件查询lecture列表 </p>
+     * <p> admin可以查询到所有的lecture列表 </p>
+     * <p> manager只能查询到它发布的lecture列表 </p>
      * @param page 当前页
      * @param limit 每页显示数量
+     * @param lectureForAdminListQueryVo 查询条件
      * @return 分页查询结果
      */
     @Override
     public R lectureForAdminPageList(int page, int limit, LectureForAdminListQueryVo lectureForAdminListQueryVo) {
+        // 获取登录用户信息
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<String> permissions = loginUser.getPermissions();
+        if (permissions.size() == 0) {
+            throw new GlobalException(ResultCodeEnum.ERROR);
+        }
+        String role = permissions.get(0);
+        // 若为admin角色，userId为null，否则userId为当前用户id
+        Long userId = "admin".equals(role) ? null : loginUser.getUser().getId();
 
-        String title = lectureForAdminListQueryVo.getTitle();;
-        Long typeId = lectureForAdminListQueryVo.getTypeId();;
-        String startTime = lectureForAdminListQueryVo.getStartTime();;
-        String endTime = lectureForAdminListQueryVo.getEndTime();;
+        String title = lectureForAdminListQueryVo.getTitle();
+        Long typeId = lectureForAdminListQueryVo.getTypeId();
+        String startTime = lectureForAdminListQueryVo.getStartTime();
+        String endTime = lectureForAdminListQueryVo.getEndTime();
 
         if (title != null) {
             title = "%" + title + '%';
@@ -67,8 +82,8 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
         int begin = (page - 1) * limit;
 
         // 处理数据
-        int total = lectureMapper.countLectureAdminListByCondition(title, typeId, startTime, endTime);
-        List<LectureForAdminListVo> records = lectureMapper.getLectureAdminPageListByCondition(begin, limit, title, typeId, startTime, endTime);
+        int total = lectureMapper.countLectureAdminListByCondition(title, typeId, startTime, endTime, userId);
+        List<LectureForAdminListVo> records = lectureMapper.getLectureAdminPageListByCondition(begin, limit, title, typeId, startTime, endTime, userId);
 
         return R.ok().put("total", total).put("records", records);
     }
@@ -229,6 +244,32 @@ public class LectureServiceImpl extends ServiceImpl<LectureMapper, Lecture> impl
     public LectureForAdminInfoVo getLectureInfoForAdminById(Long id) {
         // 根据id查询讲座详情
         return lectureMapper.getLectureInfoForAdminById(id);
+    }
+
+    /**
+     * 逻辑删除讲座
+     * @param id 讲座id
+     */
+    @Override
+    public void deleteLecture(Long id) {
+        // 获取已登录用户
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = loginUser.getUser().getId();
+        List<String> permissions = loginUser.getPermissions();
+        if (permissions.size() == 0) {
+            throw new GlobalException(ResultCodeEnum.ERROR);
+        }
+        String role = permissions.get(0);
+        QueryWrapper<Lecture> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", id);
+        Lecture lecture = lectureMapper.selectOne(queryWrapper);
+
+        // 判断删除者是不是创建者或admin
+        if (lecture.getCreatorId().equals(userId) || "admin".equals(role)) {
+            lectureMapper.logicallyDeleteLectureById(id);
+        } else {
+            throw new GlobalException(ResultCodeEnum.PERMISSION_DENIED);
+        }
     }
 
 

@@ -77,4 +77,9 @@ public interface LectureService extends IService<Lecture> {
      */
     LectureForAdminInfoVo getLectureInfoForAdminById(Long id);
 
+    /**
+     * 逻辑删除讲座
+     * @param id 讲座id
+     */
+    void deleteLecture(Long id);
 }
