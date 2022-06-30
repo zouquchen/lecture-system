@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.entity.user.User;
 import com.study.lecture.common.exception.GlobalException;
+import com.study.lecture.common.utils.AesUtil;
 import com.study.lecture.common.utils.ResultCodeEnum;
 import com.study.lecture.user.mapper.MenuMapper;
 import com.study.lecture.user.mapper.UserMapper;
@@ -64,9 +65,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new GlobalException(ResultCodeEnum.PASSWORD_WRONG);
         }
 
+        // 查看是否逻辑删除
         if (user.getIsDeleted() == 1) {
             throw new GlobalException(ResultCodeEnum.USER_NOT_EXIST);
         }
+
         // 查询对应的角色信息
         List<String> list = menuMapper.selectRoleByUserId(user.getId());
         // 把数据封装成UserDetails返回

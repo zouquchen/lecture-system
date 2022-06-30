@@ -1,6 +1,8 @@
 import request from '@/utils/request'
+import aes from '@/utils/aes'
 
 export function login(username, password) {
+  password = aes.encrypt(password, null, null)
   return request({
     url: '/user/login',
     method: 'post',

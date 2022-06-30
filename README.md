@@ -2,8 +2,7 @@
 
 ## 📚 1 项目简介
 
-Lecture是一款前后端分离的校园讲座预约系统，基于目前主流的技术栈
-（SpringBoot + MyBatis + MySQL + Redis + RabbitMQ + Spring Security + ...），提供详细的学习开发文档。
+Lecture是一款前后端分离的校园讲座预约系统，基于目前主流的技术栈（SpringBoot + MyBatis + MySQL + Redis + RabbitMQ + Spring Security + ...），提供详细的学习开发文档。
 
 ## 🎬 2 快速开始
 
@@ -134,17 +133,15 @@ lecture-system
 下面对Spring Security的原理进行简单的介绍：
 
 登录
-- 请求携带用户信息请求 /login 接口，在配置类中配置Spring Security对 /login 接口进行匿名访问， 
-  所以Spring Security会对 /login 接口放行并准备执行登陆业务。
+- 请求携带用户信息请求`/login`接口，在配置类中配置Spring Security对 `/login` 接口进行匿名访问， 所以Spring Security会对`/login`接口放行，之后执行登录业务。
 - 登录业务中，使用Spring Security提供的AuthenticationManager进行认证。
 - 通过实现UserDetailService接口，重写loadUserByUsername方法，该方法可以从数据库中获取用户信息返回UserDetails对象（LoginUser）。
+- 通过继承`DaoAuthenticationProvider`重写`additionalAuthenticationChecks`方法完成自定义密码校验，首先将前端传入的密码进行AES解码获得密码明文，再将密码明文与数据库中的加密密码进行匹配。
 - 认证成功后，将用户信息（LoginUser对象）存储在redis中，将userId封装成jwt返回到前端，也就是前端每次访问需要携带的token。
 
 认证
-- 所有的请求将经过Spring Security过滤链，过滤链中包含自定义的jwt认证过滤器，用于解析从请求头中获取的token，
-并使用jwt工具解析为userId后从redis中获取用户信息。
-- 如果从redis中成功获取LoginUser用户信息，就将该信息存储到SecurityContextHolder中的SecurityContext中的Authentication中，
-表示当前用户认证通过。
+- 所有的请求将经过Spring Security过滤链，过滤链中包含自定义的jwt认证过滤器，可从请求头中获取的token；使用jwt工具将token解析为userId后，从redis中获取用户信息。
+- 如果从redis中成功获取LoginUser用户信息，就将该信息存储到SecurityContextHolder中的SecurityContext中的Authentication中，表示当前用户认证通过。
 - 如果用户不存在，则返回认证失败的异常。
 
 异常处理
@@ -173,8 +170,9 @@ lecture-system
 ### 9.3 预约讲座模块
 #### 9.3.1 讲座列表
 支持分页、条件查询所有状态为【0发布】的讲座。
+
 #### 9.3.2 我的讲座
-查询所有已预约过的讲座。
+根据已登录用户的id查询所有已预约过的讲座。
 #### 9.3.3 预约与取消
 讲座预约模块主要实现两个功能： 用户预约讲座、用户取消讲座。
 
@@ -202,13 +200,13 @@ lecture-system
 
 #### 9.4.1 分页查询
 
-管理员可以分页、条件查询数据库中所有用户信息，不包含被逻辑删除的用户；同时可以辑删除用户（数据库is_deleted = 1表示被删除）
+【管理员Admin】可以分页、条件查询数据库中所有用户信息，不包含被逻辑删除的用户；同时可以辑删除用户（数据库is_deleted = 1表示被删除）
 
 
 
 #### 9.4.2 添加新用户
 
-填写必要的用户字段添加用户。
+填写必要的用户字段添加用户。密码传输经过加密处理。
 
 由于http是明文传输，为了保证密码的安全，前端在传输密码的时候需要对密码进行加密，在后端对密码进行解密，存储到数据库的时候再对密码进行加密。
 
@@ -218,10 +216,22 @@ lecture-system
 
 #### 9.5.1 修改密码
 
-输入原密码，填写新密码。
+输入原密码，填写新密码。密码传输经过加密处理。
 
-由于http是明文传输，为了保证密码的安全，前端在传输密码的时候需要对密码进行加密，在后端对密码进行解密，存储到数据库的时候再对密码进行加密。
+
 
 #### 9.5.2 修改信息
 
-填写需要修改的字段修改密码。
+填写需要修改的字段。
+
+
+
+### 9.6 其他
+
+#### 9.6.1 密码加密与传输
+
+由于http是明文传输，为了保证密码的安全，前端在传输密码的时候需要对密码进行加密，在后端对密码进行解密，存储到数据库的时候再对密码进行加密。
+
+![](doc/images/password_crpty.png)
+
+数据库中的密码采用加密的方式存储，即使数据库被盗，黑客也不能用密文作为密码进行登录，确保了账号的安全。

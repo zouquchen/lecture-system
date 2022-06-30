@@ -1,6 +1,7 @@
-package com.study.lecture.common.config;
+package com.study.lecture.user.config;
 
-import com.study.lecture.common.filter.JwtAuthenticationTokenFilter;
+import com.study.lecture.user.filter.JwtAuthenticationTokenFilter;
+import com.study.lecture.user.service.impl.MyAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,11 +11,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -59,6 +63,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AccessDeniedHandler accessDeniedHandler;
 
+    @Resource
+    private UserDetailsService uerDetailsServiceImpl;
+
     /**
      * 详细配置信息
      * @param http
@@ -99,6 +106,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public MyAuthenticationProvider myAuthenticationProvider() {
+        MyAuthenticationProvider myAuthenticationProvider = new MyAuthenticationProvider();
+        myAuthenticationProvider.setUserDetailsService(uerDetailsServiceImpl);
+        return myAuthenticationProvider;
     }
 
 }

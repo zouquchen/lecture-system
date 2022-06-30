@@ -1,4 +1,4 @@
-package com.study.lecture.common.filter;
+package com.study.lecture.user.filter;
 
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.exception.GlobalException;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +39,7 @@ import java.util.Objects;
 @Slf4j
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    @DubboReference(version = "1.0")
+    @Resource
     private UserService userService;
 
     @Override
