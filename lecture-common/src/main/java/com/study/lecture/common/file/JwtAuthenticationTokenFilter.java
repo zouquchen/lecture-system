@@ -1,4 +1,4 @@
-package com.study.lecture.user.filter;
+package com.study.lecture.common.file;
 
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.exception.GlobalException;
@@ -25,6 +25,7 @@ import java.util.Objects;
 /**
  * <p>
  * 权限认证过滤器
+ * 每个请求都要经过这个过滤器
  * </p>
  * <p>1 获取请求头中的token，对token进行解析取出其中的userid。 </p>
  * <p>2 使用userid去redis中获取对应的LoginUser对象。 </p>
@@ -39,7 +40,7 @@ import java.util.Objects;
 @Slf4j
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    @Resource
+    @DubboReference(version = "1.0")
     private UserService userService;
 
     @Override

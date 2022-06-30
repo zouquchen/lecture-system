@@ -1,4 +1,4 @@
-package com.study.lecture.user.handler;
+package com.study.lecture.common.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.study.lecture.common.utils.R;

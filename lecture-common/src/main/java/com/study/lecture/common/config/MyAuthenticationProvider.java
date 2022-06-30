@@ -1,4 +1,4 @@
-package com.study.lecture.user.service.impl;
+package com.study.lecture.common.config;
 
 import com.study.lecture.common.utils.AesUtil;
 import org.springframework.context.annotation.Bean;

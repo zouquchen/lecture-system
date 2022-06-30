@@ -1,7 +1,7 @@
-package com.study.lecture.user.config;
+package com.study.lecture.common.config;
 
-import com.study.lecture.user.filter.JwtAuthenticationTokenFilter;
-import com.study.lecture.user.service.impl.MyAuthenticationProvider;
+import com.study.lecture.common.file.JwtAuthenticationTokenFilter;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,7 +63,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AccessDeniedHandler accessDeniedHandler;
 
-    @Resource
+    /**
+     * 实现UserDetailService，根据用id从数据库中查询用户信息.
+     */
+    @DubboReference(version = "1.0")
     private UserDetailsService uerDetailsServiceImpl;
 
     /**

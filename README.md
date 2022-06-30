@@ -18,6 +18,8 @@ Lecture是一款前后端分离的校园讲座预约系统，基于目前主流�
   - 修改每一个项目中application.yml中zookeeper的ip地址。
 - 配置RabbitMQ
   - 修改每一个项目中application.yml中rabbitmq的host, username以及password。
+- 配置OSS
+  - 修改lecture-oss服务中的application.yml的阿里云OSS配置
 - 配置前端
   - 修改`.env.*`中的前端请求路径`VUE_APP_BASE_API`, 即Nginx监听端口。
   
