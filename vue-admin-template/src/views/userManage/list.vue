@@ -98,7 +98,7 @@
       </el-table-column>
       <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
-          <el-button type="warning" size="mini" icon="el-icon-delete" @click="deleteUserById(scope.row.id)">删除</el-button>
+          <el-button type="warning" size="mini" icon="el-icon-delete" @click="deleteUserById(scope.row.id, scope.row.username)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -246,7 +246,7 @@ export default {
       this.$refs[formName].resetFields()
     },
     // 删除用户
-    deleteUserById(id) {
+    deleteUser(id) {
       userApi.deleteUser(id).then(res => {
         // 提示信息
         this.$message({
@@ -254,6 +254,16 @@ export default {
           message: '删除成功'
         })
         this.$router.go(0)
+      })
+    },
+    // 删除用户案件
+    deleteUserById(id, username) {
+      this.$confirm('此操作将删除用户【' + username + '】, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteUser(id)
       })
     },
     // --------------------------------------------- 上传文件图片 ---------------------------------------------

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.lecture.lecture.mapper.LectureCommentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.study.lecture.common.entity.lecture.LectureComment">
+        <id column="id" property="id" />
+        <result column="lecture_id" property="lectureId" />
+        <result column="user_id" property="userId" />
+        <result column="parent_id" property="parentId" />
+        <result column="root_parent_id" property="rootParentId" />
+        <result column="content" property="content" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+
+    <!-- 根据讲座id获取所有评论信息-->
+    <select id="getCommentVoByLectureId" resultType="com.study.lecture.common.vo.CommentVo">
+        SELECT lc.id, lc.user_id, su.username, su.avatar, lc.lecture_id, lc.parent_id, lc.root_parent_id, lc.content, lc.create_time, lc.update_time
+        FROM sys_user su, lecture_comment lc
+        WHERE su.id = lc.user_id and lc.lecture_id = #{id}
+        ORDER BY lc.create_time desc
+    </select>
+
+    <!-- 根据评论id和用户id删除评论-->
+    <delete id="deleteComment">
+        DELETE FROM lecture_comment
+        WHERE id=#{commentId} AND user_id=#{userId}
+    </delete>
+    <!-- 根据根评论id删除评论-->
+    <delete id="deleteChildrenComment">
+        DELETE FROM lecture_comment
+        WHERE root_parent_id=#{parentId} OR parent_id=#{parentId}
+    </delete>
+
+</mapper>

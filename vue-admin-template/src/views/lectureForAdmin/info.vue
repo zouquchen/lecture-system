@@ -82,13 +82,21 @@
         </el-table>
       </el-col>
     </el-row>
+
+    <!-- 评论详情 -->
+    <el-descriptions :column="1" size="1" class="margin-top" style="margin-top:50px" title="评论内容" border />
+    <el-row>
+      <CommentComponent />
+    </el-row>
   </div>
 </template>
 
 <script>
 import lectureApi from '@/api/lecture/lecture'
+import CommentComponent from '@/views/components/CommentComponent'
 
 export default {
+  components: { CommentComponent },
   data() {
     return {
       // lecutre参数详情
@@ -119,7 +127,7 @@ export default {
   },
   created() {
     // 获取路由id值
-    if (this.$route.params && this.$route.params.id) { // 修改
+    if (this.$route.params && this.$route.params.id) {
       this.lecture.id = this.$route.params.id
       // 获取讲座详情
       this.getInfo()
@@ -128,8 +136,8 @@ export default {
     }
   },
   methods: {
+    // 获得讲座详情
     getInfo() {
-      // 获得讲座详情
       lectureApi.getLectureInfoAndUserListForAdminById(this.lecture.id).then(res => {
         this.lecture = res.lectureInfo
       }).catch(err => {

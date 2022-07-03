@@ -176,3 +176,16 @@ VALUES
 -- ----------------------------
 -- 讲座签到码表
 -- ----------------------------
+CREATE TABLE `lecture_comment` (
+    `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `lecture_id` BIGINT(20) NOT NULL COMMENT '讲座id',
+    `user_id` BIGINT(20) NOT NULL COMMENT '用户id',
+    `parent_id` BIGINT(20) COMMENT '父评论id',
+    `root_parent_id` BIGINT(20) COMMENT '最顶级父评论',
+    `content` text NOT NULL COMMENT '评论内容',
+    `create_time` DATETIME DEFAULT NOW() COMMENT '创建时间',
+    `update_time` DATETIME DEFAULT NOW() COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COMMENT='讲座签到表';
+
+DROP TABLE `lecture_comment`;

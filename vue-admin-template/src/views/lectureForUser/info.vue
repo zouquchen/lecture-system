@@ -60,14 +60,22 @@
         </el-descriptions>
       </el-col>
     </el-row>
+
+    <!-- 评论详情 -->
+    <el-descriptions :column="1" size="1" class="margin-top" style="margin-top:50px" title="评论内容" border />
+    <el-row>
+      <CommentComponent />
+    </el-row>
   </div>
 </template>
 
 <script>
 import lectureApi from '@/api/lecture/lecture'
 import lectureOrderApi from '@/api/lecture/lectureOrder'
+import CommentComponent from '@/views/components/CommentComponent'
 
 export default {
+  components: { CommentComponent },
   data() {
     return {
       // lecutre参数详情
