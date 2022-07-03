@@ -80,6 +80,20 @@ lecture-system
 
 ## 🌌 6 部署架构
 
+Nginx：通过反向代理访问不同的服务器
+
+前端服务：vue框架搭建的前端项目
+
+微服务：处理各类业务、通过操作redis缓存数据、MySQL存储数据
+
+RabbitMQ：通过消息队列异步解决并发问题
+
+Zookeeper：实现微服务的注册
+
+阿里云OSS：存储用户上传的图片
+
+<img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/deployment_architecture.png" style="zoom: 50%;" />
+
 ## 📐 7 功能说明
 在该系统中分为三个身份：【管理员Admin】、【管理员Manager】和【用户Student】，不同身份有不同的权限，不同的需求和任务。
 
@@ -98,7 +112,10 @@ lecture-system
 ### 7.2 用户操作
 
 用户关于讲座的操作包含：
+
+- 评论：在讲座评论区进行留言评论
 - 预约讲座：在讲座开始预约后，可以预约讲座
+
 - 取消预约讲座：讲座关闭之前，可以取消预约讲座
 - 签到：现场由管理员根据用户提供的用户名完成签到
 
@@ -106,8 +123,57 @@ lecture-system
 
 ![](doc/images/user_operation.png)
 
-
 ## 🎀 8 界面展示
+
+### 8.1 公共界面
+
+🔶 **登录界面**
+
+![UI1](https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/UI_login.png)
+
+🔶 **首页**
+
+![UI1](https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/UI_index.png)
+
+🔶 **个人中心**
+
+![](https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/UI_userCenter.png)
+
+🔶 **评论模块**
+
+![](https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/UI_comment.png)
+
+### 8.2 Student界面展示
+
+🔶 **讲座列表**
+
+![](https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/UI_student_list.png)
+
+🔶 **讲座详情**
+
+![](https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/UI_student_info.png)
+
+### 8.3 Admin界面展示
+
+🔶 **讲座列表**
+
+![](https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/UI_admin_list.png)
+
+🔶 **添加讲座**
+
+![](https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/UI_admin_add.png)
+
+🔶 **讲座详情**
+
+![](https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/UI_admin_info.png)
+
+🔶 **讲座签到**
+
+![](https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/UI_admin_sign.png)
+
+🔶 **用户列表**
+
+![](https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/UI_admin_userList.png)
 
 ## 🎯 9 功能逻辑图
 
@@ -126,7 +192,7 @@ lecture-system
 
 下图是登录认证模块，使用Spring Security提供的认证逻辑。
 
-![structure_login.png](doc/images/structure_login.png)
+<img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/structure_login.png" alt="structure_login.png" style="zoom: 50%;" />
 
 #### 9.1.2 授权
 
@@ -152,7 +218,7 @@ lecture-system
 
 
 
-![structure_login.png](doc/images/structure_SpringSecurity.png)
+![structure_login.png](https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/structure_SpringSecurity.png)
 
 ### 9.2 讲座管理模块
 
@@ -196,7 +262,7 @@ lecture-system
 
 流程图如下：
 
-![structure_login.png](doc/images/structure_order.png)
+<img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/structure_order.png" alt="structure_login.png"  />
 
 ### 9.4 用户列表模块
 
@@ -204,15 +270,11 @@ lecture-system
 
 【管理员Admin】可以分页、条件查询数据库中所有用户信息，不包含被逻辑删除的用户；同时可以辑删除用户（数据库is_deleted = 1表示被删除）
 
-
-
 #### 9.4.2 添加新用户
 
 填写必要的用户字段添加用户。密码传输经过加密处理。
 
 由于http是明文传输，为了保证密码的安全，前端在传输密码的时候需要对密码进行加密，在后端对密码进行解密，存储到数据库的时候再对密码进行加密。
-
-
 
 ### 9.5 个人中心
 
@@ -220,20 +282,40 @@ lecture-system
 
 输入原密码，填写新密码。密码传输经过加密处理。
 
-
-
 #### 9.5.2 修改信息
 
 填写需要修改的字段。
 
-
-
-### 9.6 其他
-
-#### 9.6.1 密码加密与传输
+#### 9.5.3 密码加密与传输
 
 由于http是明文传输，为了保证密码的安全，前端在传输密码的时候需要对密码进行加密，在后端对密码进行解密，存储到数据库的时候再对密码进行加密。
 
-![](doc/images/password_crpty.png)
+![](https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/password_crpty.png)
 
 数据库中的密码采用加密的方式存储，即使数据库被盗，黑客也不能用密文作为密码进行登录，确保了账号的安全。
+
+### 9.6 评论模块
+
+在数据库中，评论分为两类：父级评论和子级评论，子评论包含指向父评论和根评论的指针。
+
+> 父评论：评论A、评论B、评论C
+>
+> 子评论：评论B1、评论B2、评论B3、评论1、评论2
+>
+> 评论2的根评论为评论B，父评论为评论1。
+
+<img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/comment_relation_db.png" style="zoom: 50%;" />
+
+#### 9.6.1 获取评论
+
+根据讲座id获取所有评论，根据评论之间的关系封装好评论数据发给前端。此时，将子评论同级之间进行封装，有利于前端显示。
+
+<img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/comment_relation_json.png" style="zoom: 50%;" />
+
+#### 9.6.2 添加评论
+
+根据讲座id、用户id、父评论id、根评论id和评论内容添加讲座信息。
+
+#### 9.63. 删除评论
+
+根据评论id、用户id删除评论及其子评论。

@@ -19,7 +19,7 @@
     <div v-for="commentVo in list" :key="commentVo.id">
       <el-card class="box-card" shadow="never" style="margin-top: 10px">
         <!-- 发表评论的用户信息 -->
-        <div slot="header" style="padding: 0px 0px">
+        <div slot="header">
           <el-row type="flex" align="middle">
             <el-col :span="1">
               <div><el-avatar :src="commentVo.avatar" /></div>
@@ -69,7 +69,7 @@
                 </el-col>
                 <el-col :span="2">
                   <el-button icon="el-icon-chat-dot-square" style="float: right" circle @click="showCommentInput(children.id)" />
-                  <el-button v-show="user.name == children.username" style="float: right" icon="el-icon-delete" circle @click="deleteComment(children.id)" />
+                  <el-button v-show="user.name == children.username" style="float: right" icon="el-icon-delete" circle @click="deleteComment(commentVo.id)" />
                 </el-col>
               </el-row>
             </div>
@@ -204,9 +204,10 @@ export default {
   }
 }
 </script>
+
 <style>
-.el-card__header {
-  padding: 0px 0px 0px 20px;
+.el-card-header {
+  padding: 10px 0px 2px 20px;
   border-bottom: 1px solid #EBEEF5;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
