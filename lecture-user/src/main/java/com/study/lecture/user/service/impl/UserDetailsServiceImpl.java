@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.entity.user.User;
 import com.study.lecture.common.exception.GlobalException;
-import com.study.lecture.common.utils.AesUtil;
 import com.study.lecture.common.utils.ResultCodeEnum;
 import com.study.lecture.user.mapper.MenuMapper;
 import com.study.lecture.user.mapper.UserMapper;
@@ -15,6 +14,7 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 

@@ -1,6 +1,6 @@
 package com.study.lecture.common.config;
 
-import com.study.lecture.common.file.JwtAuthenticationTokenFilter;
+import com.study.lecture.common.filter.JwtAuthenticationTokenFilter;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,8 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import javax.annotation.Resource;
 
 /**
  * <p>

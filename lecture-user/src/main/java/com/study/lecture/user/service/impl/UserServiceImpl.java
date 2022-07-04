@@ -1,8 +1,6 @@
 package com.study.lecture.user.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.study.lecture.common.entity.user.UserRole;
 import com.study.lecture.common.exception.GlobalException;
@@ -15,7 +13,6 @@ import com.study.lecture.common.vo.*;
 import com.study.lecture.user.mapper.UserMapper;
 import com.study.lecture.common.service.user.UserService;
 import com.study.lecture.user.mapper.UserRoleMapper;
-import io.jsonwebtoken.Claims;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +22,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -45,7 +42,7 @@ import java.util.concurrent.TimeUnit;
 @DubboService(version = "1.0")
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
-    @Autowired
+    @Resource
     private AuthenticationManager authenticationManager;
 
     @Resource

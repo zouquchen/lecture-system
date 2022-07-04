@@ -60,7 +60,7 @@ spring:
 
 dubbo:
   application:
-    name: lecture-provider
+    name: lecture-leture-pro
   registry:
     address: zookeeper://119.3.15.104:2181
     timeout: 6000
@@ -74,5 +74,3 @@ mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
   configuration:
     map-underscore-to-camel-case: true
-    # 控制台打印日志
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

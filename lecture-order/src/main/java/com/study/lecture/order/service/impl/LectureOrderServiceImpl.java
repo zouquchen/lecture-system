@@ -15,6 +15,7 @@ import com.study.lecture.common.vo.LectureOrderMqVo;
 import com.study.lecture.order.service.LectureOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;

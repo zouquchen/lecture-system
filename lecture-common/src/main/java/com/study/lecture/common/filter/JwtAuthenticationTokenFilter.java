@@ -1,4 +1,4 @@
-package com.study.lecture.common.file;
+package com.study.lecture.common.filter;
 
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.exception.GlobalException;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +44,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("经过JwtAuthenticationTokenFilter！");
         log.debug("经过JwtAuthenticationTokenFilter！");
         // 获取token
         String token = request.getHeader("token");
