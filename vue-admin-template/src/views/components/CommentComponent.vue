@@ -208,7 +208,7 @@ export default {
     commentLike(comment) {
       lectureCommentApi.commentLike(comment.id).then(res => {
         comment.likes = comment.likes + 1
-        comment.isLike = true
+        comment.liked = true
         this.$message({
           type: 'success',
           message: '点赞成功'
@@ -224,7 +224,7 @@ export default {
     commentCancelLike(comment) {
       lectureCommentApi.commentCancelLike(comment.id).then(res => {
         comment.likes = comment.likes - 1
-        comment.isLike = false
+        comment.liked = false
         this.$message({
           type: 'success',
           message: '取消成功'
@@ -238,7 +238,7 @@ export default {
     },
     // 点击点赞按钮
     likeButton(comment) {
-      if (comment.isLike) {
+      if (comment.liked) {
         this.commentCancelLike(comment)
       } else {
         this.commentLike(comment)
