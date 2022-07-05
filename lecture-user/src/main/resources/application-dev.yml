@@ -30,7 +30,7 @@ dubbo:
   application:
     name: user-provider-dev
   registry:
-    address: zookeeper://119.3.15.104:2181
+    address: zookeeper://120.48.107.246:2181
     timeout: 6000
   protocol:
     name: dubbo

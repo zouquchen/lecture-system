@@ -97,6 +97,11 @@ Zookeeper：实现微服务的注册
 由于资金问题，实际运行部署情况
 
 <img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/deployment_real_architecture.png" style="zoom: 50%;" />
+
+本地测试的部署情况
+
+<img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/deployment_local_architecture.png" style="zoom: 50%;" />
+
 ## 📐 7 功能说明
 
 在该系统中分为三个身份：【管理员Admin】、【管理员Manager】和【用户Student】，不同身份有不同的权限，不同的需求和任务。

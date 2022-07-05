@@ -24,13 +24,14 @@
             <el-col :span="1">
               <div><el-avatar :src="commentVo.avatar" /></div>
             </el-col>
-            <el-col :span="2"><p style="font-weight:bold">{{ commentVo.username }}</p></el-col>
-            <el-col :span="19">
+            <el-col :span="4"><p style="font-weight:bold">{{ commentVo.username }}</p></el-col>
+            <el-col :span="10">
               <p style="font-size: 13px;color: #999">{{ moment(commentVo.createTime).utcOffset(480).format('YYYY年MM月DD日 HH:mm:ss') }}</p>
             </el-col>
-            <el-col :span="2">
-              <el-button icon="el-icon-chat-dot-square" style="float: right" circle @click="showCommentInput(commentVo.id)" />
-              <el-button v-show="user.name == commentVo.username" style="float: right" icon="el-icon-delete" circle @click="deleteComment(commentVo.id)" />
+            <el-col :span="9">
+              <el-button icon="el-icon-thumb" style="float: right" :type="commentVo.liked ? 'danger' : null" circle @click="likeButton(commentVo)">{{ commentVo.likes }}</el-button>
+              <el-button icon="el-icon-chat-dot-square" style="float: right; margin-right:10px" circle @click="showCommentInput(commentVo.id)" />
+              <el-button v-show="user.name == commentVo.username" icon="el-icon-delete" style="float: right" circle @click="deleteComment(commentVo.id)" />
             </el-col>
           </el-row>
         </div>
@@ -55,21 +56,22 @@
 
         <!-- 评论的回复 -->
         <el-row v-for="children in commentVo.children" :key="children.id">
-          <el-card class="box-card" shadow="never" style="margin-top: 10px; background-color: WhiteSmoke">
+          <el-card class="box-card" shadow="never" style="margin-top: 10px; margin-right: 0px; background-color: WhiteSmoke">
             <div slot="header" style="padding: 0px 0px">
               <el-row type="flex" align="middle">
                 <el-col :span="1">
                   <div><el-avatar :src="children.avatar" /></div>
                 </el-col>
-                <el-col :span="4" style="display: inline-block">
+                <el-col :span="4" style="display: inline-block; float: left">
                   <p style="color: #999">{{ children.username }} 回复 {{ children.parentName }}</p>
                 </el-col>
-                <el-col :span="17">
-                  <p style="font-size: 13px;color: #999">{{ moment(children.createTime).utcOffset(480).format('YYYY年MM月DD日 HH:mm:ss') }}</p>
+                <el-col :span="10">
+                  <p style="font-size: 13px;color: #999">{{ moment(children.createTime).utcOffset(480).format('YYYY年MM月DD日 HH:mm:ss') }} </p>
                 </el-col>
-                <el-col :span="2">
-                  <el-button icon="el-icon-chat-dot-square" style="float: right" circle @click="showCommentInput(children.id)" />
-                  <el-button v-show="user.name == children.username" style="float: right" icon="el-icon-delete" circle @click="deleteComment(commentVo.id)" />
+                <el-col :span="9">
+                  <el-button icon="el-icon-thumb" style="float: right" :type="children.liked ? 'danger' : null " circle @click="likeButton(children)"> {{ children.likes }}</el-button>
+                  <el-button icon="el-icon-chat-dot-square" style="float: right; margin-right:10px" circle @click="showCommentInput(children.id)" />
+                  <el-button v-show="user.name == children.username" icon="el-icon-delete" style="float: right" circle @click="deleteComment(children.id)" />
                 </el-col>
               </el-row>
             </div>
@@ -131,6 +133,8 @@ export default {
         rootParentId: '',
         rootParentName: '',
         content: '',
+        likes: '',
+        liked: '',
         createTime: '',
         updateTime: '',
         children: ''
@@ -184,7 +188,6 @@ export default {
         })
       })
       this.vShowId = ''
-      // 刷新评论
     },
 
     deleteComment(id) {
@@ -200,14 +203,57 @@ export default {
           message: '删除失败'
         })
       })
+    },
+    // 点赞
+    commentLike(comment) {
+      lectureCommentApi.commentLike(comment.id).then(res => {
+        comment.likes = comment.likes + 1
+        comment.isLike = true
+        this.$message({
+          type: 'success',
+          message: '点赞成功'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'danger',
+          message: '点赞失败'
+        })
+      })
+    },
+    // 取消点赞
+    commentCancelLike(comment) {
+      lectureCommentApi.commentCancelLike(comment.id).then(res => {
+        comment.likes = comment.likes - 1
+        comment.isLike = false
+        this.$message({
+          type: 'success',
+          message: '取消成功'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'danger',
+          message: '取消失败'
+        })
+      })
+    },
+    // 点击点赞按钮
+    likeButton(comment) {
+      if (comment.isLike) {
+        this.commentCancelLike(comment)
+      } else {
+        this.commentLike(comment)
+      }
     }
   }
 }
 </script>
 
 <style>
-.el-card-header {
-  padding: 10px 0px 2px 20px;
+.el-card__body {
+    padding: 20px 0px 20px 20px;
+}
+.el-card__header {
+  padding: 10px 10px 2px 20px;
   border-bottom: 1px solid #EBEEF5;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;

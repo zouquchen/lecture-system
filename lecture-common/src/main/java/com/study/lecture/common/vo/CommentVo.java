@@ -76,6 +76,16 @@ public class CommentVo implements Serializable {
     private String content;
 
     /**
+     * 点赞数量，存储在redis里，数据库里没有
+     */
+    private Long likes;
+
+    /**
+     * 是否点赞
+     */
+    private boolean liked;
+
+    /**
      * 创建时间
      */
     private Date createTime;

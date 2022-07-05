@@ -19,6 +19,8 @@ public class RedisConstant {
     public static final String LECTURE_STORE = "lectureInfo:stock:";
     public static final String LECTURE_USER_RECORD = "userRecord:";
 
+    public static final String LECTURE_COMMENT_LIKES = "commentLikes:";
+
     /**
      * 用于redis，讲座开始时间的key
      * @param lectureId 讲座id
@@ -54,5 +56,14 @@ public class RedisConstant {
      */
     public static String getKeyOfUserRecord(Long userId, Long lectureId) {
         return LECTURE_USER_RECORD + userId + ":" + lectureId;
+    }
+
+    /**
+     * 评论点赞（set）
+     * @param commentId 评论id
+     * @return 评论点赞的key
+     */
+    public static String getKeyOfLectureCommentLikes(Long commentId) {
+        return LECTURE_COMMENT_LIKES + commentId;
     }
 }

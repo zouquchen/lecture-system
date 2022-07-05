@@ -27,7 +27,7 @@ spring:
         min-idle: 5
 
   rabbitmq:
-    host: 119.3.15.104
+    host: 120.48.107.246
     username: lecture_root
     password: Lecture123
     # 虚拟主机，默认就这一个，需要自己添加
@@ -62,5 +62,5 @@ dubbo:
   application:
     name: lecture-order-dev
   registry:
-    address: zookeeper://119.3.15.104:2181
+    address: zookeeper://120.48.107.246:2181
     timeout: 6000

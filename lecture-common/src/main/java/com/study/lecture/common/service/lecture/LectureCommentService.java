@@ -40,4 +40,33 @@ public interface LectureCommentService extends IService<LectureComment> {
      * @param lectureComment 讲座信息
      */
     void updateComment(LectureComment lectureComment);
+
+    /**
+     * 根据评论id点赞
+     * @param commentId 评论id
+     * @return 成功标致
+     */
+    boolean commentLike(Long commentId);
+
+    /**
+     * 根据评论id取消点赞
+     * @param commentId 评论id
+     * @return 成功标致
+     */
+    boolean commentCancelLike(Long commentId);
+
+    /**
+     * 根据评论id统计点赞数
+     * @param commentId 评论id
+     * @return 点赞数
+     */
+    long countCommentLike(Long commentId);
+
+    /**
+     * 该用户是否喜欢
+     * @param commentId 评论id
+     * @return 是否喜欢
+     */
+    boolean isLike(Long commentId);
+
 }

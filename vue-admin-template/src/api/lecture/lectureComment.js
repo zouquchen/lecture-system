@@ -35,5 +35,33 @@ export default {
       method: 'post',
       data: comment
     })
+  },
+  // 点赞
+  commentLike(id) {
+    return request({
+      url: `/lecture/comment/commentLike/${id}`,
+      method: 'post'
+    })
+  },
+  // 取消点赞
+  commentCancelLike(id) {
+    return request({
+      url: `/lecture/comment/commentCancelLike/${id}`,
+      method: 'post'
+    })
+  },
+  // 获取点赞数量
+  countCommentLikes(id) {
+    return request({
+      url: `/lecture/comment/countCommentLikes/${id}`,
+      method: 'get'
+    })
+  },
+  // 判断是否点赞
+  isLike(id) {
+    return request({
+      url: `/lecture/comment/isLike/${id}`,
+      method: 'get'
+    })
   }
 }

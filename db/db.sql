@@ -42,22 +42,51 @@ CREATE TABLE `lecture` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20010 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='讲座发布表';
+) ENGINE=InnoDB AUTO_INCREMENT=20015 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='讲座发布表';
 
 /*Data for the table `lecture` */
 
 insert  into `lecture`(`id`,`title`,`type_id`,`creator_id`,`state`,`organizer`,`undertaker`,`sponsor`,`space`,`speaker`,`reservation`,`store`,`description`,`poster`,`order_start_time`,`order_end_time`,`lecture_start_time`,`is_deleted`,`create_time`,`update_time`) values 
-(1,'PUA的艺术2',1,1,1,'东南大学学生会','东南大学学生会','东南大学自动化学院','四牌楼大礼堂','小张',500,500,'这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-04-15 19:00:00','2022-05-13 19:00:00','2022-06-13 19:00:00',0,'2022-04-13 22:06:05','2022-06-17 15:35:52'),
-(2,'中国的建设和中国自信3',3,1,1,'东南大学学生会','东南大学学生会','东南大学自动化学院','四牌楼大礼堂','xxx',500,500,'2这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-04-15 19:00:00','2022-05-13 19:00:00','2022-06-13 19:00:00',0,'2022-04-13 22:06:05','2022-04-16 23:41:11'),
-(3,'戏曲百戏盛典',4,1,0,'共青团东南大学委员会','东南大学学生会','','四牌楼大礼堂','xxx',400,400,'3这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-06-15 19:00:00','2022-09-01 19:00:00','2022-09-01 19:00:00',0,'2022-04-13 22:06:05','2022-04-13 22:06:05'),
-(4,'公共卫生治理',1,1,0,'东南大学学生会','东南大学学生会','','四牌楼大礼堂','xxx2',400,400,'4这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-06-15 19:00:00','2022-09-01 19:00:00','2022-09-01 19:00:00',0,'2022-04-13 22:06:05','2022-04-13 22:06:05'),
-(5,'控制情绪成就人生',5,1,0,'东南大学学生会','东南大学学生会','','四牌楼大礼堂','xxx3',400,400,'5这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-06-15 19:00:00','2022-09-01 19:00:00','2022-09-01 19:00:00',0,'2022-04-13 22:06:05','2022-04-13 22:06:05'),
-(6,'这是你熟悉的汉语吗',3,1,0,'东南大学学生会','东南大学学生会','','中山院','xxx4',400,400,'6这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-06-15 19:00:00','2022-09-01 19:00:00','2022-09-01 19:00:00',0,'2022-04-13 22:06:05','2022-04-13 22:06:05'),
-(7,'零售商业模式',1,1,0,'东南大学学生会','东南大学学生会','','四牌楼大礼堂','xxx5',400,400,'7这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-06-15 19:00:00','2022-09-01 19:00:00','2022-09-01 19:00:00',0,'2022-04-13 22:06:05','2022-04-13 22:06:05'),
+(1,'PUA的艺术2',1,1,1,'东南大学学生会','东南大学学生会','东南大学自动化学院','四牌楼大礼堂','小张',500,497,'这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-04-15 19:00:00','2022-06-25 19:00:00','2022-06-28 19:00:00',0,'2022-04-13 22:06:05','2022-06-26 10:11:49'),
+(2,'中国的建设和中国自信3',3,1,1,'东南大学学生会','东南大学学生会','东南大学自动化学院','四牌楼大礼堂','xxx',500,497,'2这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-04-15 19:00:00','2022-06-25 19:00:00','2022-06-28 19:00:00',0,'2022-04-13 22:06:05','2022-04-16 23:41:11'),
+(3,'戏曲百戏盛典',4,1,0,'共青团东南大学委员会','东南大学学生会','','四牌楼大礼堂','xxx',400,396,'3这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-06-15 19:00:00','2022-09-01 19:00:00','2022-09-01 19:00:00',0,'2022-04-13 22:06:05','2022-06-21 15:53:39'),
+(4,'公共卫生治理',1,1,0,'东南大学学生会','东南大学学生会','','四牌楼大礼堂','xxx2',400,397,'4这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-06-15 19:00:00','2022-09-01 19:00:00','2022-09-01 19:00:00',0,'2022-04-13 22:06:05','2022-04-13 22:06:05'),
+(5,'控制情绪成就人生',5,1,0,'东南大学学生会','东南大学学生会','','四牌楼大礼堂','xxx3',400,398,'5这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-06-15 19:00:00','2022-09-01 19:00:00','2022-09-01 19:00:00',0,'2022-04-13 22:06:05','2022-04-13 22:06:05'),
+(6,'这是你熟悉的汉语吗',3,1,0,'东南大学学生会','东南大学学生会','','中山院','xxx4',400,398,'6这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-06-15 19:00:00','2022-09-01 19:00:00','2022-09-01 19:00:00',0,'2022-04-13 22:06:05','2022-04-13 22:06:05'),
+(7,'零售商业模式',1,1,0,'东南大学学生会','东南大学学生会','','四牌楼大礼堂','xxx5',400,400,'7这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-12-30 19:00:00','2023-05-13 19:00:00','2023-05-13 19:00:00',0,'2022-04-13 22:06:05','2022-04-13 22:06:05'),
 (8,'当代艺术与当代设计',4,1,0,'东南大学学生会','东南大学学生会','','四牌楼大礼堂','xxx6',400,400,'8这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-12-30 19:00:00','2023-05-13 19:00:00','2023-05-13 19:00:00',0,'2022-04-13 22:06:05','2022-04-13 22:06:05'),
 (9,'数智时代基本权利的演变与保护',2,1,0,'东南大学学生会','东南大学学生会','','四牌楼大礼堂','xxx7',400,400,'9这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-12-30 19:00:00','2023-05-13 19:00:00','2023-05-13 19:00:00',0,'2022-04-13 22:06:05','2022-04-13 22:06:05'),
 (10,'国际隐秘斗争形势和特点',3,1,0,'东南大学学生会','东南大学学生会','','线上','xxx8',400,400,'10这是第一场精彩绝伦的讲座！！！','https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.daimg.com%2Fuploads%2Fallimg%2F200704%2F1-200F41J910.jpg&refer=http%3A%2F%2Fimg.daimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1652614434&t=a01ae28aa294ee04c2b4d30ec91a7829','2022-12-30 19:00:00','2023-05-13 19:00:00','2023-05-13 19:00:00',0,'2022-04-13 22:06:05','2022-04-13 22:06:05'),
-(20004,'PUA的艺术3',3,1,0,'东南大学自动化学院','东南大学自动化学院','东南大学自动化学院','撕破脸大礼堂','小张',400,400,'教你如何进行PUA','https://lecture-system.oss-cn-shanghai.aliyuncs.com/2022/05/16/20bd4a7d5bc54a808af4d1b5317cdc2c1.png','2022-12-30 19:00:00','2023-05-13 19:00:00','2023-05-13 19:00:00',0,'2022-05-16 20:18:58','2022-05-18 15:16:23');
+(20004,'PUA的艺术3',3,1,0,'东南大学自动化学院','东南大学自动化学院','东南大学自动化学院','撕破脸大礼堂','小张',400,400,'教你如何进行PUA','https://lecture-system.oss-cn-shanghai.aliyuncs.com/2022/05/16/20bd4a7d5bc54a808af4d1b5317cdc2c1.png','2022-12-30 19:00:00','2023-05-13 19:00:00','2023-05-13 19:00:00',0,'2022-05-16 20:18:58','2022-05-18 15:16:23'),
+(20014,'12321',1,2,0,'321',NULL,NULL,'dasdas','ada',33,33,NULL,'https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/noPicture.png','2022-06-29 14:43:36','2022-06-29 14:43:37','2022-06-29 14:43:38',0,'2022-06-29 14:43:41','2022-06-29 14:43:41');
+
+/*Table structure for table `lecture_comment` */
+
+DROP TABLE IF EXISTS `lecture_comment`;
+
+CREATE TABLE `lecture_comment` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `lecture_id` bigint NOT NULL COMMENT '讲座id',
+  `user_id` bigint NOT NULL COMMENT '用户id',
+  `parent_id` bigint DEFAULT NULL COMMENT '父评论id',
+  `root_parent_id` bigint DEFAULT NULL COMMENT '最顶级父评论',
+  `content` text NOT NULL COMMENT '评论内容',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='讲座签到表';
+
+/*Data for the table `lecture_comment` */
+
+insert  into `lecture_comment`(`id`,`lecture_id`,`user_id`,`parent_id`,`root_parent_id`,`content`,`create_time`,`update_time`) values 
+(1,3,3,NULL,NULL,'我觉得讲座不错~','2022-07-03 12:48:37','2022-07-01 12:48:37'),
+(2,3,4,NULL,NULL,'讲座真好~','2022-07-01 22:21:20','2022-07-02 22:21:21'),
+(3,3,5,1,1,'我觉得你说的不对！','2022-07-01 22:21:23','2022-07-03 22:21:24'),
+(4,3,3,3,1,'你说不对就不对吗','2022-07-01 22:22:00','2022-07-03 22:22:00'),
+(5,3,5,4,1,'是呀！就是不对！','2022-07-01 22:22:30','2022-07-03 22:22:30'),
+(6,3,1,5,1,'不要吵了。','2022-07-03 14:27:13','2022-07-04 14:27:13'),
+(21,4,1,NULL,NULL,'欢迎大家积极报名参加讲座~','2022-07-03 14:53:37','2022-07-03 14:53:37'),
+(22,3,3,NULL,NULL,'嘿嘿~','2022-07-04 14:34:13','2022-07-04 14:34:13');
 
 /*Table structure for table `lecture_data_analysis` */
 
@@ -162,9 +191,41 @@ CREATE TABLE `lecture_user_record` (
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `lecture_id` (`lecture_id`,`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10267 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='讲座预约记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=10320 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='讲座预约记录表';
 
 /*Data for the table `lecture_user_record` */
+
+insert  into `lecture_user_record`(`id`,`lecture_id`,`user_id`,`sign_code_id`,`order_time`,`sign_time`,`is_deleted`,`create_time`,`update_time`) values 
+(10291,3,5,12345678,'2022-06-23 16:19:10',NULL,0,'2022-06-23 16:19:10','2022-06-23 16:19:10'),
+(10292,4,5,12345678,'2022-06-23 16:19:14',NULL,0,'2022-06-23 16:19:14','2022-06-23 16:19:14'),
+(10293,5,5,12345678,'2022-06-23 16:19:16',NULL,0,'2022-06-23 16:19:16','2022-06-23 16:19:16'),
+(10294,6,5,12345678,'2022-06-23 16:19:22',NULL,0,'2022-06-23 16:19:22','2022-06-23 16:19:22'),
+(10295,3,6,12345678,'2022-06-23 16:19:40',NULL,0,'2022-06-23 16:19:40','2022-06-23 16:19:40'),
+(10296,4,6,12345678,'2022-06-23 16:19:44',NULL,0,'2022-06-23 16:19:44','2022-06-23 16:19:44'),
+(10297,5,6,12345678,'2022-06-23 16:19:49',NULL,0,'2022-06-23 16:19:49','2022-06-23 16:19:49'),
+(10298,6,6,12345678,'2022-06-23 16:19:52',NULL,0,'2022-06-23 16:19:52','2022-06-23 16:19:52'),
+(10299,1,4,12345678,'2022-06-23 16:23:19','2022-06-23 16:24:45',0,'2022-06-23 16:23:19','2022-06-23 16:23:19'),
+(10300,2,4,12345678,'2022-06-23 16:23:31','2022-06-23 16:26:05',0,'2022-06-23 16:23:31','2022-06-23 16:23:31'),
+(10301,1,5,12345678,'2022-06-23 16:23:46','2022-06-23 16:24:50',0,'2022-06-23 16:23:46','2022-06-23 16:23:46'),
+(10302,2,5,12345678,'2022-06-23 16:23:51',NULL,0,'2022-06-23 16:23:51','2022-06-23 16:23:51'),
+(10303,1,6,12345678,'2022-06-23 16:24:10',NULL,0,'2022-06-23 16:24:10','2022-06-23 16:24:10'),
+(10304,2,6,12345678,'2022-06-23 16:24:14',NULL,0,'2022-06-23 16:24:14','2022-06-23 16:24:14'),
+(10314,3,4,12345678,'2022-06-25 16:20:00',NULL,0,'2022-06-25 16:20:00','2022-06-25 16:20:00'),
+(10318,3,3,12345678,'2022-07-03 14:50:38',NULL,0,'2022-07-03 14:50:38','2022-07-03 14:50:38'),
+(10319,4,4,12345678,'2022-07-04 14:19:18',NULL,0,'2022-07-04 14:19:18','2022-07-04 14:19:18');
+
+/*Table structure for table `sys_md` */
+
+DROP TABLE IF EXISTS `sys_md`;
+
+CREATE TABLE `sys_md` (
+  `id` bigint NOT NULL,
+  `name` varchar(60) NOT NULL COMMENT '文件名',
+  `md` text COMMENT '内容',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `sys_md` */
 
 /*Table structure for table `sys_menu` */
 
@@ -241,17 +302,17 @@ CREATE TABLE `sys_user` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
 
 /*Data for the table `sys_user` */
 
 insert  into `sys_user`(`id`,`username`,`password`,`status`,`email`,`phone_number`,`sex`,`avatar`,`user_type`,`is_deleted`,`create_time`,`update_time`) values 
-(1,'admin','$2a$10$ha5kcAOTEswbCPjB9lXQ8uyep6QpbP7VusfBFUdKiEbigDk5j6uFe','0',NULL,NULL,NULL,'http://www.weixintouxiang.cn/weixin/20140607090832328.gif','0',0,NULL,NULL),
-(2,'manager','$2a$10$AJUfqCEQrI1H1k88eRlddOHGVEucaqn9L.lDFvM4YZFqMZ2x0zGou','0',NULL,NULL,NULL,'http://www.weixintouxiang.cn/weixin/20140607090832328.gif','0',0,NULL,NULL),
-(3,'student0','$2a$10$NOIGGyky/vYSxgc2j6z3FuEVP8nMxZk5OuaWVjN4FUNRcqK2XEsYe','0',NULL,NULL,NULL,'http://www.weixintouxiang.cn/weixin/20140607090832328.gif','1',0,NULL,NULL),
-(4,'student1','$2a$10$NOIGGyky/vYSxgc2j6z3FuEVP8nMxZk5OuaWVjN4FUNRcqK2XEsYe','0',NULL,NULL,NULL,'http://www.weixintouxiang.cn/weixin/20140607090832328.gif','1',0,NULL,NULL),
-(5,'student2','$2a$10$NOIGGyky/vYSxgc2j6z3FuEVP8nMxZk5OuaWVjN4FUNRcqK2XEsYe','0',NULL,NULL,NULL,'http://www.weixintouxiang.cn/weixin/20140607090832328.gif','1',0,NULL,NULL),
-(6,'student3','$2a$10$NOIGGyky/vYSxgc2j6z3FuEVP8nMxZk5OuaWVjN4FUNRcqK2XEsYe','0',NULL,NULL,NULL,'http://www.weixintouxiang.cn/weixin/20140607090832328.gif','1',0,NULL,NULL);
+(1,'admin','$2a$10$pCusntRi6u/nlIlxY2jRT.TjiRQqCXcUyFZOsTZfTK1OaKj2hK57u','0','670953242@qq.com','13063615252',0,'http://www.weixintouxiang.cn/weixin/20140607090832328.gif','0',0,NULL,NULL),
+(2,'manager','$2a$10$AJUfqCEQrI1H1k88eRlddOHGVEucaqn9L.lDFvM4YZFqMZ2x0zGou','0',NULL,NULL,0,'http://www.weixintouxiang.cn/weixin/201406061603126277.jpg','0',0,NULL,NULL),
+(3,'student0','$2a$10$NOIGGyky/vYSxgc2j6z3FuEVP8nMxZk5OuaWVjN4FUNRcqK2XEsYe','0',NULL,NULL,NULL,'http://www.weixintouxiang.cn/weixin/201406070927382979.jpg','1',0,NULL,NULL),
+(4,'student1','$2a$10$NOIGGyky/vYSxgc2j6z3FuEVP8nMxZk5OuaWVjN4FUNRcqK2XEsYe','0',NULL,NULL,0,'http://www.weixintouxiang.cn/weixin/201406070935054859.jpg','1',0,NULL,NULL),
+(5,'student2','$2a$10$NOIGGyky/vYSxgc2j6z3FuEVP8nMxZk5OuaWVjN4FUNRcqK2XEsYe','0',NULL,NULL,NULL,'http://www.weixintouxiang.cn/weixin/201406070934044443.jpg','1',0,NULL,NULL),
+(6,'student3','$2a$10$NOIGGyky/vYSxgc2j6z3FuEVP8nMxZk5OuaWVjN4FUNRcqK2XEsYe','0',NULL,NULL,NULL,'http://www.weixintouxiang.cn/weixin/201406070924012606.jpg','1',0,NULL,NULL);
 
 /*Table structure for table `sys_user_role` */
 
@@ -261,7 +322,7 @@ CREATE TABLE `sys_user_role` (
   `user_id` bigint NOT NULL AUTO_INCREMENT COMMENT '用户id',
   `role_id` bigint NOT NULL DEFAULT '0' COMMENT '角色id',
   PRIMARY KEY (`user_id`,`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `sys_user_role` */
 
