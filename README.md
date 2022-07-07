@@ -327,7 +327,9 @@ Zookeeper：实现微服务的注册
 
 #### 9.6.2 添加评论
 
-根据讲座id、用户id、父评论id、根评论id和评论内容添加讲座信息。被回复的评论者将收到系统消息（见9.7消息通知）。
+根据讲座id、用户id、父评论id、根评论id和评论内容添加讲座信息。异步产生消息通知给被评论者，加快响应速度（见9.7消息通知）。
+
+<img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/structure_add_comment.png" style="zoom: 50%;" />
 
 #### 9.6.3. 删除评论
 
@@ -335,15 +337,26 @@ Zookeeper：实现微服务的注册
 
 #### 9.6.4 点赞功能
 
-用户可以在讲座详情页面对每一个评论进行点赞或取消点赞，点赞的数据以set数据结构存储在redis缓存内，键为`commentLikes:讲座id`，值为`用户id`，使用set数据结构可以保证每一个用户只能点赞一次，并且可以快速判断该用户是否点赞以及某一条评论的点赞总数。
+用户可以在讲座详情页面对每一个评论进行点赞或取消点赞，点赞的数据以set数据结构存储在redis缓存内，键为`commentLikes:讲座id`，值为`用户id`，使用set数据结构可以保证每一个用户只能点赞一次，并且可以快速判断该用户是否点赞以及某一条评论的点赞总数。同时，异步产生消息通知给被点赞者，加快响应速度（见9.7消息通知）。
 
 <img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/structure_likes.png" style="zoom: 60%;" />
 
 ### 9.7 消息通知模块
 
+#### 9.7.1 用户获取消息
 
+系统消息数据存储在redis内，采用list数据结构，针对每一个用户创建一个list存储消息，键为`systemMessage:用户id`，值为包含消息内容、讲座id、目标用户id属性的对象。用户在登录网站时每间隔1分钟获取系统消息数量，显示在导航栏右上角的头像位置。可在用户中心内查看系统消息，当查看完后，所有消息将pop出list队列。
+
+<img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/structure_get_message.png" style="zoom: 50%;" />
+
+#### 9.7.2 生产消息
+
+当有用户点赞或评论时将产生系统消息，为了加快点赞和评论的响应速度，生成系统消息的过程采用异步处理，通过消息队列来实现异步操作。
+
+<img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/structure_add_message.png" style="zoom: 50%;" />
 
 ## ⌚ 10 待实现及优化
 
 - [ ] 点赞数据存储到数据库
-- [ ] 逐条消费系统消息
+- [ ] 逐条消费系统消息（目前只能一次性查看所有系统消息）
+- [ ] 讲座即将开始系统消息提示
