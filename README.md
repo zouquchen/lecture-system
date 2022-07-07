@@ -4,6 +4,10 @@
 
 Lecture是一款前后端分离的校园讲座预约系统，基于目前主流的技术栈（SpringBoot + MyBatis + MySQL + Redis + RabbitMQ + Spring Security + ...），提供详细的学习开发文档。
 
+登录账号：admin
+
+登录密码：needoffer
+
 ## 🎬 2 快速开始
 
 - 配置mysql
@@ -102,7 +106,7 @@ Zookeeper：实现微服务的注册
 
 <img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/deployment_local_architecture.png" style="zoom: 50%;" />
 
-## 📐 7 功能说明
+## 📢 7 功能说明
 
 在该系统中分为三个身份：【管理员Admin】、【管理员Manager】和【用户Student】，不同身份有不同的权限，不同的需求和任务。
 
@@ -184,7 +188,7 @@ Zookeeper：实现微服务的注册
 
 ![](https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/UI_admin_userList.png)
 
-## 🎯 9 功能逻辑图
+## 📌 9 功能逻辑图
 
 ### 9.1 用户登录模块
 
@@ -323,8 +327,23 @@ Zookeeper：实现微服务的注册
 
 #### 9.6.2 添加评论
 
-根据讲座id、用户id、父评论id、根评论id和评论内容添加讲座信息。
+根据讲座id、用户id、父评论id、根评论id和评论内容添加讲座信息。被回复的评论者将收到系统消息（见9.7消息通知）。
 
-#### 9.63. 删除评论
+#### 9.6.3. 删除评论
 
 根据评论id、用户id删除评论及其子评论。
+
+#### 9.6.4 点赞功能
+
+用户可以在讲座详情页面对每一个评论进行点赞或取消点赞，点赞的数据以set数据结构存储在redis缓存内，键为`commentLikes:讲座id`，值为`用户id`，使用set数据结构可以保证每一个用户只能点赞一次，并且可以快速判断该用户是否点赞以及某一条评论的点赞总数。
+
+<img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/structure_likes.png" style="zoom: 60%;" />
+
+### 9.7 消息通知模块
+
+
+
+## ⌚ 10 待实现及优化
+
+- [ ] 点赞数据存储到数据库
+- [ ] 逐条消费系统消息

@@ -31,7 +31,7 @@ public class LectureComment implements Serializable {
     private Long id;
 
     /**
-     * 用户id
+     * 评论用户id
      */
     private Long userId;
 

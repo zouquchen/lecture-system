@@ -96,6 +96,25 @@
         </el-descriptions>
       </div>
     </el-card>
+
+    <!-- 消息通知-->
+    <el-card class="box-card" style="margin-top:30px">
+      <div slot="header" class="clearfix">
+        <span>消息通知</span>
+      </div>
+      <div class="text item">
+        <el-table :data="messageList" :show-header="false">
+          <el-table-column property="message" />
+          <el-table-column width="150" align="center">
+            <template slot-scope="scope">
+              <router-link :to="routerTo + scope.row.lectureId">
+                <el-button type="text" size="mini">查看</el-button>
+              </router-link>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </el-card>
   </div>
 
 </template>
@@ -104,6 +123,7 @@
 import userApi from '@/api/user/user'
 import lectureUserRecordApi from '@/api/lecture/lectureUserRecord'
 import aes from '@/utils/aes'
+import messageApi from '@/api/user/message'
 
 export default {
   data() {
@@ -136,6 +156,8 @@ export default {
         newPassword: '',
         newCheckPass: ''
       },
+      // 消息通知
+      messageList: [],
       orderCount: '',
       notAttendCount: '',
       signCount: '',
@@ -143,6 +165,7 @@ export default {
       dialogEditInfoVisible: false,
       dialogEditPassVisible: false,
       formLabelWidth: '120px',
+      routerTo: '', // 不同角色的跳转
       rules: {
         usernmae: [
           { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
@@ -170,6 +193,8 @@ export default {
   created() {
     this.getInfo()
     this.getDataOfUserRecord()
+    this.setRouterTo()
+    this.getMessage()
   },
   methods: {
     // 获得用户详情
@@ -200,6 +225,20 @@ export default {
       }).catch(err => {
         console.log('updatePassword Error: ' + err)
       })
+    },
+    // 获取消息
+    getMessage() {
+      messageApi.getMessage().then(res => {
+        this.messageList = res.messageList
+      })
+    },
+    // 根据角色跳转消息详情的路径
+    setRouterTo() {
+      if (this.$store.state.user.roles[0] === 'admin' || this.$store.state.user.roles[0] === 'manager') {
+        this.routerTo = '/lectureForAdmin/info/'
+      } else {
+        this.routerTo = '/lectureForUser/info/'
+      }
     },
     editInfo(formName) {
       this.$refs[formName].validate((valid) => {

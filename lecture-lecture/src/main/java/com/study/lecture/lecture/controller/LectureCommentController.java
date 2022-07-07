@@ -84,8 +84,13 @@ public class LectureCommentController {
      */
     @PostMapping("commentLike/{commentId}")
     public R commentLike(@PathVariable Long commentId) {
-        lectureCommentService.commentLike(commentId);
-        return R.ok();
+        boolean b = lectureCommentService.commentLike(commentId);
+        if (b) {
+            return R.ok();
+        } else {
+            return R.error("点赞失败！");
+        }
+
     }
 
     /**

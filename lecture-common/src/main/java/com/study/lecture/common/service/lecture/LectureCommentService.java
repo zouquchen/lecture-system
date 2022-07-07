@@ -69,4 +69,19 @@ public interface LectureCommentService extends IService<LectureComment> {
      */
     boolean isLike(Long commentId);
 
+    /**
+     * 添加评论的消息通知
+     * @param commentId 被评论的评论id，通过评论id获取用户id
+     * @param replyUsername 回复者的用户名
+     * @param content 内容
+     */
+    void addCommentMessage(Long commentId, String replyUsername, String content);
+
+    /**
+     * 添加点赞评论的消息通知
+     * @param commentId 被点赞的评论id，通过评论id获取用户id
+     * @param likeUsername 点赞者的用户名
+     */
+    void addLikeMessage(Long commentId, String likeUsername);
+
 }

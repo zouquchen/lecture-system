@@ -21,6 +21,8 @@ public class RedisConstant {
 
     public static final String LECTURE_COMMENT_LIKES = "commentLikes:";
 
+    public static final String SYSTEM_MESSAGE = "systemMessages:";
+
     /**
      * 用于redis，讲座开始时间的key
      * @param lectureId 讲座id
@@ -65,5 +67,14 @@ public class RedisConstant {
      */
     public static String getKeyOfLectureCommentLikes(Long commentId) {
         return LECTURE_COMMENT_LIKES + commentId;
+    }
+
+    /**
+     * 系统消息（list）
+     * @param userId 目标用户id
+     * @return 系统消息的key
+     */
+    public static String getKeyOfSystemMessage(Long userId) {
+        return SYSTEM_MESSAGE + userId;
     }
 }

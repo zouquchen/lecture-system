@@ -7,7 +7,9 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <el-badge :value="messageCount" class="item">
+            <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          </el-badge>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -22,6 +24,12 @@
           <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
             <el-dropdown-item>Docs</el-dropdown-item>
           </a> -->
+          <router-link to="/personalCenter/index">
+            <el-dropdown-item class="clearfix">
+              消息
+              <el-badge class="mark" :value="messageCount" :max="99" />
+            </el-dropdown-item>
+          </router-link>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">注销</span>
           </el-dropdown-item>
@@ -29,24 +37,40 @@
       </el-dropdown>
     </div>
   </div>
-
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import messageApi from '@/api/user/message'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger
   },
+  data() {
+    return {
+      messageCount: null,
+      messageList: {
+        userId: '',
+        lectureId: '',
+        message: ''
+      }
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
       'avatar'
     ])
+  },
+  created() {
+    this.getMessageCount()
+    this.timer = setInterval(() => {
+      this.getMessageCount() // 你的方法
+    }, 60000) // 1分钟
   },
   methods: {
     toggleSideBar() {
@@ -55,6 +79,22 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    // 获取消息数量
+    getMessageCount() {
+      messageApi.getMessageCount().then(res => {
+        if (res.messageCount === 0) {
+          this.messageCount = null
+        } else {
+          this.messageCount = res.messageCount
+        }
+      })
+    },
+    // 获取消息
+    getMessage() {
+      messageApi.getMessage().then(res => {
+        this.messageList = res.messageList
+      })
     }
   }
 }

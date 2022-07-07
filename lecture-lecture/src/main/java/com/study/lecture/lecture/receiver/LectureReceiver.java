@@ -1,14 +1,9 @@
 package com.study.lecture.lecture.receiver;
 
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.study.lecture.common.constant.MqConstant;
-import com.study.lecture.common.entity.lecture.Lecture;
-import com.study.lecture.common.entity.lecture.LectureUserRecord;
-import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.exception.GlobalException;
 import com.study.lecture.common.service.lecture.LectureService;
 import com.study.lecture.common.service.lecture.LectureUserRecordService;
-import com.study.lecture.common.utils.ResultCodeEnum;
 import com.study.lecture.common.vo.LectureOrderMqVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -16,11 +11,9 @@ import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 /**
  * <p>
@@ -50,7 +43,11 @@ public class LectureReceiver {
      * <p>根据LectureId和UserId创建记录</p>
      * @param lectureOrderMqVo 包含LectureId和UserId
      */
-    @RabbitListener(queues = MqConstant.QUEUE_ORDER)
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue(value = MqConstant.QUEUE_ORDER, durable = "true"),
+            exchange = @Exchange(value = MqConstant.EXCHANGE_ORDER, durable = "true", type = "topic"),
+            key = MqConstant.ROUTE_ORDER
+    ))
     public void receive(LectureOrderMqVo lectureOrderMqVo) {
         log.info("接收到消息：" + lectureOrderMqVo.toString());
 
@@ -61,7 +58,7 @@ public class LectureReceiver {
             lectureUserRecordService.orderLectureById(lectureId, userId);
         } catch (Exception exception) {
             log.error("讲座预约失败");
-            exception.printStackTrace();
+            throw new GlobalException("讲座预约失败");
         }
     }
 }

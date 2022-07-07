@@ -1,16 +1,25 @@
 package com.study.lecture.lecture.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.study.lecture.common.constant.MqConstant;
 import com.study.lecture.common.constant.RedisConstant;
+import com.study.lecture.common.entity.lecture.Lecture;
 import com.study.lecture.common.entity.lecture.LectureComment;
 import com.study.lecture.common.entity.user.LoginUser;
 import com.study.lecture.common.exception.GlobalException;
+import com.study.lecture.common.service.MqSender;
 import com.study.lecture.common.service.lecture.LectureCommentService;
+import com.study.lecture.common.service.user.MessageService;
 import com.study.lecture.common.vo.CommentVo;
+import com.study.lecture.common.vo.MessageMqVo;
 import com.study.lecture.lecture.mapper.LectureCommentMapper;
+import com.study.lecture.lecture.mapper.LectureMapper;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,10 +42,19 @@ import java.util.Map;
 public class LectureCommentServiceImpl extends ServiceImpl<LectureCommentMapper, LectureComment> implements LectureCommentService {
 
     @Resource
+    private MqSender mqSender;
+
+    @Resource
+    private LectureMapper lectureMapper;
+
+    @Resource
     private LectureCommentMapper lectureCommentMapper;
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
+
+    @DubboReference(version = "1.0")
+    private MessageService messageService;
 
     /**
      * 根据讲座id获取所有评论
@@ -94,9 +112,17 @@ public class LectureCommentServiceImpl extends ServiceImpl<LectureCommentMapper,
         // 获取评论者身份
         LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = loginUser.getUser().getId();
+        String username = loginUser.getUser().getUsername();
         lectureComment.setUserId(userId);
         // 添加
         lectureCommentMapper.insert(lectureComment);
+
+        // 消息通知，发送到消息队列
+        MessageMqVo messageMqVo = new MessageMqVo();
+        messageMqVo.setCommentId(lectureComment.getParentId());
+        messageMqVo.setUsername(username);
+        messageMqVo.setContent(lectureComment.getContent());
+        mqSender.sendMessage(MqConstant.EXCHANGE_MESSAGE_COMMENT, MqConstant.ROUTE_MESSAGE_COMMENT, messageMqVo);
     }
 
     /**
@@ -139,9 +165,18 @@ public class LectureCommentServiceImpl extends ServiceImpl<LectureCommentMapper,
     public boolean commentLike(Long commentId) {
         LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = loginUser.getUser().getId();
+        String username = loginUser.getUser().getUsername();
         // key: 关键字:评论id
         // value: 用户id
-        redisTemplate.opsForSet().add(RedisConstant.getKeyOfLectureCommentLikes(commentId), userId);
+        Long add = redisTemplate.opsForSet().add(RedisConstant.getKeyOfLectureCommentLikes(commentId), userId);
+        if (add == null || add == 0) {
+            return false;
+        }
+        // 消息通知，发送到消息队列
+        MessageMqVo messageMqVo = new MessageMqVo();
+        messageMqVo.setCommentId(commentId);
+        messageMqVo.setUsername(username);
+        mqSender.sendMessage(MqConstant.EXCHANGE_MESSAGE_LIKES, MqConstant.ROUTE_MESSAGE_LIKES, messageMqVo);
         return true;
     }
 
@@ -187,5 +222,48 @@ public class LectureCommentServiceImpl extends ServiceImpl<LectureCommentMapper,
             throw new GlobalException("评论不存在！");
         }
         return isLike;
+    }
+
+    /**
+     * 添加评论的消息通知
+     * @param commentId 被评论的评论id，通过评论id获取用户id
+     * @param replyUsername 回复者的用户名
+     * @param content 内容
+     */
+    @Override
+    public void addCommentMessage(Long commentId, String replyUsername, String content) {
+        LectureComment comment = lectureCommentMapper.selectOne(new QueryWrapper<LectureComment>().eq("id", commentId));
+        Long userId = comment.getUserId();
+        Long lectureId = comment.getLectureId();
+        String repliedCommentContent = comment.getContent();
+
+        Lecture lecture = lectureMapper.selectOne(new QueryWrapper<Lecture>().eq("id", lectureId));
+        String lectureTitle = lecture.getTitle();
+
+        // 消息内容
+        String message = "【" + lectureTitle + "】" + replyUsername + "回复你的评论【" + repliedCommentContent + "】说：" + content;
+        // 添加消息
+        messageService.addMessage(userId, lectureId, message);
+    }
+
+    /**
+     * 添加点赞评论的消息通知
+     * @param commentId 被点赞的评论id，通过评论id获取用户id
+     * @param likeUsername 点赞者的用户名
+     */
+    @Override
+    public void addLikeMessage(Long commentId, String likeUsername) {
+        LectureComment comment = lectureCommentMapper.selectOne(new QueryWrapper<LectureComment>().eq("id", commentId));
+        Long userId = comment.getUserId();
+        Long lectureId = comment.getLectureId();
+        String repliedCommentContent = comment.getContent();
+
+        Lecture lecture = lectureMapper.selectOne(new QueryWrapper<Lecture>().eq("id", lectureId));
+        String lectureTitle = lecture.getTitle();
+
+        // 消息内容
+        String message = "【" + lectureTitle + "】" + likeUsername + "点赞了你的评论【" + repliedCommentContent + "】";
+        // 添加消息
+        messageService.addMessage(userId, lectureId, message);
     }
 }
