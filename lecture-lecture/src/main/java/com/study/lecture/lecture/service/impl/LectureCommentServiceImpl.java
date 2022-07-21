@@ -25,10 +25,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * <p>
@@ -122,6 +120,8 @@ public class LectureCommentServiceImpl extends ServiceImpl<LectureCommentMapper,
         messageMqVo.setCommentId(lectureComment.getParentId());
         messageMqVo.setUsername(username);
         messageMqVo.setContent(lectureComment.getContent());
+        messageMqVo.setDate(new Date());
+
         mqSender.sendMessage(MqConstant.EXCHANGE_MESSAGE_COMMENT, MqConstant.ROUTE_MESSAGE_COMMENT, messageMqVo);
     }
 
@@ -176,7 +176,9 @@ public class LectureCommentServiceImpl extends ServiceImpl<LectureCommentMapper,
         MessageMqVo messageMqVo = new MessageMqVo();
         messageMqVo.setCommentId(commentId);
         messageMqVo.setUsername(username);
+        messageMqVo.setDate(new Date());
         mqSender.sendMessage(MqConstant.EXCHANGE_MESSAGE_LIKES, MqConstant.ROUTE_MESSAGE_LIKES, messageMqVo);
+
         return true;
     }
 
@@ -226,12 +228,15 @@ public class LectureCommentServiceImpl extends ServiceImpl<LectureCommentMapper,
 
     /**
      * 添加评论的消息通知
-     * @param commentId 被评论的评论id，通过评论id获取用户id
-     * @param replyUsername 回复者的用户名
-     * @param content 内容
+     * @param messageMqVo 消息详情
      */
     @Override
-    public void addCommentMessage(Long commentId, String replyUsername, String content) {
+    public void addCommentMessage(MessageMqVo messageMqVo) {
+        Long commentId = messageMqVo.getCommentId();
+        String replyUsername = messageMqVo.getUsername();
+        String content = messageMqVo.getContent();
+        Date date = messageMqVo.getDate();
+
         LectureComment comment = lectureCommentMapper.selectOne(new QueryWrapper<LectureComment>().eq("id", commentId));
         Long userId = comment.getUserId();
         Long lectureId = comment.getLectureId();
@@ -241,18 +246,23 @@ public class LectureCommentServiceImpl extends ServiceImpl<LectureCommentMapper,
         String lectureTitle = lecture.getTitle();
 
         // 消息内容
-        String message = "【" + lectureTitle + "】" + replyUsername + "回复你的评论【" + repliedCommentContent + "】说：" + content;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String message = simpleDateFormat.format(date) + " 【" + lectureTitle + "】" + replyUsername + "回复你的评论【" + repliedCommentContent + "】说：" + content;
+
         // 添加消息
         messageService.addMessage(userId, lectureId, message);
     }
 
     /**
      * 添加点赞评论的消息通知
-     * @param commentId 被点赞的评论id，通过评论id获取用户id
-     * @param likeUsername 点赞者的用户名
+     * @param messageMqVo 消息详情
      */
     @Override
-    public void addLikeMessage(Long commentId, String likeUsername) {
+    public void addLikeMessage(MessageMqVo messageMqVo) {
+        Long commentId = messageMqVo.getCommentId();
+        String likeUsername = messageMqVo.getUsername();
+        Date date = messageMqVo.getDate();
+
         LectureComment comment = lectureCommentMapper.selectOne(new QueryWrapper<LectureComment>().eq("id", commentId));
         Long userId = comment.getUserId();
         Long lectureId = comment.getLectureId();
@@ -262,7 +272,8 @@ public class LectureCommentServiceImpl extends ServiceImpl<LectureCommentMapper,
         String lectureTitle = lecture.getTitle();
 
         // 消息内容
-        String message = "【" + lectureTitle + "】" + likeUsername + "点赞了你的评论【" + repliedCommentContent + "】";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String message = simpleDateFormat.format(date) + " 【" + lectureTitle + "】" + likeUsername + "点赞了你的评论【" + repliedCommentContent + "】";
         // 添加消息
         messageService.addMessage(userId, lectureId, message);
     }

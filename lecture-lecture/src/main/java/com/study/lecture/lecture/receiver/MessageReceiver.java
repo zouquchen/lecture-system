@@ -41,12 +41,8 @@ public class MessageReceiver {
     ))
     public void receiveComment(MessageMqVo messageMqVo) {
         log.debug("消费消息队列中的评论消息！");
-        Long commentId = messageMqVo.getCommentId();
-        String username = messageMqVo.getUsername();
-        String content = messageMqVo.getContent();
-
         try {
-            lectureCommentService.addCommentMessage(commentId, username, content);
+            lectureCommentService.addCommentMessage(messageMqVo);
         } catch (Exception e) {
             e.printStackTrace();
             throw new GlobalException("消费消息失败[系统评论消息]！");
@@ -64,10 +60,8 @@ public class MessageReceiver {
     ))
     public void receiveLikes(MessageMqVo messageMqVo) {
         log.debug("消费消息队列中的点赞消息！");
-        Long commentId = messageMqVo.getCommentId();
-        String username = messageMqVo.getUsername();
         try {
-            lectureCommentService.addLikeMessage(commentId, username);
+            lectureCommentService.addLikeMessage(messageMqVo);
         } catch (Exception e) {
             e.printStackTrace();
             throw new GlobalException("消费消息失败[系统点赞消息]！");

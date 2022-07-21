@@ -24,12 +24,12 @@
           <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
             <el-dropdown-item>Docs</el-dropdown-item>
           </a> -->
-          <router-link to="/personalCenter/index">
-            <el-dropdown-item class="clearfix">
-              消息
-              <el-badge class="mark" :value="messageCount" :max="99" />
-            </el-dropdown-item>
-          </router-link>
+
+          <el-dropdown-item class="clearfix">
+            <el-button type="text" style="color: black" @click="getMessage()">消息</el-button>
+            <el-badge class="mark" :value="messageCount" :max="99" />
+          </el-dropdown-item>
+
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">注销</span>
           </el-dropdown-item>
@@ -92,9 +92,8 @@ export default {
     },
     // 获取消息
     getMessage() {
-      messageApi.getMessage().then(res => {
-        this.messageList = res.messageList
-      })
+      this.messageCount = null
+      this.$router.replace('/personalCenter/index')
     }
   }
 }

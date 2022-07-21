@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -36,4 +37,9 @@ public class MessageMqVo implements Serializable {
      * 评论内容
      */
     private String content;
+
+    /**
+     * 时间
+     */
+    private Date date;
 }

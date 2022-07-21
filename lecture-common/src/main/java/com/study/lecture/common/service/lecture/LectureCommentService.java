@@ -3,6 +3,7 @@ package com.study.lecture.common.service.lecture;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.study.lecture.common.entity.lecture.LectureComment;
 import com.study.lecture.common.vo.CommentVo;
+import com.study.lecture.common.vo.MessageMqVo;
 
 import java.util.List;
 
@@ -71,17 +72,14 @@ public interface LectureCommentService extends IService<LectureComment> {
 
     /**
      * 添加评论的消息通知
-     * @param commentId 被评论的评论id，通过评论id获取用户id
-     * @param replyUsername 回复者的用户名
-     * @param content 内容
+     * @param messageMqVo 消息详情
      */
-    void addCommentMessage(Long commentId, String replyUsername, String content);
+    void addCommentMessage(MessageMqVo messageMqVo);
 
     /**
      * 添加点赞评论的消息通知
-     * @param commentId 被点赞的评论id，通过评论id获取用户id
-     * @param likeUsername 点赞者的用户名
+     * @param messageMqVo 消息详情
      */
-    void addLikeMessage(Long commentId, String likeUsername);
+    void addLikeMessage(MessageMqVo messageMqVo);
 
 }

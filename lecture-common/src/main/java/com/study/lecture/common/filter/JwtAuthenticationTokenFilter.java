@@ -62,7 +62,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             e.printStackTrace();
             // TOKEN非法
-            throw new GlobalException(ResultCodeEnum.TOKEN_ILLEGAL.getMessage(),ResultCodeEnum.TOKEN_ILLEGAL.getCode());
+            throw new GlobalException(ResultCodeEnum.TOKEN_ILLEGAL);
         }
 
         // 从redis中获取用户信息
@@ -70,7 +70,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         LoginUser loginUser = userService.getUserFromRedisById(redisKey);
         if (Objects.isNull(loginUser)) {
             // 用户未登录
-            throw new GlobalException(ResultCodeEnum.USER_OFFLINE.getMessage(), ResultCodeEnum.USER_OFFLINE.getCode());
+            throw new GlobalException(ResultCodeEnum.USER_OFFLINE);
         }
 
         // 后面将需要一个Authentication的对象，在这里通过实现类UsernamePasswordAuthenticationToken构造这个对象

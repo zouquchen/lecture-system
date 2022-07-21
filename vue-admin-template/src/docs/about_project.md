@@ -2,31 +2,53 @@
 
 ## 📚 1 项目简介
 
-Lecture是一款前后端分离的校园讲座预约系统，基于目前主流的技术栈（SpringBoot + MyBatis + MySQL + Redis + RabbitMQ + Spring Security + ...），提供详细的学习开发文档。
+Lecture是一款前后端分离的校园讲座预约系统，基于目前主流的技术栈（SpringBoot + MyBatis + MySQL + Redis + RabbitMQ + Spring Security + ...），现已支持面向管理员的讲座发布与修订，面向学生的讲座预约与取消等功能。
 
-## 🎬 2 快速开始
+## 📺 2 功能介绍
 
-- 配置mysql
-  - 修改每一个项目中application.yml中mysql的url, username以及password。
-  - 运行db/data.sql添加数据到数据库
-- 配置redis
-  - 修改每一个项目中application.yml中redis的host, port以及password。
-- 启动Nginx
-  - 方式1：Window10环境下，并保证所有项目都在该环境下运行时，启动nginx-lecture目录下的niginx.exe
-  - 方式2：自定义Nginx，并仿照nginx-lecture/conf/nginx.conf对自己的Nginx进行配置。
-- 配置Zookeeper
-  - 修改每一个项目中application.yml中zookeeper的ip地址。
-- 配置RabbitMQ
-  - 修改每一个项目中application.yml中rabbitmq的host, username以及password。
-- 配置OSS
-  - 修改lecture-oss服务中的application.yml的阿里云OSS配置
-- 配置前端
-  - 修改`.env.*`中的前端请求路径`VUE_APP_BASE_API`, 即Nginx监听端口。
+### 2.1 测试账号
+
+| 账号     | 密码      | 权限角色                              |
+| -------- | --------- | ------------------------------------- |
+| admin    | needoffer | admin，拥有所有权限（不包含预约讲座） |
+| manager  | needoffer | manger，拥有发布和修改讲座等权限      |
+| student0 | needoffer | student，拥有预约讲座等权限           |
+| student1 | needoffer | student，拥有预约讲座等权限           |
+| student2 | needoffer | student，拥有预约讲座等权限           |
+| student3 | needoffer | student，拥有预约讲座等权限           |
+
+### 2.2 主要功能
+
+- 登录|登出
+- 个人中心
+  - 修改个人信息
+  - 修改密码
+  - 查看讲座统计（总预约次数、未开始场次、出席次数、缺席次数）
+- 关于
+  - 自定义显示markdown文件
+- 讲座管理【admin权限】
+  - 分页条件查询讲座列表
+  - 讲座签到
+    - 根据用户名进行讲座签到
+    - 显示已签到用户
+  - 讲座详情查看
+    - 查看讲座详情
+    - 查看预约详情
+    - 评论或点赞内容
+  - 添加、修改或删除讲座
+- 用户列表【admin权限】
+  - 分页条件查询用户
+  - 添加或删除用户
+- 讲座预约【student权限】
+  - 查看讲座详情
+  - 预约或取消预约讲座
+  - 评论或点赞内容
+  - 查看我参与的讲座
+- 消息通知
+  - 系统自动通知用户被评论或被点赞消息
 
 ## 💻 3 核心技术栈
-
 后端：
-
 - Spring
 - Spring MVC
 - Spring Boot 2.2.1.RELEASE
@@ -39,14 +61,12 @@ Lecture是一款前后端分离的校园讲座预约系统，基于目前主流�
 - 权限：Spring Security
 
 前端：
-
 - Vue 2.6.10
 - Node 16.15.0
 - 模板：[vue-admin-template](https://github.com/PanJiaChen/vue-admin-template)
 - 样式：[element-ui@2.15.7](https://element.eleme.cn/#/zh-CN)
 
 ## 🔨 4 开发环境
-
 - 操作系统：Windows 10
 - 后端IDE：IDEA
 - 前端IDE：VS code
@@ -57,7 +77,6 @@ Lecture是一款前后端分离的校园讲座预约系统，基于目前主流�
 - Java 版本：8
 
 ## 📑 5 目录结构
-
 ```
 lecture-system
 ├── db （数据库脚本）
@@ -77,7 +96,7 @@ lecture-system
 ├── lecture-lecture （讲座微服务，核心）
 ├── lecture-order （讲座预约微服务）
 ├── lecture-user （用户登录微服务）
-├── nginx-lecture （nginx文件）
+├── nginx-lecture （win10测试nginx文件）
 ├── vue-admin-template （前端工程）
 │ 
 └── README.md
@@ -99,7 +118,34 @@ Zookeeper：实现微服务的注册
 
 <img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/deployment_architecture.png" style="zoom: 50%;" />
 
-## 📐 7 功能说明
+由于资金问题，实际运行部署情况
+
+<img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/deployment_real_architecture.png" style="zoom: 50%;" />
+
+本地测试的部署情况
+
+<img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/deployment_local_architecture.png" style="zoom: 50%;" />
+
+## 🎬 7 部署项目
+
+- 配置mysql
+  - 修改每一个项目中application.yml中mysql的url, username以及password。
+  - 运行db/data.sql添加数据到数据库
+- 配置redis
+  - 修改每一个项目中application.yml中redis的host, port以及password。
+- 启动Nginx
+  - 方式1：Window10环境下，并保证所有项目都在该环境下运行时，启动nginx-lecture目录下的niginx.exe
+  - 方式2：自定义Nginx，并仿照nginx-lecture/conf/nginx.conf对自己的Nginx进行配置。
+- 配置Zookeeper
+  - 修改每一个项目中application.yml中zookeeper的ip地址。
+- 配置RabbitMQ
+  - 修改每一个项目中application.yml中rabbitmq的host, username以及password。
+- 配置OSS
+  - 修改lecture-oss服务中的application.yml的阿里云OSS配置
+- 配置前端
+  - 修改`.env.*`中的前端请求路径`VUE_APP_BASE_API`, 即Nginx监听端口。
+
+## 📢 7 功能说明
 
 在该系统中分为三个身份：【管理员Admin】、【管理员Manager】和【用户Student】，不同身份有不同的权限，不同的需求和任务。
 
@@ -120,8 +166,8 @@ Zookeeper：实现微服务的注册
 用户关于讲座的操作包含：
 
 - 评论：在讲座评论区进行留言评论
+- 点赞：对喜欢的评论进行点赞
 - 预约讲座：在讲座开始预约后，可以预约讲座
-
 - 取消预约讲座：讲座关闭之前，可以取消预约讲座
 - 签到：现场由管理员根据用户提供的用户名完成签到
 
@@ -181,14 +227,14 @@ Zookeeper：实现微服务的注册
 
 ![](https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/UI_admin_userList.png)
 
-## 🎯 9 功能逻辑图
+## 📌 9 功能逻辑图
 
 ### 9.1 用户登录模块
 
 用户模块使用Spring Security框架实现认证、授权两大功能。
 
 >认证（Authentication）：验证当前访问系统的是不是本系统的用户，并且确认具体是哪个用户。
->
+> 
 >授权（Authoritarian）：经过认证后判断当前用户是否有权限进行某个操作。
 
 #### 9.1.1 认证
@@ -207,7 +253,6 @@ Zookeeper：实现微服务的注册
 下面对Spring Security的原理进行简单的介绍：
 
 登录
-
 - 请求携带用户信息请求`/login`接口，在配置类中配置Spring Security对 `/login` 接口进行匿名访问， 所以Spring Security会对`/login`接口放行，之后执行登录业务。
 - 登录业务中，使用Spring Security提供的AuthenticationManager进行认证。
 - 通过实现UserDetailService接口，重写loadUserByUsername方法，该方法可以从数据库中获取用户信息返回UserDetails对象（LoginUser）。
@@ -215,13 +260,11 @@ Zookeeper：实现微服务的注册
 - 认证成功后，将用户信息（LoginUser对象）存储在redis中，将userId封装成jwt返回到前端，也就是前端每次访问需要携带的token。
 
 认证
-
 - 所有的请求将经过Spring Security过滤链，过滤链中包含自定义的jwt认证过滤器，可从请求头中获取的token；使用jwt工具将token解析为userId后，从redis中获取用户信息。
 - 如果从redis中成功获取LoginUser用户信息，就将该信息存储到SecurityContextHolder中的SecurityContext中的Authentication中，表示当前用户认证通过。
 - 如果用户不存在，则返回认证失败的异常。
 
 异常处理
-
 - 认证失败异常，状态码（401）。实现AuthenticationEntryPoint，捕获并处理认证失败的异常。
 - 权限不足，状态码（403）。实现AccessDeniedHandler接口，捕获并处理权限不足的异常。
 
@@ -232,19 +275,12 @@ Zookeeper：实现微服务的注册
 ### 9.2 讲座管理模块
 
 #### 9.2.1 讲座列表
-
 支持分页、条件查询所有数据库中的所有讲座。
-
 #### 9.2.2 讲座详情
-
 根据讲座id获取讲座详情，根据讲座id获取预约该讲座的所有用户预约记录。
-
 #### 9.2.3 添加更新讲座
-
 发布讲座或修改讲座，海报的上传需要阿里云的Oss服务。
-
 #### 9.2.4 讲座签到
-
 根据讲座id查询讲座详情，根据讲座id查询所有已签到用户列表。
 
 通过输入用户名并点击签到按钮完成用户的签到，单个用户完成签到后立即刷新签到用户列表。
@@ -252,17 +288,12 @@ Zookeeper：实现微服务的注册
 关闭签到系统后，讲座的状态从【0发布】变为【1结束】，用户预约讲座列表中将无法查询到该讲座，该讲座将无法被预约。
 
 ### 9.3 预约讲座模块
-
 #### 9.3.1 讲座列表
-
 支持分页、条件查询所有状态为【0发布】的讲座。
 
 #### 9.3.2 我的讲座
-
 根据已登录用户的id查询所有已预约过的讲座。
-
 #### 9.3.3 预约与取消
-
 讲座预约模块主要实现两个功能： 用户预约讲座、用户取消讲座。
 
 该过程需要lecture-lecture和lecture-order两个微服务共同完成。其中：
@@ -271,14 +302,13 @@ Zookeeper：实现微服务的注册
 
 - lecture-order微服务：从redis中查询用户是否重复预定讲座、讲座是否还有剩余的可预约数量，
   如果用户未预约该讲座，且该讲座剩余可预约数量大于0，则把讲座id和用户id封装为一个对象发送到消息队列，最后返回前端预约成功。
-
+  
 - lecture-lecture微服务：从消息队列中获取消息，操作数据库减少讲座可预约数量，添加用户预约记录；
   操作redis减少讲座可预约数量，添加用户预约记录。
 
 取消预约讲座
-
 - lecture-order微服务：从redis中查询用户是否预约讲座，若用户未预约该讲座则抛出异常；若用户预约该讲座，则远程调用lecture-lecture微服务。
-
+  
 - lecture-lecture微服务：查询讲座是否结束，若结束则抛出异常；查询用户是否签到，若签到则抛出异常；删除用户预约记录，
   增加给定id讲座的剩余可预约数量，最后删除redis内用户的预约记录。
 
@@ -336,8 +366,57 @@ Zookeeper：实现微服务的注册
 
 #### 9.6.2 添加评论
 
-根据讲座id、用户id、父评论id、根评论id和评论内容添加讲座信息。
+根据讲座id、用户id、父评论id、根评论id和评论内容添加讲座信息。异步产生消息通知给被评论者，加快响应速度（见9.7消息通知）。
 
-#### 9.63. 删除评论
+<img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/structure_add_comment.png" style="zoom: 50%;" />
+
+#### 9.6.3. 删除评论
 
 根据评论id、用户id删除评论及其子评论。
+
+#### 9.6.4 点赞功能
+
+用户可以在讲座详情页面对每一个评论进行点赞或取消点赞，点赞的数据以set数据结构存储在redis缓存内，键为`commentLikes:讲座id`，值为`用户id`，使用set数据结构可以保证每一个用户只能点赞一次，并且可以快速判断该用户是否点赞以及某一条评论的点赞总数。同时，异步产生消息通知给被点赞者，加快响应速度（见9.7消息通知）。
+
+<img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/structure_likes.png" style="zoom: 60%;" />
+
+### 9.7 消息通知模块
+
+#### 9.7.1 用户获取消息
+
+系统消息数据存储在redis内，采用list数据结构，针对每一个用户创建一个list存储消息，键为`systemMessage:用户id`，值为包含消息内容、讲座id、目标用户id属性的对象。用户在登录网站时每间隔1分钟获取系统消息数量，显示在导航栏右上角的头像位置。可在用户中心内查看系统消息，当查看完后，所有消息将pop出list队列。
+
+<img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/structure_get_message.png" style="zoom: 50%;" />
+
+#### 9.7.2 生产消息
+
+当有用户点赞或评论时将产生系统消息，为了加快点赞和评论的响应速度，生成系统消息的过程采用异步处理，通过消息队列来实现异步操作。
+
+<img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/structure_add_message.png" style="zoom: 50%;" />
+
+## ⌚ 10 待实现及优化
+
+- [ ] 点赞数据存储到数据库
+- [ ] 逐条消费系统消息（目前只能一次性查看所有系统消息）
+- [ ] 讲座即将开始系统消息提示
+- [ ] 管理员可以发布通知给预约某一场讲座的所有用户
+
+## 🙇‍♂️ 11 学习参考
+
+[1 尚硅谷全栈项目——谷粒学院](https://www.bilibili.com/video/BV1dQ4y1A75e?p=1)
+
+描述：在线学习网站，管理员可以通过后台管理系统上传教师信息、课程大纲、课程视频等；学生可以在前台页面中查看教师、课程等内容。
+
+参考学习内容：前端知识的学习、前端vue模板的使用，element-ui的使用，前后端开发的流程。
+
+[2 renren-fast](https://gitee.com/renrenio)
+
+描述：前后端快速开发的框架
+
+参考学习内容：代码生成器、权限管理的数据库设计、响应类的设计
+
+[3 秒杀项目](https://www.bilibili.com/video/BV1sf4y1L7KE?p=2)
+
+描述：简单的后端秒杀系统
+
+参考学习内容：秒杀的架构设计和基本流程、压力测试；redis、rabbitMQ的使用

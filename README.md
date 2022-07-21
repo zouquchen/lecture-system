@@ -2,31 +2,51 @@
 
 ## 📚 1 项目简介
 
-Lecture是一款前后端分离的校园讲座预约系统，基于目前主流的技术栈（SpringBoot + MyBatis + MySQL + Redis + RabbitMQ + Spring Security + ...），提供详细的学习开发文档。
+Lecture是一款前后端分离的校园讲座预约系统，基于目前主流的技术栈（SpringBoot + MyBatis + MySQL + Redis + RabbitMQ + Spring Security + ...），现已支持面向管理员的讲座发布与修订，面向学生的讲座预约与取消等功能。
 
-登录账号：admin
+## 📺 2 功能介绍
 
-登录密码：needoffer
+### 2.1 测试账号
 
-## 🎬 2 快速开始
+| 账号     | 密码      | 权限角色                              |
+| -------- | --------- | ------------------------------------- |
+| admin    | needoffer | admin，拥有所有权限（不包含预约讲座） |
+| manager  | needoffer | manger，拥有发布和修改讲座等权限      |
+| student0 | needoffer | student，拥有预约讲座等权限           |
+| student1 | needoffer | student，拥有预约讲座等权限           |
+| student2 | needoffer | student，拥有预约讲座等权限           |
+| student3 | needoffer | student，拥有预约讲座等权限           |
 
-- 配置mysql
-  - 修改每一个项目中application.yml中mysql的url, username以及password。
-  - 运行db/data.sql添加数据到数据库
-- 配置redis
-  - 修改每一个项目中application.yml中redis的host, port以及password。
-- 启动Nginx
-  - 方式1：Window10环境下，并保证所有项目都在该环境下运行时，启动nginx-lecture目录下的niginx.exe
-  - 方式2：自定义Nginx，并仿照nginx-lecture/conf/nginx.conf对自己的Nginx进行配置。
-- 配置Zookeeper
-  - 修改每一个项目中application.yml中zookeeper的ip地址。
-- 配置RabbitMQ
-  - 修改每一个项目中application.yml中rabbitmq的host, username以及password。
-- 配置OSS
-  - 修改lecture-oss服务中的application.yml的阿里云OSS配置
-- 配置前端
-  - 修改`.env.*`中的前端请求路径`VUE_APP_BASE_API`, 即Nginx监听端口。
-  
+### 2.2 主要功能
+
+- 登录|登出
+- 个人中心
+  - 修改个人信息
+  - 修改密码
+  - 查看讲座统计（总预约次数、未开始场次、出席次数、缺席次数）
+- 关于
+  - 自定义显示markdown文件
+- 讲座管理【admin权限】
+  - 分页条件查询讲座列表
+  - 讲座签到
+    - 根据用户名进行讲座签到
+    - 显示已签到用户
+  - 讲座详情查看
+    - 查看讲座详情
+    - 查看预约详情
+    - 评论或点赞内容
+  - 添加、修改或删除讲座
+- 用户列表【admin权限】
+  - 分页条件查询用户
+  - 添加或删除用户
+- 讲座预约【student权限】
+  - 查看讲座详情
+  - 预约或取消预约讲座
+  - 评论或点赞内容
+  - 查看我参与的讲座
+- 消息通知
+  - 系统自动通知用户被评论或被点赞消息
+
 ## 💻 3 核心技术栈
 后端：
 - Spring
@@ -76,7 +96,7 @@ lecture-system
 ├── lecture-lecture （讲座微服务，核心）
 ├── lecture-order （讲座预约微服务）
 ├── lecture-user （用户登录微服务）
-├── nginx-lecture （nginx文件）
+├── nginx-lecture （win10测试nginx文件）
 ├── vue-admin-template （前端工程）
 │ 
 └── README.md
@@ -106,6 +126,25 @@ Zookeeper：实现微服务的注册
 
 <img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/deployment_local_architecture.png" style="zoom: 50%;" />
 
+## 🎬 7 部署项目
+
+- 配置mysql
+  - 修改每一个项目中application.yml中mysql的url, username以及password。
+  - 运行db/data.sql添加数据到数据库
+- 配置redis
+  - 修改每一个项目中application.yml中redis的host, port以及password。
+- 启动Nginx
+  - 方式1：Window10环境下，并保证所有项目都在该环境下运行时，启动nginx-lecture目录下的niginx.exe
+  - 方式2：自定义Nginx，并仿照nginx-lecture/conf/nginx.conf对自己的Nginx进行配置。
+- 配置Zookeeper
+  - 修改每一个项目中application.yml中zookeeper的ip地址。
+- 配置RabbitMQ
+  - 修改每一个项目中application.yml中rabbitmq的host, username以及password。
+- 配置OSS
+  - 修改lecture-oss服务中的application.yml的阿里云OSS配置
+- 配置前端
+  - 修改`.env.*`中的前端请求路径`VUE_APP_BASE_API`, 即Nginx监听端口。
+
 ## 📢 7 功能说明
 
 在该系统中分为三个身份：【管理员Admin】、【管理员Manager】和【用户Student】，不同身份有不同的权限，不同的需求和任务。
@@ -127,8 +166,8 @@ Zookeeper：实现微服务的注册
 用户关于讲座的操作包含：
 
 - 评论：在讲座评论区进行留言评论
+- 点赞：对喜欢的评论进行点赞
 - 预约讲座：在讲座开始预约后，可以预约讲座
-
 - 取消预约讲座：讲座关闭之前，可以取消预约讲座
 - 签到：现场由管理员根据用户提供的用户名完成签到
 
@@ -360,3 +399,24 @@ Zookeeper：实现微服务的注册
 - [ ] 点赞数据存储到数据库
 - [ ] 逐条消费系统消息（目前只能一次性查看所有系统消息）
 - [ ] 讲座即将开始系统消息提示
+- [ ] 管理员可以发布通知给预约某一场讲座的所有用户
+
+## 🙇‍♂️ 11 学习参考
+
+[1 尚硅谷全栈项目——谷粒学院](https://www.bilibili.com/video/BV1dQ4y1A75e?p=1)
+
+描述：在线学习网站，管理员可以通过后台管理系统上传教师信息、课程大纲、课程视频等；学生可以在前台页面中查看教师、课程等内容。
+
+参考学习内容：前端知识的学习、前端vue模板的使用，element-ui的使用，前后端开发的流程。
+
+[2 renren-fast](https://gitee.com/renrenio)
+
+描述：前后端快速开发的框架
+
+参考学习内容：代码生成器、权限管理的数据库设计、响应类的设计
+
+[3 秒杀项目](https://www.bilibili.com/video/BV1sf4y1L7KE?p=2)
+
+描述：简单的后端秒杀系统
+
+参考学习内容：秒杀的架构设计和基本流程、压力测试；redis、rabbitMQ的使用
