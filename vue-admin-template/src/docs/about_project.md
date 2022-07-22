@@ -1,9 +1,5 @@
 # Lecture — 校园讲座预约系统
 
-::: tip 项目暂未开源
-
-:::
-
 ## 📚 1 项目简介
 
 Lecture 是一款前后端分离的校园讲座预约系统，基于目前主流的技术栈（SpringBoot + MyBatis + MySQL + Redis + RabbitMQ + Spring Security + ...），现已支持面向管理员的讲座发布与修订，面向学生的讲座预约与取消等功能。
