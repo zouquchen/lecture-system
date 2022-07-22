@@ -1,8 +1,12 @@
 # Lecture — 校园讲座预约系统
 
+::: tip 项目暂未开源
+
+:::
+
 ## 📚 1 项目简介
 
-Lecture是一款前后端分离的校园讲座预约系统，基于目前主流的技术栈（SpringBoot + MyBatis + MySQL + Redis + RabbitMQ + Spring Security + ...），现已支持面向管理员的讲座发布与修订，面向学生的讲座预约与取消等功能。
+Lecture 是一款前后端分离的校园讲座预约系统，基于目前主流的技术栈（SpringBoot + MyBatis + MySQL + Redis + RabbitMQ + Spring Security + ...），现已支持面向管理员的讲座发布与修订，面向学生的讲座预约与取消等功能。
 
 ## 📺 2 功能介绍
 
@@ -25,8 +29,8 @@ Lecture是一款前后端分离的校园讲座预约系统，基于目前主流�
   - 修改密码
   - 查看讲座统计（总预约次数、未开始场次、出席次数、缺席次数）
 - 关于
-  - 自定义显示markdown文件
-- 讲座管理【admin权限】
+  - 自定义显示 markdown 文件
+- 讲座管理「admin权限」
   - 分页条件查询讲座列表
   - 讲座签到
     - 根据用户名进行讲座签到
@@ -36,16 +40,20 @@ Lecture是一款前后端分离的校园讲座预约系统，基于目前主流�
     - 查看预约详情
     - 评论或点赞内容
   - 添加、修改或删除讲座
-- 用户列表【admin权限】
+- 用户列表「admin权限」
   - 分页条件查询用户
   - 添加或删除用户
-- 讲座预约【student权限】
+- 讲座预约「student权限」
   - 查看讲座详情
   - 预约或取消预约讲座
   - 评论或点赞内容
   - 查看我参与的讲座
 - 消息通知
   - 系统自动通知用户被评论或被点赞消息
+- 其他
+  - 前后端的密码传输进行了加密、数据库中使用密文进行存储
+  - 前后端对填入数据的校验
+
 
 ## 💻 3 核心技术栈
 后端：
@@ -108,7 +116,7 @@ Nginx：通过反向代理访问不同的服务器
 
 前端服务：vue框架搭建的前端项目
 
-微服务：处理各类业务、通过操作redis缓存数据、MySQL存储数据
+微服务：处理各类业务、通过操作redis缓存数据、MySQL 存储数据
 
 RabbitMQ：通过消息队列异步解决并发问题
 
@@ -128,34 +136,34 @@ Zookeeper：实现微服务的注册
 
 ## 🎬 7 部署项目
 
-- 配置mysql
-  - 修改每一个项目中application.yml中mysql的url, username以及password。
-  - 运行db/data.sql添加数据到数据库
-- 配置redis
-  - 修改每一个项目中application.yml中redis的host, port以及password。
-- 启动Nginx
-  - 方式1：Window10环境下，并保证所有项目都在该环境下运行时，启动nginx-lecture目录下的niginx.exe
-  - 方式2：自定义Nginx，并仿照nginx-lecture/conf/nginx.conf对自己的Nginx进行配置。
-- 配置Zookeeper
-  - 修改每一个项目中application.yml中zookeeper的ip地址。
-- 配置RabbitMQ
-  - 修改每一个项目中application.yml中rabbitmq的host, username以及password。
-- 配置OSS
-  - 修改lecture-oss服务中的application.yml的阿里云OSS配置
+- 配置 mysql
+  - 修改每一个项目中 application.yml 中 mysql的url, username 以及 password。
+  - 运行 db/data.sql 添加数据到数据库
+- 配置 redis
+  - 修改每一个项目中 application.yml 中 redis 的 host, port 以及 password。
+- 启动 Nginx
+  - 方式1：Window10 环境下，并保证所有项目都在该环境下运行时，启动 nginx-lecture 目录下的 niginx.exe
+  - 方式2：自定义 Nginx，并仿照 nginx-lecture/conf/nginx.conf 对自己的 Nginx 进行配置。
+- 配置 Zookeeper
+  - 修改每一个项目中 application.yml 中 zookeeper 的 ip 地址。
+- 配置 RabbitMQ
+  - 修改每一个项目中 application.yml 中 rabbitmq 的 host, username 以及 password。
+- 配置 OSS
+  - 修改 lecture-oss 服务中的 application.yml 的阿里云OSS配置
 - 配置前端
-  - 修改`.env.*`中的前端请求路径`VUE_APP_BASE_API`, 即Nginx监听端口。
+  - 修改 `.env.* `中的前端请求路径 `VUE_APP_BASE_API`, 即 Nginx 监听端口。
 
 ## 📢 7 功能说明
 
-在该系统中分为三个身份：【管理员Admin】、【管理员Manager】和【用户Student】，不同身份有不同的权限，不同的需求和任务。
+在该系统中分为三个身份：「管理员Admin」、「管理员Manager」和「用户Student」，不同身份有不同的权限，不同的需求和任务。
 
-- 【管理员Admin】拥有发布讲座、修改和签到统计所有讲座的权限；拥有用户管理的权限。
-- 【管理员Manager】拥有发布讲座、修改和签到统计他所发布讲座的权限。
-- 【用户Student】拥有讲座预约、取消预约的权限。
+- 「管理员Admin」拥有发布讲座、修改和签到统计所有讲座的权限；拥有用户管理的权限。
+- 「管理员Manager」拥有发布讲座、修改和签到统计他所发布讲座的权限。
+- 「用户Student」拥有讲座预约、取消预约的权限。
 
 ### 7.1 讲座状态
 
-对于讲座来说，具有两种状态：【0发布】与【1结束】，这两种状态由管理员进行切换。
+对于讲座来说，具有两种状态：「0发布」与「1结束」，这两种状态由管理员进行切换。
 
 对于用户来说，每一个讲座都有如下的状态：未开放、未预约（已开放）、已预约、已签到、缺席、已结束。
 通过分析讲座预约开始的时间、讲座的状态、预约记录以及预约记录上的签到时间得出这些状态。
@@ -234,7 +242,7 @@ Zookeeper：实现微服务的注册
 用户模块使用Spring Security框架实现认证、授权两大功能。
 
 >认证（Authentication）：验证当前访问系统的是不是本系统的用户，并且确认具体是哪个用户。
-> 
+>
 >授权（Authoritarian）：经过认证后判断当前用户是否有权限进行某个操作。
 
 #### 9.1.1 认证
@@ -242,7 +250,16 @@ Zookeeper：实现微服务的注册
 认证模块是验证当前访问系统的是不是本系统的用户，并且确认具体是哪个用户。
 如果用户未登录就需要让用户先登录再认证。
 
-下图是登录认证模块，使用Spring Security提供的认证逻辑。
+下图是登录认证模块，使用 Spring Security 提供的认证逻辑。
+
+⭐ **登录**：SpringSecurity过滤链放行 `/login` 请求，成功调用 Controller 执行登录业务，通过Spring Security 模块来对用户的账号密码进行判断，若符合要求则登陆成功，最终将用户信息存储到 Redis 中，返回前端一个 token，之后每次的访问可以在请求头中携带这个 token，jwt 过滤器可以从 token 中解析出用户 id，通过用户 id 可以从 Redis 中获取用户登录信息判断用户是否登录。
+
+⭐ **正常请求**：任何一次请求都将经过 Security 过滤链，在 jwt 过滤器中将会对请求头中的 token 进行解析：
+
+- token 解析错误就是 token 非法或者 token 过期，将抛出异常，通过自定义的异常捕获器捕获异常，并将异常信息返回到前端。
+- token 正常解析出用户 id，通过 id 从 Redis 中获取用户信息，若获取不到说明用户未登录；若获取到了说明用户为登录状态，将当前的用户信息存储到 Spring Securiy 的容器当中。
+
+经过过滤器后，开始正常执行业务逻辑。
 
 <img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/structure_login.png" alt="structure_login.png" style="zoom: 50%;" />
 
@@ -250,23 +267,23 @@ Zookeeper：实现微服务的注册
 
 #### 9.1.3 Spring Security原理
 
-下面对Spring Security的原理进行简单的介绍：
+下面对 Spring Security 的原理进行简单的介绍：
 
-登录
-- 请求携带用户信息请求`/login`接口，在配置类中配置Spring Security对 `/login` 接口进行匿名访问， 所以Spring Security会对`/login`接口放行，之后执行登录业务。
-- 登录业务中，使用Spring Security提供的AuthenticationManager进行认证。
-- 通过实现UserDetailService接口，重写loadUserByUsername方法，该方法可以从数据库中获取用户信息返回UserDetails对象（LoginUser）。
-- 通过继承`DaoAuthenticationProvider`重写`additionalAuthenticationChecks`方法完成自定义密码校验，首先将前端传入的密码进行AES解码获得密码明文，再将密码明文与数据库中的加密密码进行匹配。
-- 认证成功后，将用户信息（LoginUser对象）存储在redis中，将userId封装成jwt返回到前端，也就是前端每次访问需要携带的token。
+⭐ **登录**
+- 请求携带用户信息请求 `/login` 接口，在配置类中配置 Spring Security 对  `/login`  接口进行匿名访问， 所以 Spring Security 会对 `/login` 接口放行，之后执行登录业务。
+- 登录业务中，使用 Spring Security 提供的 AuthenticationManager 进行认证。
+- 通过实现 UserDetailService 接口，重写 loadUserByUsername 方法，该方法可以从数据库中获取用户信息返回 UserDetails 对象（LoginUser）。
+- 通过继承 `DaoAuthenticationProvider` 重写 `additionalAuthenticationChecks` 方法完成自定义密码校验，首先将前端传入的密码进行AES解码获得密码明文，再将密码明文与数据库中的加密密码进行匹配。
+- 认证成功后，将用户信息（LoginUser对象）存储在 redis 中，将 userId 封装成 jwt 返回到前端，也就是前端每次访问需要携带的 token。
 
-认证
-- 所有的请求将经过Spring Security过滤链，过滤链中包含自定义的jwt认证过滤器，可从请求头中获取的token；使用jwt工具将token解析为userId后，从redis中获取用户信息。
-- 如果从redis中成功获取LoginUser用户信息，就将该信息存储到SecurityContextHolder中的SecurityContext中的Authentication中，表示当前用户认证通过。
+⭐ **认证**
+- 所有的请求将经过 Spring Security 过滤链，过滤链中包含自定义的 jwt 认证过滤器，可从请求头中获取的 token；使用 jwt 工具将 token 解析为 userId 后，从 redis 中获取用户信息。
+- 如果从 redis 中成功获取 LoginUser 用户信息，就将该信息存储到 SecurityContextHolder 容器中，表示当前用户认证通过。
 - 如果用户不存在，则返回认证失败的异常。
 
-异常处理
-- 认证失败异常，状态码（401）。实现AuthenticationEntryPoint，捕获并处理认证失败的异常。
-- 权限不足，状态码（403）。实现AccessDeniedHandler接口，捕获并处理权限不足的异常。
+⭐ **异常处理**
+- 认证失败异常，状态码（401）。实现 AuthenticationEntryPoint 接口，捕获并处理认证失败的异常。
+- 权限不足，状态码（403）。实现 AccessDeniedHandler 接口，捕获并处理权限不足的异常。
 
 
 
@@ -285,32 +302,32 @@ Zookeeper：实现微服务的注册
 
 通过输入用户名并点击签到按钮完成用户的签到，单个用户完成签到后立即刷新签到用户列表。
 
-关闭签到系统后，讲座的状态从【0发布】变为【1结束】，用户预约讲座列表中将无法查询到该讲座，该讲座将无法被预约。
+关闭签到系统后，讲座的状态从「0发布」变为「1结束」，用户预约讲座列表中将无法查询到该讲座，该讲座将无法被预约。
 
 ### 9.3 预约讲座模块
 #### 9.3.1 讲座列表
-支持分页、条件查询所有状态为【0发布】的讲座。
+支持分页、条件查询所有状态为「0发布」的讲座。
 
 #### 9.3.2 我的讲座
 根据已登录用户的id查询所有已预约过的讲座。
 #### 9.3.3 预约与取消
 讲座预约模块主要实现两个功能： 用户预约讲座、用户取消讲座。
 
-该过程需要lecture-lecture和lecture-order两个微服务共同完成。其中：
+该过程需要 lecture-lecture 和 lecture-order 两个微服务共同完成。其中：
 
 预约讲座
 
-- lecture-order微服务：从redis中查询用户是否重复预定讲座、讲座是否还有剩余的可预约数量，
-  如果用户未预约该讲座，且该讲座剩余可预约数量大于0，则把讲座id和用户id封装为一个对象发送到消息队列，最后返回前端预约成功。
-  
-- lecture-lecture微服务：从消息队列中获取消息，操作数据库减少讲座可预约数量，添加用户预约记录；
+- lecture-order 微服务：从 redis 中查询用户是否重复预定讲座、讲座是否还有剩余的可预约数量，
+  如果用户未预约该讲座，且该讲座剩余可预约数量大于 0，则把讲座 id 和用户 id 封装为一个对象发送到消息队列，最后返回前端预约成功。
+
+- lecture-lecture 微服务：从消息队列中获取消息，操作数据库减少讲座可预约数量，添加用户预约记录；
   操作redis减少讲座可预约数量，添加用户预约记录。
 
 取消预约讲座
-- lecture-order微服务：从redis中查询用户是否预约讲座，若用户未预约该讲座则抛出异常；若用户预约该讲座，则远程调用lecture-lecture微服务。
-  
-- lecture-lecture微服务：查询讲座是否结束，若结束则抛出异常；查询用户是否签到，若签到则抛出异常；删除用户预约记录，
-  增加给定id讲座的剩余可预约数量，最后删除redis内用户的预约记录。
+- lecture-order 微服务：从 redis 中查询用户是否预约讲座，若用户未预约该讲座则抛出异常；若用户预约该讲座，则远程调用 lecture-lecture 微服务。
+
+- lecture-lecture 微服务：查询讲座是否结束，若结束则抛出异常；查询用户是否签到，若签到则抛出异常；删除用户预约记录，
+  增加给定id讲座的剩余可预约数量，最后删除 redis 内用户的预约记录。
 
 流程图如下：
 
@@ -320,13 +337,13 @@ Zookeeper：实现微服务的注册
 
 #### 9.4.1 分页查询
 
-【管理员Admin】可以分页、条件查询数据库中所有用户信息，不包含被逻辑删除的用户；同时可以辑删除用户（数据库is_deleted = 1表示被删除）
+「管理员Admin」可以分页、条件查询数据库中所有用户信息，不包含被逻辑删除的用户；同时可以辑删除用户（数据库is_deleted = 1表示被删除）
 
 #### 9.4.2 添加新用户
 
 填写必要的用户字段添加用户。密码传输经过加密处理。
 
-由于http是明文传输，为了保证密码的安全，前端在传输密码的时候需要对密码进行加密，在后端对密码进行解密，存储到数据库的时候再对密码进行加密。
+由于 http 是明文传输，为了保证密码的安全，前端在传输密码的时候需要对密码进行加密，在后端对密码进行解密，存储到数据库的时候再对密码进行加密。
 
 ### 9.5 个人中心
 
@@ -340,7 +357,7 @@ Zookeeper：实现微服务的注册
 
 #### 9.5.3 密码加密与传输
 
-由于http是明文传输，为了保证密码的安全，前端在传输密码的时候需要对密码进行加密，在后端对密码进行解密，存储到数据库的时候再对密码进行加密。
+由于 http 是明文传输，为了保证密码的安全，前端在传输密码的时候需要对密码进行加密，在后端对密码进行解密，存储到数据库的时候再对密码进行加密。
 
 ![](https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/password_crpty.png)
 
@@ -366,17 +383,17 @@ Zookeeper：实现微服务的注册
 
 #### 9.6.2 添加评论
 
-根据讲座id、用户id、父评论id、根评论id和评论内容添加讲座信息。异步产生消息通知给被评论者，加快响应速度（见9.7消息通知）。
+根据讲座 id、用户 id、父评论 id、根评论 id 和评论内容添加讲座信息。异步产生消息通知给被评论者，加快响应速度（见9.7消息通知）。
 
 <img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/structure_add_comment.png" style="zoom: 50%;" />
 
 #### 9.6.3. 删除评论
 
-根据评论id、用户id删除评论及其子评论。
+根据评论 id、用户 id 删除评论及其子评论。
 
 #### 9.6.4 点赞功能
 
-用户可以在讲座详情页面对每一个评论进行点赞或取消点赞，点赞的数据以set数据结构存储在redis缓存内，键为`commentLikes:讲座id`，值为`用户id`，使用set数据结构可以保证每一个用户只能点赞一次，并且可以快速判断该用户是否点赞以及某一条评论的点赞总数。同时，异步产生消息通知给被点赞者，加快响应速度（见9.7消息通知）。
+用户可以在讲座详情页面对每一个评论进行点赞或取消点赞，点赞的数据以 set 数据结构存储在 redis 缓存内，键为 `commentLikes:讲座id`，值为 `用户id`，使用 set 数据结构可以保证每一个用户只能点赞一次，并且可以快速判断该用户是否点赞以及某一条评论的点赞总数。同时，异步产生消息通知给被点赞者，加快响应速度（见9.7消息通知）。
 
 <img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/structure_likes.png" style="zoom: 60%;" />
 
@@ -384,7 +401,7 @@ Zookeeper：实现微服务的注册
 
 #### 9.7.1 用户获取消息
 
-系统消息数据存储在redis内，采用list数据结构，针对每一个用户创建一个list存储消息，键为`systemMessage:用户id`，值为包含消息内容、讲座id、目标用户id属性的对象。用户在登录网站时每间隔1分钟获取系统消息数量，显示在导航栏右上角的头像位置。可在用户中心内查看系统消息，当查看完后，所有消息将pop出list队列。
+系统消息数据存储在 redis 内，采用 list 数据结构，针对每一个用户创建一个 list 存储消息，键为 `systemMessage:用户id`，值为包含消息内容、讲座 id、目标用户id属性的对象。用户在登录网站时每间隔 1 分钟获取系统消息数量，显示在导航栏右上角的头像位置。可在用户中心内查看系统消息，当查看完后，所有消息将pop 出 list 队列。
 
 <img src="https://lecture-system.oss-cn-shanghai.aliyuncs.com/images/structure_get_message.png" style="zoom: 50%;" />
 
@@ -407,7 +424,7 @@ Zookeeper：实现微服务的注册
 
 描述：在线学习网站，管理员可以通过后台管理系统上传教师信息、课程大纲、课程视频等；学生可以在前台页面中查看教师、课程等内容。
 
-参考学习内容：前端知识的学习、前端vue模板的使用，element-ui的使用，前后端开发的流程。
+参考学习内容：前端知识的学习、前端 vue 模板的使用，element-ui 的使用，前后端开发的流程。
 
 [2 renren-fast](https://gitee.com/renrenio)
 
@@ -419,4 +436,4 @@ Zookeeper：实现微服务的注册
 
 描述：简单的后端秒杀系统
 
-参考学习内容：秒杀的架构设计和基本流程、压力测试；redis、rabbitMQ的使用
+参考学习内容：秒杀的架构设计和基本流程、压力测试；redis、rabbitMQ 的使用
