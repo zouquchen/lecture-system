@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.study.lecture.common.entity.user.User;
 import com.study.lecture.common.vo.RoleListVo;
 import com.study.lecture.common.vo.UserListVo;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

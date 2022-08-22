@@ -40,12 +40,13 @@ public class MessageReceiver {
             key = MqConstant.ROUTE_MESSAGE_COMMENT
     ))
     public void receiveComment(MessageMqVo messageMqVo) {
-        log.debug("消费消息队列中的评论消息！");
+        // log.debug("消费消息队列中的评论消息！");
         try {
             lectureCommentService.addCommentMessage(messageMqVo);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new GlobalException("消费消息失败[系统评论消息]！");
+            log.error("消费消息失败[系统评论消息]！");
+            // throw new GlobalException("消费消息失败[系统评论消息]！");
         }
     }
 
@@ -59,12 +60,13 @@ public class MessageReceiver {
             key = MqConstant.ROUTE_MESSAGE_LIKES
     ))
     public void receiveLikes(MessageMqVo messageMqVo) {
-        log.debug("消费消息队列中的点赞消息！");
+        // log.debug("消费消息队列中的点赞消息！");
         try {
             lectureCommentService.addLikeMessage(messageMqVo);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new GlobalException("消费消息失败[系统点赞消息]！");
+            log.error("消费消息失败[系统点赞消息]！");
+            // throw new GlobalException("消费消息失败[系统点赞消息]！");
         }
     }
 }

@@ -49,7 +49,7 @@ public class LectureReceiver {
             key = MqConstant.ROUTE_ORDER
     ))
     public void receive(LectureOrderMqVo lectureOrderMqVo) {
-        log.info("接收到消息：" + lectureOrderMqVo.toString());
+        // log.info("接收到消息：" + lectureOrderMqVo.toString());
 
         Long userId = lectureOrderMqVo.getUserId();
         Long lectureId = lectureOrderMqVo.getLectureId();
@@ -58,7 +58,7 @@ public class LectureReceiver {
             lectureUserRecordService.orderLectureById(lectureId, userId);
         } catch (Exception exception) {
             log.error("讲座预约失败");
-            throw new GlobalException("讲座预约失败");
+            // throw new GlobalException("讲座预约失败");
         }
     }
 }
