@@ -59,6 +59,10 @@ public class LectureOrderServiceImpl implements LectureOrderService, Initializin
      */
     @Override
     public R orderLectureById(Long lectureId) {
+        // TODO 通过 Redis 键过期策略，保证用户每 10s 内只能请求一次
+
+        // TODO 使用令牌桶算法
+
         // 获取用户信息
         LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = loginUser.getUser().getId();
@@ -84,6 +88,8 @@ public class LectureOrderServiceImpl implements LectureOrderService, Initializin
             throw new GlobalException(ResultCodeEnum.REPEAT_ORDER);
         }
 
+        // TODO 使用 Zookeeper 作为分布式协调，在 Zookeeper 内创建一个节点表示“某用户正在预约某讲座”；若该节点存在说明用户重复预约
+
         // 递减redis内该讲座剩余可预约数量
         // stock为递减之后的库存，decrement是原子操作
         Long stock = redisTemplate.opsForValue().decrement(RedisConstant.getKeyOfLectureStore(lectureId));
@@ -100,7 +106,14 @@ public class LectureOrderServiceImpl implements LectureOrderService, Initializin
         // 发送到消息队列，由消息队列异步处理：在数据库中创建用户预约讲座的记录
         LectureOrderMqVo lectureOrderMqVo = new LectureOrderMqVo(userId, lectureId);
 
-        // TODO 发送到消息队列是否成功
+        // TODO 使用 Zookeeper 作为分布式协调，判断此人的讲座是否预约完毕
+        /*
+            监听 Zookeeper 中该用户正在预约的节点。
+            1. 若存在，说明用户正在预约中，等待。
+            2. 若不存在，说明用户已经预约完毕，或成功或失败；可以从 Redis 中查询用户的预约记录来判断是否预约成功
+            3. 超时，返回用户已经超时
+         */
+
         mqSender.sendMessage(MqConstant.EXCHANGE_ORDER, MqConstant.ROUTE_ORDER, lectureOrderMqVo);
 
         return R.ok();

@@ -56,7 +56,10 @@ public class LectureReceiver {
 
         try {
             lectureUserRecordService.orderLectureById(lectureId, userId);
+            // TODO Zookeeper 作为分布式协调，删除表示“某用户正在预约某讲座”的节点
         } catch (Exception exception) {
+            // TODO Redis 剩余可预约数量加 1
+            // TODO 消费失败留存记录
             log.error("讲座预约失败");
             // throw new GlobalException("讲座预约失败");
         }
