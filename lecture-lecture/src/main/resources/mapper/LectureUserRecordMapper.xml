@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.lecture.lecture.mapper.LectureUserRecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.study.lecture.common.entity.lecture.LectureUserRecord">
+        <id column="id" property="id" />
+        <result column="lecture_id" property="lectureId" />
+        <result column="user_id" property="userId" />
+        <result column="sign_code_id" property="signCodeId" />
+        <result column="order_time" property="orderTime" />
+        <result column="sign_time" property="signTime" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 根据id查询该用户预约过的所有讲座-->
+    <select id="getAllLectureUserRecord" resultType="com.study.lecture.common.entity.lecture.LectureUserRecord">
+        SELECT luc.id, luc.lecture_id, luc.user_id, luc.sign_code_id, luc.order_time, luc.sign_time, l.state
+        FROM lecture_user_record luc, lecture l
+        WHERE l.id = luc.lecture_id AND luc.user_id = #{userId}
+    </select>
+
+    <!-- 分页查询，根据用户id查询该用户已预约过的讲座-->
+    <select id="getLectureUserRecordPageList" resultType="com.study.lecture.common.vo.LectureUserRecordVo">
+        select lur.id, lur.lecture_id,lur.user_id,lur.sign_code_id, lur.order_time, lur.sign_time,
+               l.title, l.organizer, l.state, l.space, l.lecture_start_time,
+               lt.name as typeName
+        from lecture l, lecture_type lt, lecture_user_record lur
+        where l.id = lur.lecture_id and lt.id = l.type_id and lur.user_id = #{userId}
+        limit #{begin}, #{limit};
+    </select>
+
+    <!-- 根据用户id查询该用户已预约过的讲座的数量-->
+    <select id="countLectureUserRecord" resultType="java.lang.Integer">
+        select COUNT(*)
+        from lecture_user_record
+        where user_id=#{userId}
+    </select>
+
+    <!-- 根据讲座id和用户id获取用户预约讲座记录-->
+    <select id="getLectureUserRecord" resultType="com.study.lecture.common.entity.lecture.LectureUserRecord">
+        SELECT id, lecture_id, user_id, sign_code_id, order_time, sign_time, is_deleted, create_time, update_time
+        FROM lecture_user_record
+        WHERE lecture_id = #{lectureId} AND user_id = #{userId}
+    </select>
+
+    <!-- 根据讲座id和用户id删除用户预约讲座记录-->
+    <delete id="deleteLectureUserRecord">
+        DELETE FROM lecture_user_record
+        WHERE lecture_id = #{lectureId} AND user_id = #{userId}
+    </delete>
+
+    <!-- 根据id获取预约此讲座的所有用户信息-->
+    <select id="getOrderRecordOfOneLectureListById"
+            resultType="com.study.lecture.common.vo.OrderRecordOfOneLectureVo">
+        SELECT lur.user_id, su.username, lur.order_time, lur.sign_time
+        FROM lecture_user_record lur, sys_user su
+        WHERE lur.user_id = su.id AND lur.lecture_id = #{id}
+    </select>
+
+    <!-- 根据id获取预约且签到此讲座的所有用户信息-->
+    <select id="getSignedUserOfOneLectureListById"
+            resultType="com.study.lecture.common.vo.OrderRecordOfOneLectureVo">
+        SELECT lur.user_id, su.username, lur.order_time, lur.sign_time
+        FROM lecture_user_record lur, sys_user su
+        WHERE lur.user_id = su.id AND lur.lecture_id = #{id} AND lur.sign_time IS NOT NULL
+    </select>
+
+    <!-- 用户签到-->
+    <update id="userSign">
+        UPDATE lecture_user_record lur
+        JOIN sys_user su ON su.username = #{username}
+        SET lur.sign_time=NOW()
+        WHERE lur.lecture_id = #{lectureId} and su.id = lur.user_id
+    </update>
+</mapper>

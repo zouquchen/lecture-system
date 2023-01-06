@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.lecture.user.mapper.MenuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.study.lecture.common.entity.user.Menu">
+        <result column="id" property="id" />
+        <result column="menu_name" property="menuName" />
+        <result column="path" property="path" />
+        <result column="component" property="component" />
+        <result column="visible" property="visible" />
+        <result column="status" property="status" />
+        <result column="perms" property="perms" />
+        <result column="icon" property="icon" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        menu_name, path, component, visible, status, perms, icon, is_deleted, remark, create_time, update_time
+    </sql>
+
+    <!-- 根据用户id查询权限-->
+    <select id="selectPermsByUserId" resultType="java.lang.String" parameterType="java.lang.Long">
+        select distinct m.perms
+        from sys_user_role ur
+                 left join sys_role r on ur.role_id = r.id
+                 left join sys_role_menu rm on ur.role_id = rm.role_id
+                 left join sys_menu m on m.id = rm.menu_id
+        where user_id = #{id}
+          and r.status = 0
+          and m.status = 0
+    </select>
+
+    <!-- 根据用户id查询角色-->
+    <select id="selectRoleByUserId" resultType="java.lang.String" parameterType="java.lang.Long">
+        SELECT sr.role_key
+        FROM sys_user su
+                 LEFT JOIN sys_user_role sur ON su.id = sur.user_id
+                 LEFT JOIN sys_role sr ON sr.id = sur.role_id
+        WHERE su.id = #{id};
+    </select>
+
+</mapper>

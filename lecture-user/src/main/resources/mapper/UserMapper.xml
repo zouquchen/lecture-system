@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.lecture.user.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.study.lecture.common.entity.user.User">
+        <result column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="status" property="status" />
+        <result column="email" property="email" />
+        <result column="phone_number" property="phoneNumber" />
+        <result column="sex" property="sex" />
+        <result column="avatar" property="avatar" />
+        <result column="user_type" property="userType" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 获取所有角色列表-->
+    <select id="getRoleList" resultType="com.study.lecture.common.vo.RoleListVo">
+        SELECT id, name
+        FROM sys_role
+    </select>
+
+    <!-- 根据条件查询用户总量-->
+    <select id="countUserListByCondition" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM sys_user su, sys_user_role sur, sys_role sr
+        WHERE su.id = sur.user_id and sur.role_id = sr.id and su.is_deleted = 0
+        <if test="username != null">
+            AND su.username LIKE #{username}
+        </if>
+        <if test="roleId != null">
+            AND sur.role_id = #{roleId}
+        </if>
+    </select>
+
+    <!-- 根据条件分页查询用户数据-->
+    <select id="getUserListByCondition" resultType="com.study.lecture.common.vo.UserListVo">
+        SELECT su.id, su.username, su.email, su.phone_number, su.sex, su.avatar, sr.name as role
+        FROM sys_user su, sys_user_role sur, sys_role sr
+        WHERE su.id = sur.user_id and sur.role_id = sr.id and su.is_deleted = 0
+        <if test="username != null">
+            AND su.username LIKE #{username}
+        </if>
+        <if test="roleId != null">
+            AND sur.role_id = #{roleId}
+        </if>
+        LIMIT #{begin}, #{limit}
+    </select>
+
+    <!-- 更新用户信息-->
+    <update id="updateUser">
+        UPDATE sys_user
+        SET username=#{username}, email=#{email}, phone_number=#{phoneNumber}, sex=#{sex}, avatar=#{avatar}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 逻辑删除用户-->
+    <update id="logicallyDeleteUser">
+        UPDATE sys_user SET is_deleted = 1 WHERE id = #{id}
+    </update>
+
+    <!-- 修改密码-->
+    <update id="updatePassword">
+        UPDATE sys_user SET password = #{password} where id = #{userId}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.lecture.lecture.mapper.LectureMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.study.lecture.common.entity.lecture.Lecture">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="type_id" property="typeId" />
+        <result column="creator_id" property="creatorId" />
+        <result column="state" property="state" />
+        <result column="organizer" property="organizer" />
+        <result column="undertaker" property="undertaker" />
+        <result column="sponsor" property="sponsor" />
+        <result column="space" property="space" />
+        <result column="speaker" property="speaker" />
+        <result column="reservation" property="reservation" />
+        <result column="store" property="store" />
+        <result column="description" property="description" />
+        <result column="poster" property="poster" />
+        <result column="order_start_time" property="orderStartTime" />
+        <result column="order_end_time" property="orderEndTime" />
+        <result column="lecture_start_time" property="lectureStartTime" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, title, type_id, creator_id, state, organizer, undertaker, sponsor, space, speaker, reservation, store, description, poster, order_start_time, order_end_time, lecture_start_time, is_deleted, create_time, update_time
+    </sql>
+
+    <!-- 分页条件查询管理员可以查看的讲座列表，返回查询页的数据记录-->
+    <select id="getLectureAdminPageListByCondition" resultType="com.study.lecture.common.vo.LectureForAdminListVo">
+        SELECT l.id, l.title, lt.name, l.space, l.state, lt.name as typeName, l.organizer, l.store, l.reservation, l.order_start_time, l.order_end_time, l.lecture_start_time
+        FROM lecture l, lecture_type lt
+        WHERE l.type_id = lt.id and l.is_deleted = 0
+        <if test="title != null">
+            AND l.title LIKE #{title}
+        </if>
+        <if test="typeId != null">
+            AND l.type_id=#{typeId}
+        </if>
+        <if test="startTime != null">
+            AND l.lecture_start_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            AND l.lecture_start_time &lt;= #{endTime}
+        </if>
+        <if test="userId != null">
+            AND creator_id = #{userId}
+        </if>
+        LIMIT #{begin}, #{limit}
+    </select>
+
+    <!-- 在分页条件查询管理员可以查看的讲座列表时，查询所有符合条件的记录数-->
+    <select id="countLectureAdminListByCondition" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM lecture
+        WHERE is_deleted = 0
+        <if test="title != null">
+            AND title LIKE #{title}
+        </if>
+        <if test="typeId != null">
+            AND type_id=#{typeId}
+        </if>
+        <if test="startTime != null">
+            AND lecture_start_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            AND lecture_start_time &lt;= #{endTime}
+        </if>
+        <if test="userId != null">
+            AND creator_id = #{userId}
+        </if>
+    </select>
+
+    <!-- 查询用户（学生）可以查看的全部讲座列表，用于redis缓存-->
+    <select id="getLectureUserList" resultType="com.study.lecture.common.vo.LectureForUserListVo">
+        SELECT l.id, l.title, lt.name, l.space, lt.name as typeName, l.organizer, l.store, l.reservation, l.order_start_time, l.order_end_time, l.lecture_start_time
+        FROM lecture l, lecture_type lt
+        WHERE l.type_id = lt.id and l.state = 0 and l.order_end_time > NOW()
+    </select>
+
+    <!-- 分页条件查询用户（学生）可以查看的讲座列表，返回查询页的数据记录-->
+    <select id="getLectureUserPageListByCondition" resultType="com.study.lecture.common.vo.LectureForUserListVo">
+        SELECT l.id, l.title, lt.name, l.space, lt.name as typeName, l.organizer, l.store, l.reservation, l.order_start_time, l.order_end_time, l.lecture_start_time
+        FROM lecture l, lecture_type lt
+        WHERE l.type_id = lt.id and l.state = 0 and l.order_end_time > NOW() and l.is_deleted = 0
+        <if test="title != null">
+            AND l.title LIKE #{title}
+        </if>
+        <if test="typeId != null">
+            AND l.type_id=#{typeId}
+        </if>
+        <if test="startTime != null">
+            AND l.lecture_start_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            AND l.lecture_start_time &lt;= #{endTime}
+        </if>
+        ORDER BY l.order_start_time
+        LIMIT #{begin}, #{limit}
+    </select>
+
+    <!-- 在分页条件查询用户（学生）可以查看的讲座列表时，查询所有符合条件的记录数-->
+    <select id="countLectureUserListByCondition" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM lecture l, lecture_type lt
+        WHERE l.type_id = lt.id and l.state = 0 and l.order_end_time > NOW() and l.is_deleted = 0
+        <if test="title != null">
+            AND l.title LIKE #{title}
+        </if>
+        <if test="typeId != null">
+            AND l.type_id=#{typeId}
+        </if>
+        <if test="startTime != null">
+            AND l.lecture_start_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            AND l.lecture_start_time &lt;= #{endTime}
+        </if>
+        ORDER BY l.order_start_time
+    </select>
+
+    <!-- 根据id获取讲座详情页面，显示详情页面（for user）-->
+    <select id="getLectureInfoForUserById" resultType="com.study.lecture.common.vo.LectureForUserInfoVo">
+        SELECT l.id, l.title, lt.name as typeName, l.state, u.username as creatorName, l.organizer, l.undertaker, l.sponsor, l.space, l.speaker, l.reservation, l.store, l.description, l.poster, l.order_start_time, l.order_end_time, l.lecture_start_time
+        FROM lecture l, lecture_type lt, sys_user u
+        WHERE l.type_id = lt.id and l.creator_id = u.id and l.id = #{id}
+    </select>
+
+    <!-- 根据id获取讲座详情页面，显示详情页面（for admin）-->
+    <select id="getLectureInfoForAdminById" resultType="com.study.lecture.common.vo.LectureForAdminInfoVo">
+        SELECT l.id, l.title, l.type_id, lt.name as typeName, l.state, u.username as creatorName, l.organizer, l.undertaker, l.sponsor, l.space, l.speaker, l.reservation, l.store, l.description, l.poster, l.order_start_time, l.order_end_time, l.lecture_start_time
+        FROM lecture l, lecture_type lt, sys_user u
+        WHERE l.type_id = lt.id and l.creator_id = u.id and l.id = #{id}
+    </select>
+
+    <!-- 减少给定id讲座的剩余可预约数量-->
+    <update id="decreaseLectureStoreById">
+        UPDATE lecture SET store = store - 1 WHERE store > 0 AND id = #{id}
+    </update>
+
+    <!-- 增加给定id讲座的剩余可预约数量-->
+    <update id="increaseLectureStoreById">
+        UPDATE lecture SET store = store + 1 WHERE id = #{id}
+    </update>
+
+    <!-- 逻辑删除将作-->
+    <update id="logicallyDeleteLectureById">
+        UPDATE lecture SET is_deleted = 1 WHERE id = #{id}
+    </update>
+
+</mapper>

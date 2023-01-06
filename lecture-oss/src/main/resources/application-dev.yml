@@ -1,0 +1,9 @@
+server:
+  port: 8003
+
+dubbo:
+  application:
+    name: lecture-oss-dev
+  registry:
+    address: zookeeper://120.48.107.246:2181
+    timeout: 6000
